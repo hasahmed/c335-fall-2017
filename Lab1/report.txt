@@ -1,0 +1,7 @@
+Username: hasahmed
+Name: Hasan Y Ahmed
+
+Results: Created a git repo, added all the A.I.s to the collaborators on it.
+No difficulties arose.
+
+I learned about the tail unix command

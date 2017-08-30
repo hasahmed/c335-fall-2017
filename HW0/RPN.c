@@ -1,29 +1,31 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "NODE.h"
+#include <signal.h>
+#include "node.h"
+#include "rpnlib.h"
+
+String strArr[MAX_STR_ARR_LEN];
+
+#define MAX_USER_INPUT 256
 
 int main(){
-    LIST node2 = {
-        42,
-        NULL
-    };
+    List *list = NULL;
 
-    LIST node1 = {
-        32,
-        &node2
-    };
-
-    LIST *list = add_node(&node1, 57);
-    print_node_values(list);
-    free(list);
-
-    /*
-
-    node2->val = 42;
-    node2->next = NULL;
+    char user_input[MAX_USER_INPUT];
+    while(1){
+        printf("> ");
+        scanf("%s", user_input);
+        process_store_scanned(&list, user_input);
+        if(user_input[0] == 'q')
+            break;
+    }
+        print_list_values(&list);
 
 
-    node->val = 32;
-    */
-    //node1->next = node2;
+    goto cleanup;
+
+cleanup:
+    list_free(&list);
+
 }
+

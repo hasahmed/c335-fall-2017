@@ -24,22 +24,23 @@ int pop(List **head){
     *head = tmp;
     return ans;
 }
-
-/*
-void init_list(List **head, int val){
-    *head = (Cell*) malloc(sizeof(Cell));
-    if(*head != NULL){
-        (*head)->value = val;
-        (*head)->next = NULL;
+int length(Cell **head){
+    int ans = 0;
+    if(*head == NULL)
+        return ans;
+    Cell *tmp = *head;
+    while(tmp != NULL){
+        ans += tmp->value;
+        tmp = tmp->next;
     }
-    else{
-        puts("The malloc failed");
-        exit(1);
-    }
+    return ans;
 }
-*/
 
 void print_list_values(Cell **head){
+    if(*head == NULL){
+        puts("The list is empty");
+        return;
+    }
     Cell *tmp = *head;
     while(tmp != NULL){
         printf("%d\n", tmp->value);
@@ -57,4 +58,5 @@ void list_free(Cell **head){
        tmp = nxt;
        nxt = tmp->next;
     }
+    *head = NULL;
 }

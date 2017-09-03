@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -g
+CFLAGS = ""
 all : rpn
 
 rpn : rpn.o node.o rpnlib.o

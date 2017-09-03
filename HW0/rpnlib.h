@@ -15,9 +15,10 @@ struct string_t{
 
 
 void print_top(List **head);
-void process_store_scanned(List **head, char *scanned);
+char process_store_scanned(List **head, char *scanned);
 void process_nums(int val);
 void process_letters(char cmd);
 void break_and_store(char **strarr, char *scanned);
+void clear_buf(char[MAX_STR_LEN]); 
 
 #endif

@@ -13,5 +13,6 @@ void push(Cell **head, int value);
 void print_list_values(Cell **head);
 void list_free(Cell **head);
 int pop(Cell **head);
+int length(Cell **head);
 
 #endif

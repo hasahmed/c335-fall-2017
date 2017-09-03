@@ -10,9 +10,9 @@ String strArr[MAX_STR_ARR_LEN];
 
 int main(){
     List *list = NULL;
+
     char user_input[MAX_USER_INPUT_LEN];
     while(1){
-        printf("> ");
         int result = scanf("%s", user_input);
         if(result == EOF)
             break;
@@ -32,6 +32,11 @@ int main(){
             case 'c':
                 list_free(&list);
                 break;
+            case 'd':
+                puts("Divide by 0 error. Try something else");
+                break;
+            case 'e':
+                puts("Stack is empty");
         }
     }
 

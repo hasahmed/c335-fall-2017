@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 #include "node.h"
 
 void push(Cell **head, int value){
@@ -16,6 +17,9 @@ void push(Cell **head, int value){
 }
 
 int pop(List **head){
+    if(*head == NULL){
+        return INT_MAX;
+    }
     int ans;
     ans = (*head)->value;
 
@@ -38,7 +42,6 @@ int length(Cell **head){
 
 void print_list_values(Cell **head){
     if(*head == NULL){
-        puts("The list is empty");
         return;
     }
     Cell *tmp = *head;

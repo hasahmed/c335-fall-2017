@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include <limits.h>
 #include "rpnlib.h"
 #include "node.h"
 
@@ -16,28 +17,20 @@ void clear_buf(char strbuf[MAX_STR_LEN]){
 }
 
 char process_store_scanned(List **head, char *scanned){
-    puts("we are processing scanned string");
 
     char strbuf[MAX_STR_LEN]; //create a buffer to scan in strings
     clear_buf(strbuf);
     int buf_write_index = 0; //this is the index where we are going to write into the buffer
 
     for(int i = 0;;i++){ //loop thorugh the scanned string
-        puts("we are looping throught the scanned string");
         if(scanned[i] == '\0'){ //until we reach a null character
-            puts("The null character was the ith element of the scanned string");
-            if(1){
-                int scanned_int = atoi(strbuf);
-                printf("we are pushing %d to the stack\n", scanned_int);
-                push(head, atoi(strbuf));//when null character is reached convert the contents of the buffer to an integer and push it 
-            }
+            int scanned_int = atoi(strbuf);
+            push(head, atoi(strbuf));//when null character is reached convert the contents of the buffer to an integer and push it 
             return 'z'; // then the string no longer needs any processesing so return
         }
 
         if(scanned[i] == ' '){ //if a space is reached
-            puts("a space has been reached in the input");
             strbuf[buf_write_index] = '\0'; //then and end the string with a null character
-            printf("this is the scanned string: %s\n", strbuf);
             push(head, atoi(strbuf)); //convert to int and push to stack
             buf_write_index = 0; //restart the buffer write index
             break;
@@ -48,7 +41,6 @@ char process_store_scanned(List **head, char *scanned){
         } else if(scanned[i] == -1){
             break;
         } else {
-            printf("The scanned character '%c' is not a digit\n", scanned[i]);
             switch(scanned[i]){
                 case 'q':
                 case 'p':
@@ -56,29 +48,83 @@ char process_store_scanned(List **head, char *scanned){
                 case 'c':
                     return scanned[i];
                 case '+':
-                    push(head, pop(head) + pop(head));
+                    {
+                    if(*head == NULL)
+                        return 'e';
+                    int second = pop(head);
+
+                    if(second == INT_MAX)
+                        return 'e';
+
+                    int first = pop(head);
+                    if(first == INT_MAX){
+                        push(head, second);
+                        return 'e';
+                    }
+                    push(head, first + second);
                     return 'z';
                     break;
+                    }
                 case '*':
-                    push(head, pop(head) * pop(head));
+                    {
+                    if(*head == NULL)
+                        return 'e';
+                    int second = pop(head);
+
+                    if(second == INT_MAX)
+                        return 'e';
+
+                    int first = pop(head);
+                    if(first == INT_MAX){
+                        push(head, second);
+                        return 'e';
+                    }
+                    push(head, first * second);
                     return 'z';
                     break;
+                    }
                 case '/':
                     {
+                    if(*head == NULL)
+                        return 'e';
                     int second = pop(head);
+
+                    if(second == INT_MAX)
+                        return 'e';
+
                     int first = pop(head);
+                    if(first == INT_MAX){
+                        push(head, second);
+                        return 'e';
+                    }
+                    if(second == 0){
+                        push(head, 0);
+                        return 'd';
+                    }
                     push(head, first / second);
                     return 'z';
                     break;
                     }
                 case '-':
                     {
+                    if(*head == NULL)
+                        return 'e';
                     int second = pop(head);
+
+                    if(second == INT_MAX)
+                        return 'e';
+
                     int first = pop(head);
+                    if(first == INT_MAX){
+                        push(head, second);
+                        return 'e';
+                    }
                     push(head, first - second);
                     return 'z';
                     break;
                     }
+                default:
+                    return 'z';
             }
         }
         buf_write_index++;

@@ -9,7 +9,7 @@ debug : rpn
 	gdb -tui rpn
 
 clean : 
-	rm -f rpn rpn.o node.o
+	rm -f rpn *.o
 
 rpn.o : rpn.c
 

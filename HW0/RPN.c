@@ -44,7 +44,6 @@ int main(){
 
 cleanup:
     list_free(&list);
-    puts("program memory has been freed");
     if((length(&list) != 0)){
         puts("There has been an error freeing the memory of the program");
     }

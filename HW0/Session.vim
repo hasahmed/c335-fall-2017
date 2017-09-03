@@ -34,12 +34,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 11 - ((10 * winheight(0) + 24) / 49)
+let s:l = 15 - ((14 * winheight(0) + 24) / 49)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-11
-normal! 02|
+15
+normal! 010|
 tabedit node.c
 set splitbelow splitright
 set nosplitbelow
@@ -56,12 +56,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 41 - ((40 * winheight(0) + 24) / 49)
+let s:l = 44 - ((43 * winheight(0) + 24) / 49)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-41
-normal! 0
+44
+normal! 09|
 tabedit rpn.c
 set splitbelow splitright
 set nosplitbelow
@@ -78,12 +78,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 20 - ((19 * winheight(0) + 24) / 49)
+let s:l = 28 - ((27 * winheight(0) + 24) / 49)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-20
-normal! 09|
+28
+normal! 022|
 tabedit rpnlib.c
 set splitbelow splitright
 set nosplitbelow
@@ -100,12 +100,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 42 - ((37 * winheight(0) + 24) / 49)
+let s:l = 122 - ((34 * winheight(0) + 24) / 49)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-42
-normal! 032|
+122
+normal! 021|
 tabedit rpnlib.h
 set splitbelow splitright
 set nosplitbelow
@@ -122,13 +122,13 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 8 - ((7 * winheight(0) + 24) / 49)
+let s:l = 22 - ((21 * winheight(0) + 24) / 49)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-8
-normal! 023|
-tabnext 2
+22
+normal! 032|
+tabnext 4
 set stal=1
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf

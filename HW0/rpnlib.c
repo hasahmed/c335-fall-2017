@@ -45,6 +45,8 @@ char process_store_scanned(List **head, char *scanned){
 
         if(isdigit(scanned[i])) {
             strbuf[buf_write_index] = scanned[i];
+        } else if(scanned[i] == -1){
+            break;
         } else {
             printf("The scanned character '%c' is not a digit\n", scanned[i]);
             switch(scanned[i]){
@@ -71,8 +73,8 @@ char process_store_scanned(List **head, char *scanned){
                     }
                 case '-':
                     {
-                    int first = pop(head);
                     int second = pop(head);
+                    int first = pop(head);
                     push(head, first - second);
                     return 'z';
                     break;

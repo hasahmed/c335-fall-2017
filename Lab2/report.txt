@@ -1,0 +1,20 @@
+name: Hasan Y Ahmed
+parterner name: Mitchel Thomas
+Lab2
+
+Results:
+
+I created a word count program that works just unixs wc program. 
+
+Difficulties:
+
+I was unable to run gdb from my personal machine, which I had previously configured. I'm not sure what has gone wrong.
+I had to push my code to git, and then clone it from silo. From there I had no problems with gdb. 
+
+Things I learned:
+
+I learned a few more things about make files. For one the variable names such as CLFLAGS are not just variable names that
+you can call anything you want. They seem to have special meaning. I haven't found out for sure that this is the case,
+but it seems to be. I also learned that an executable file compiled on silo does not run on my machine without being recompiled.
+I thought this strange because they are both the same architecture. I will have to look into this further. 
+

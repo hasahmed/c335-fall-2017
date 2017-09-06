@@ -1,6 +1,7 @@
-//
-// poly.c
-//
+/* Hasan Y Ahmed (hasahmed) && Mitch Thomas (mitthoma)
+ * C335
+ * Lab2
+ */
 
 typedef union {
   unsigned char ccc[8];

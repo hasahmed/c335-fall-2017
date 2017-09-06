@@ -1,3 +1,9 @@
+/* Hasan Y Ahmed (hasahmed)
+ * C335
+ * Lab2
+ */
+
+
 #include <stdio.h>
 #include <ctype.h>
 

@@ -14,7 +14,23 @@ void dump_memory(void *p, int len) {
 printf("address\t\tchar\thex\tshort\tinteger\t\tfloat\t\tdoubleFloat\n");
   for (i = 0; i < len; i++) {
     printf("%-16p %-6c 0x%02hhx %+8d %+12d %+17.6e %+16.6e\n",
-            (int*)(p + i), //address
+            ((int*)p) + i, //address
+            ((int)(*(char*)(p + i)) > 33 && ((int)(*(char*)(p + i) < 126))) ? *(unsigned char*)(p + i) : '?', //char
+            *(((char*)p) + i), //hex char
+            *(((short*)p) + i), //short
+            i % sizeof(int) == 0 ? *(((int*)p) + i) : 0, //int
+            *(((float*)p) + i), //float
+            *(((double*)p) + i) //double
+            ); 
+  }
+}
+/*
+void dump_memory(void *p, int len) {
+  int i;
+printf("address\t\tchar\thex\tshort\tinteger\t\tfloat\t\tdoubleFloat\n");
+  for (i = 0; i < len; i++) {
+    printf("%-16p %-6c 0x%02hhx %+8d %+12d %+17.6e %+16.6e\n",
+            (int*) p + i, //address
             ((int)(*(char*)(p + i)) > 33 && ((int)(*(char*)(p + i) < 126))) ? *(unsigned char*)(p + i) : '?', //char
             *(char*)(p + i), //hex char
             *(short*)(p + i), //short
@@ -24,3 +40,4 @@ printf("address\t\tchar\thex\tshort\tinteger\t\tfloat\t\tdoubleFloat\n");
             ); 
   }
 }
+*/

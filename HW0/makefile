@@ -1,9 +1,8 @@
 CC = gcc
-CFLAGS = ""
 all : rpn
 
 rpn : rpn.o node.o rpnlib.o
-	$(CC) $(CFLAGS) -o rpn rpn.o node.o rpnlib.o
+	$(CC) -o rpn rpn.o node.o rpnlib.o
 
 debug : rpn
 	gdb -tui rpn

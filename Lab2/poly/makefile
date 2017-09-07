@@ -1,9 +1,11 @@
 #Hasan Y Ahmed && Mitchel Thomas
 #Lab2: mywc
+CC = gcc
+CFLAGS = -std=c99
 poly: poly.o dump.o
-	gcc -o poly poly.o dump.o
+	$(CC) $(CFLAGS) -o poly poly.o dump.o
 debug:
-	gcc -g poly.c dump.c -o poly
+	$(CC) $(CFLAGS) -g poly.c dump.c -o poly
 clean:
 	rm *.o poly
 

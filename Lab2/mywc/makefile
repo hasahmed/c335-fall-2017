@@ -1,7 +1,7 @@
 #Hasan Y Ahmed
 #Lab2: mywc
 CC = gcc
-CFLAGS = -g
+CFLAGS = -std=c99 
 LDFLAGS = -g
 
 mywc: mywc.o

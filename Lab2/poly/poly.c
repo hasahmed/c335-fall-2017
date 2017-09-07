@@ -1,6 +1,7 @@
 /* Hasan Y Ahmed (hasahmed) && Mitch Thomas (mitthoma)
  * C335
  * Lab2
+ * poly.c
  */
 
 typedef union {

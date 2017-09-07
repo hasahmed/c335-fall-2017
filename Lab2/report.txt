@@ -4,7 +4,7 @@ Lab2
 
 Results:
 
-I created a word count program that works just unixs wc program. 
+I created a word count program that works just unixs wc program, and also printed a bunch of values from a union, cast as different types, and aligned according to their size.
 
 Difficulties:
 
@@ -17,4 +17,8 @@ I learned a few more things about make files. For one the variable names such as
 you can call anything you want. They seem to have special meaning. I haven't found out for sure that this is the case,
 but it seems to be. I also learned that an executable file compiled on silo does not run on my machine without being recompiled.
 I thought this strange because they are both the same architecture. I will have to look into this further. 
+I also learned that the default C standard for gcc installed on machine is std=c99, while on silo its std=c89, which leads to 
+my files not compiling on silo when they do compile on my machine with the same makefile, because on my machine it isn't necessary to 
+to specify that the standard is std=c99. This lead me to place the compiler flag -std=c99 in my make file so that it compiles on silo, and
+my machine with no problem. 
 

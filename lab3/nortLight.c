@@ -1,3 +1,7 @@
+/* Hasan Y Ahmed
+ * Lab 3
+ * 9/8/17
+ */
 #include <stm32f30x.h>  // Pull in include files for F30x standard drivers 
 #include <f3d_led.h>     // Pull in include file for the local drivers
 #include <f3d_user_btn.h>

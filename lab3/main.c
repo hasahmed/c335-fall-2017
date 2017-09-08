@@ -1,3 +1,8 @@
+/* Hasan Y Ahmed
+ * Dhruv Agnihotri
+ * Lab 3
+ * 9/8/17
+ */
 #include <stm32f30x.h>  // Pull in include files for F30x standard drivers 
 #include <f3d_led.h>     // Pull in include file for the local drivers
 #include <f3d_user_btn.h>
@@ -13,29 +18,33 @@ void delay(void) {
 int main(void) {
     f3d_led_init();
 
+    f3d_user_btn_init();
 
-    GPIO_InitTypeDef button; 
-    GPIO_StructInit(&button);
-    button.GPIO_Pin = GPIO_Pin_0;
-    button.GPIO_Mode = GPIO_Mode_IN;
-    button.GPIO_PuPd = GPIO_PuPd_NOPULL;
-    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
-    GPIO_Init(GPIOA, &button);
     
 
   while(1){
       int i = 0;
       for(i; i < 8;){
-          if(!GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0)){
+btn_held:
+          if(user_btn_read()){
+              f3d_led_on(i);
+              goto btn_held;
+          }
+          else{
               f3d_led_on(i);
               delay();
               i++;
-          }
-          if(i != 0){
-              f3d_led_off(i-1);
+              if(i != 0){
+                f3d_led_off(i-1);
+            }
           }
       }
       f3d_led_all_on();
+btn_held_all:
+      if(user_btn_read()){
+          f3d_led_all_on();
+          goto btn_held_all;
+      }
       delay();
       f3d_led_all_off();
       delay();

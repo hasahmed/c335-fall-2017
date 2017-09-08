@@ -1,3 +1,8 @@
+/* Hasan Y Ahmed
+ * Dhruv Agnihotri
+ * Lab 3
+ * 9/8/17
+ */
 /************************
  *f3d_led.c - contains intializations/functions for the leds
  ************************/

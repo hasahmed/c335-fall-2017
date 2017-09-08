@@ -1,5 +1,5 @@
-/* Hasan Y Ahmed
- * Dhruv Agnihotri
+/* Hasan Y Ahmed (hasahmed)
+ * Dhruv Agnihotri (dagnihot)
  * Lab 3
  * 9/8/17
  */

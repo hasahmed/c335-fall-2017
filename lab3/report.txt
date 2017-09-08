@@ -1,0 +1,33 @@
+Hasan Y Ahmed
+Lab 3
+Partner: Dhruv Agnihotri
+
+1)
+    Flash: 128kb
+    Ram: 8kb
+    Speed: 24Mhz
+
+2)
+    GPIO stands for General Purpose I/O (Input/Output)
+
+4)
+    Port and pin numbers of the green LED's are 15, and 11
+
+5)
+These are the public attributes of the GPIO_InitTypeDef struct;
+
+    uint32_t    GPIO_Pin
+    GPIOMode_TypeDef    GPIO_Mode
+    GPIOSpeed_TypeDef   GPIO_Speed
+    GPIOOType_TypeDef   GPIO_OType
+    GPIOPuPd_TypeDef    GPIO_PuPd
+
+
+6)
+There were a few difficulites. Working in an enviornment which you are unfamiliar with is always
+difficult. Learning what the code that you are givin is actually doing is difficult. It was difficult
+to dicipher the f3 schematic, and I am unfamiliar with such types of documents.
+Other than that the logic of trying to get the LED's to stay ON when the user was holding the button
+was a bit of a challenge. But all in it seems to work well.
+
+

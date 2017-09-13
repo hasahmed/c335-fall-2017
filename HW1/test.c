@@ -46,7 +46,6 @@ void stop_light () {
 
 main(){
   int i = 0;
-  
   while (i < 36) {
     stop_light();
     i = inc(i);

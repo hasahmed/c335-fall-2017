@@ -1,6 +1,6 @@
-Address and size of global variable state. (10 pts)
-Address and size of global variable state_counter. (10 pts)
-Starting address and size of function stop_light(). (10 pts)
-Starting address and size of function inc(). (10 pts)
-Largest function in the executable HW1.elf. (10 pts)
-Overall size of the executable HW1.elf in bytes. (10 pts): 59987 bytes
+-Address and size of global variable state: size = 4 bytes, value = 0
+-Address and size of global variable state_counter: size = 4 bytes, value = 1
+Starting address and size of function stop_light(): Address = 0x8b01, size = 186 bytes
+Starting address and size of function inc(): Address = 0x8afd, size = 0
+Largest function in the executable HW1.elf:
+-Overall size of the executable HW1.elf in bytes: 59987 bytes

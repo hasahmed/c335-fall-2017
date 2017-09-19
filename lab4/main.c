@@ -5,6 +5,7 @@
 #include <stm32f30x.h>  // Pull in include files for F30x standard drivers 
 #include <f3d_uart.h>     // Pull in include file for the local drivers
 #include <stdio.h>
+#include "mywc/mywc.h"
 
 // Simple looping delay function
 void delay(void) {
@@ -20,18 +21,9 @@ int main(void) {
     setvbuf(stdin, NULL, _IONBF, 0);
     setvbuf(stdout, NULL, _IONBF, 0);
     setvbuf(stderr, NULL, _IONBF, 0);
-
     f3d_uart_init();
 
-    int i = 0;
-    char s[] = "hello world!";
-    while(1){
-        //putchar('a');
-//        putchar(getchar());
-        //putstring("hello");
-        printf("%s\n", s);
-        i++;
-    }
+    wc();
 }
 
 #ifdef USE_FULL_ASSERT

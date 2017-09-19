@@ -13,6 +13,8 @@ badd +6 main.c
 badd +1 makefile
 badd +10 ../lab3/makefile
 badd +37 ~/.vimrc
+badd +0 mywc/mywc.c
+badd +0 mywc/mywc.h
 args ../driver/src/f3d_uart.c
 edit main.c
 set splitbelow splitright
@@ -30,12 +32,56 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 32 - ((31 * winheight(0) + 28) / 57)
+let s:l = 26 - ((25 * winheight(0) + 28) / 57)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-32
-normal! 024|
+26
+normal! 05|
+tabedit mywc/mywc.c
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winheight=1 winwidth=1
+argglobal
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 49 - ((48 * winheight(0) + 28) / 57)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+49
+normal! 05|
+tabedit mywc/mywc.h
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winheight=1 winwidth=1
+argglobal
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 1 - ((0 * winheight(0) + 28) / 57)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+1
+normal! 010|
 tabedit ../driver/src/f3d_uart.c
 set splitbelow splitright
 set nosplitbelow
@@ -74,13 +120,13 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 11 - ((2 * winheight(0) + 28) / 57)
+let s:l = 10 - ((9 * winheight(0) + 28) / 57)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-11
-normal! 0
-tabnext 1
+10
+normal! 0110|
+tabnext 2
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf
 endif

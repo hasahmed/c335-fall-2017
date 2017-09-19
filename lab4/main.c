@@ -4,6 +4,7 @@
  */
 #include <stm32f30x.h>  // Pull in include files for F30x standard drivers 
 #include <f3d_uart.h>     // Pull in include file for the local drivers
+#include <stdio.h>
 
 // Simple looping delay function
 void delay(void) {
@@ -15,12 +16,21 @@ void delay(void) {
 
 int main(void) {
 
+    //to make output unbuffered
+    setvbuf(stdin, NULL, _IONBF, 0);
+    setvbuf(stdout, NULL, _IONBF, 0);
+    setvbuf(stderr, NULL, _IONBF, 0);
+
     f3d_uart_init();
 
+    int i = 0;
+    char s[] = "hello world!";
     while(1){
         //putchar('a');
-        //putchar(getchar());
-        putstring("hello");
+//        putchar(getchar());
+        //putstring("hello");
+        printf("%s\n", s);
+        i++;
     }
 }
 

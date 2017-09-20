@@ -23,7 +23,8 @@ int main(void) {
     setvbuf(stderr, NULL, _IONBF, 0);
     f3d_uart_init();
 
-    wc();
+    while(1)
+        wc();
 }
 
 #ifdef USE_FULL_ASSERT

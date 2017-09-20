@@ -47,5 +47,5 @@ void wc(){
         }
         previous_c = c;
     }
-    printf("\t%d\t%d\t%d\n", lines, words, bytes - 1);
+    printf("%d     %d     %d\n", lines, words, bytes - 1);
 }

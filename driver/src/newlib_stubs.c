@@ -1,8 +1,8 @@
 /*
- * newlib_stubs.c
- *
- *      9/19/19
- *      Author: Hasan Y Ahmed
+ * Hasan Y Ahmed
+ * Lab4
+ * 9/18/17
+ * Partner: None
  */
 #include <errno.h>
 #include <sys/stat.h>

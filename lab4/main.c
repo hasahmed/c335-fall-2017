@@ -1,6 +1,8 @@
-/* Hasan Y Ahmed (hasahmed)
- * Lab 2
- * 9/14/17
+/*
+ * Hasan Y Ahmed
+ * Lab4
+ * 9/18/17
+ * Partner: None
  */
 #include <stm32f30x.h>  // Pull in include files for F30x standard drivers 
 #include <f3d_uart.h>     // Pull in include file for the local drivers

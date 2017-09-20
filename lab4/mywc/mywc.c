@@ -1,6 +1,8 @@
-/* Hasan Y Ahmed (hasahmed)
- * C335
- * Lab2
+/*
+ * Hasan Y Ahmed
+ * Lab4
+ * 9/18/17
+ * Partner: None
  */
 
 

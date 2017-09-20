@@ -1,6 +1,37 @@
-Hasan Y Ahmed:
+/*
+ * Hasan Y Ahmed
+ * Lab4
+ * 9/18/17
+ * Partner: None
+ */
 
 
 I have ran the analyzer one time, and am confused by the output. I didn't think that the analizer was connected to anything,
 but there is still output? I have no idea what it is outputting. I will write later when I find out.
 Could not get Saleae to work, and was told by the UI to move on, and we'll try to come back to it later.
+
+
+There are 2 connections that a required to communicate over UART
+
+Alternate functions for GPIO pins are required to configure the pin for something other than the
+default IO function its configured to. For instance UART.
+
+
+The baud rate is the rate at which symbols are transfered.
+
+newlib_stubs is needed because when C is implemented by a compiler on an operating system, the 
+compiler depends on OS specific functionality for things like reading and writing to files.
+The Discovery Board does not have an operating system, and as such does not have the implemented functionality.
+So we need to provide the functionality ourselfs. This is where newlib_stubs comes in. printf specifically
+writes to standard output, and that is not something that is defined for our board, so we need to define it.
+
+
+The logic analizer is very useful for monitoring like frequencies of components.
+In the sittuation where you were unsure that would be the best form of debugging.
+
+
+I learned about the UART interface, and about what it takes to implement certain c functionality on a specific platform.
+The troubles that I ran into were mostly syntatical in nature. For instance I had a very difficult time figuring out
+why my program was not working, when after a long while of being frustrated I found that the funciton call was preceded
+by the keyword 'void' so the C compiler assumed it was a function declaration I suppose. There was no warning issued.
+I hope that it is not a mistake I will make again.

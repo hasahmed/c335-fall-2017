@@ -32,10 +32,10 @@ int gitBitsChar(unsigned char c, char answer[]){
 
 int gitBitsShort(unsigned short s, char answer[]){
     int i = 30;
-    while(i > 0){
+    while(i > -1){
         if(s & 1) answer[i] = '1';
         else answer[i] = '0';
-        s = s << 1;
+        s = s >> 1;
         i--;
     }
     answer[31] ='\0';
@@ -56,7 +56,6 @@ int gitBitsInt(int yikes, char answer[]){
         i--;
     }
     answer[32] = '\0';
-    answer[31] = '\0';
     return 0;
 }
 
@@ -69,7 +68,7 @@ int main(){
     char ans1[32];
     char ans2[32];
     char ans3[33];
-    char ans4[32];
+    char ans4[33];
     while (1){
         printf("--------------------------\n");
         gitBitsShort((unsigned short) 3200, ans1);

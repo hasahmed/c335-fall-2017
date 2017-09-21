@@ -26,7 +26,9 @@ int main(void) {
     f3d_uart_init();
 
     while(1)
-        wc();
+        printf("%s\n", "hello");
+        //putchar(getchar());
+        //wc();
 }
 
 #ifdef USE_FULL_ASSERT

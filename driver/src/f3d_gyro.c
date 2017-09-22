@@ -8,7 +8,7 @@ void f3d_gyro_interface_init() {
     GPIO_InitTypeDef GPIO_InitStructure;
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC, ENABLE);
     GPIO_StructInit(&GPIO_InitStructure);
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 | GPIO_Pin_5;
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3 | GPIO_Pin_5  | GPIO_Pin_6  | GPIO_Pin_7;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
     GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
@@ -16,8 +16,11 @@ void f3d_gyro_interface_init() {
     GPIO_Init(GPIOC,&GPIO_InitStructure);
 
 
-    GPIO_PinAFConfig(GPIOC,4,GPIO_AF_7);
-    GPIO_PinAFConfig(GPIOC,5,GPIO_AF_7);
+    GPIO_PinAFConfig(GPIOC, 5, GPIO_AF_5);
+    GPIO_PinAFConfig(GPIOC, 6, GPIO_AF_5);
+    GPIO_PinAFConfig(GPIOC, 7, GPIO_AF_5);
+
+
   //SCK PA5 
   
   //MOSI PA6 
@@ -30,6 +33,7 @@ void f3d_gyro_interface_init() {
   
   //set the CS high
   
+    GPIO_SetBits(GPIOE, GPIO_Pin_3);
   /**********************************************************************/
    
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
@@ -123,6 +127,13 @@ void f3d_gyro_write(uint8_t* pBuffer, uint8_t WriteAddr, uint16_t NumByteToWrite
 static uint8_t f3d_gyro_sendbyte(uint8_t byte) {
   /*********************************************************/
   /***********************CODE HERE ************************/
+
+while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
+SPI_SendData8(SPI1, byte);
+
+
+while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
+return (uint8_t)SPI_ReceiveData8(SPI1);
 
 
 

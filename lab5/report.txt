@@ -1,0 +1,28 @@
+Hasan Y Ahmed
+Partner: Mac Vogelsang
+9/28/17
+Lab 5 : Gyro
+
+
+1) The CS pin is used to select a slave device
+
+2) Setting the CS to high signals the end of communication with the SPI device.
+   The other functions that change the CS from high to low are the read and write functions.
+
+3) In order to hook up multiple perepherals to the same SPI bus, you would have follow all of the same
+    steps, except when using the GYRO_CS_HIGH() and low macros you would need to specify the pin of
+    the particular peripheral you want to communicate with.
+
+4) The prescale value is initially set to 8. The baud rate is then 9Mhz
+
+
+5) Yes the slave device does need to be configured with an initial transmition speed. You might want
+    to change the transmission speed of things on the fly for things polling a device to see if it is in
+    use, then if it is, up the frequncy in order to get more accurate readings from the device, if its something
+    like say a gyroscope. That way there are less wasted cpu cycles for polling.
+
+6) We learned how to communicate with a gyroscop via a SPI bus. This required writing both read and write
+    functions which required that we be familiar with the SPI protocol. We ran into a number of diffuculties, the biggest
+    of which was that we initialized the wrong pin, in our initialization function, which in its self wasn't a very big issue,
+    but the thing is that IT WORKED at least for a little while, then stoppped seemingly out of nowhere. Then it was
+    very difficult to find the source of the issue.

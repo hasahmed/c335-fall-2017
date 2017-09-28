@@ -1,54 +1,37 @@
+//*
+// Mac Vogelsang - madvogel
+// Hasan Ahmed - hasahmed
+// Lab 05 - main.c
+// Sept. 28th, 2017
+//
 //main.c for lab6
 #include <f3d_uart.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <f3d_gyro.h>
 #include <f3d_led.h>
 #include <f3d_user_btn.h>
 
-void delay(void) {
-    int i = 2000000;
-    while (i-- > 0) {
-        asm("nop"); /* This stops it optimising code out */
+void light_by_rate(float axisValue){
+    f3d_led_all_off();
+    //number of leds to turn on in positive or negative direction
+    int num = (int) abs(axisValue) / 100;
+    int j;
+    if (abs(axisValue) > 5) {
+        f3d_led_on(0);
     }
-}
-
-
-char switchAxis(char currentAxis){
-    switch(currentAxis){
-        case 'x':
-            return 'y';
-        case 'y':
-            return 'z';
-        case 'z':
-            return 'x';
-        default: return 0;
-    }
-}
-
-float getCurrentAxisValue(char currentAxis, float *gyroData){
-    switch (currentAxis){
-        case 'x':
-            return gyroData[0];
-        case 'y':
-            return gyroData[1];
-        case 'z':
-            return gyroData[2];
-        default: return 0;
-    }
-}
-
-
-void lightNorth(float av){
-    if(av > 5){
-        f3d_led_on(1);
-    }
-    else{
-        f3d_led_off(1);
+    if (axisValue > 0){
+        for (j = 1; j < num; j++){
+            f3d_led_on(j);
+        }
+    } else {
+        for (j = 7; j > (8-num); j--){
+            f3d_led_on(j);
+        }
     }
 }
 
 int main(void){
-
 
     f3d_uart_init();
     f3d_gyro_init();
@@ -59,27 +42,51 @@ int main(void){
     setvbuf(stdout, NULL, _IONBF, 0);
     setvbuf(stderr, NULL, _IONBF, 0);
 
+    //stores current state of the gyo axis
+    //0:X, 1:Y, 2:Z
+    int axis = 0;
+
+
+    int i;
+    float test[3];
     float gyroData[3];
-    char currentAxis = 'x';
-    int buttonBeenReleased = 1;
-    //f3d_led_all_on();
-    f3d_led_all_off();
+
     while(1){
-
-        if (!user_btn_read())
-            buttonBeenReleased = 1;
-
-        f3d_gyro_getdata(gyroData);
-        if(user_btn_read() && buttonBeenReleased){
-            currentAxis = switchAxis(currentAxis);
-            buttonBeenReleased = 0;
+        int val =  user_btn_read();
+        if (val) {
+            axis = (axis + 1) % 3;
+            while (user_btn_read() != 0);
+        } else {
+            //do nothing
         }
 
-        float currentAxisValue = getCurrentAxisValue(currentAxis, gyroData);
+        //*
+        //getchar() modification
+        if (USART_GetFlagStatus(USART1, USART_FLAG_RXNE) != (uint16_t)RESET) {
+            char input = USART_ReceiveData(USART1);
+            if (input == 'X' || input == 'x') axis = 0;
+            if (input == 'Y' || input == 'y') axis = 1;
+            if (input == 'Z' || input == 'z') axis = 2;
+        }
 
-        printf("%c: %f\n", currentAxis, currentAxisValue);
-        lightNorth(currentAxisValue);
-    }
+        //printf("%c\n",input[0]);
+        //*/
+
+        f3d_gyro_getdata(gyroData);
+        light_by_rate(gyroData[axis]);
+
+        printf("%c: %f\n", axis + 'X', gyroData[axis]);
+        //putchar(axis);
+        //putchar(getchar());
+
+        /* READ DATA TESTER
+        f3d_gyro_getdata(test);
+        for (i=0;i<3;i++){
+            printf("%f ", test[i]);
+        }
+        printf("\n");
+        //*/
+    };
 }
 
 void assert_failed(uint8_t* file, uint32_t line) {

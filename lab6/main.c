@@ -16,6 +16,8 @@
 
 #define CHARSTEP 6 //the amount of space to put between characters
 #define BARWIDTH 12 //the width of the bar in the bar graph
+#define HEIGHT ST7735_height;
+#define WIDTH ST7735_width;
 
 void drawString(int startx, int y, const char *str, uint16_t charColor, uint16_t charBGColor){
     int i = 0;
@@ -24,6 +26,7 @@ void drawString(int startx, int y, const char *str, uint16_t charColor, uint16_t
         i++;
     }
 }
+
 
 void bannerString(int speed, int y, const char *str, uint16_t strColor, uint16_t strBGColor){ //mess with this later
     f3d_lcd_fillScreen2(strBGColor);
@@ -57,6 +60,7 @@ void drawPositiveBar(float amount, uint16_t color, uint16_t bgColor){
 }
 
 
+
 int main(void) {
     //inits
     f3d_uart_init();
@@ -70,27 +74,15 @@ int main(void) {
 
     drawMiddleLine(RED);
 
+
+    float gyroData[3];
+    char x_axis[30];
+
     while(1){
+        f3d_gyro_getdata(gyroData);
+        sprintf(x_axis, "X: %f", gyroData[0]);
+        drawString(10, 25, x_axis, RED, BLACK);
 
-
-        /*
-           int TIME = 2000;
-           f3d_lcd_fillScreen2(RED);
-           delay(TIME);
-           f3d_lcd_fillScreen2(BLACK);
-           delay(TIME);
-           f3d_lcd_fillScreen2(BLUE);
-           delay(TIME);
-           f3d_lcd_fillScreen2(CYAN);
-           delay(TIME);
-           f3d_lcd_fillScreen2(GREEN);
-           delay(TIME);
-           f3d_lcd_fillScreen2(MAGENTA);
-           delay(TIME);
-           f3d_lcd_fillScreen2(YELLOW);
-           delay(TIME);
-           f3d_lcd_fillScreen2(WHITE);
-           */
     }
 }
 

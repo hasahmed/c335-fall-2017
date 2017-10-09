@@ -3,9 +3,9 @@
  * Filename: main.c
  * Description:
  * Author: Hasan Y Ahmed
- * Maintainer:
- * Created: Thu Jan 10 11:23:43 2013
-/* Code: */
+ * Partner: ***
+ * Date: 10/8/17
+ */
 
 #include <stm32f30x.h> // Pull in include files for F30x standard drivers
 #include <f3d_led.h> // Pull in include file for the local drivers
@@ -129,14 +129,6 @@ int main(void) {
         drawBar(BARSTART_X, gyroData, 'X', XCOLOR, BGCOLOR);
         drawBar(BARSTART_Y , gyroData, 'Y', YCOLOR, BGCOLOR);
         drawBar(BARSTART_Z , gyroData, 'Z', ZCOLOR, BGCOLOR);
-        /*
-        sprintf(x_axis, "X: %f", gyroData[0]);
-        sprintf(y_axis, "Y: %f", gyroData[1]);
-        sprintf(z_axis, "Z: %f", gyroData[2]);
-        drawString(10, 25, x_axis, RED, BLACK);
-        drawString(10, 35, y_axis, RED, BLACK);
-        drawString(10, 45, z_axis, RED, BLACK);
-        */
     }
 }
 

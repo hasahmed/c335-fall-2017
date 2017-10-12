@@ -3,7 +3,7 @@
  * Filename: main.c
  * Description:
  * Author: Hasan Y Ahmed
- * Partner: ***
+ * Partner: Kyle Lemmel
  * Date: 10/8/17
  */
 

@@ -23,7 +23,8 @@ OBJS=  $(STARTUP) 	main.o \
 			stm32f30x_usart.o \
 			stm32f30x_spi.o \
 			newlib_stubs.o \
-			f3d_gyro.o
+			f3d_gyro.o \
+			f3d_led.o
 
 # include common make file
 

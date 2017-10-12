@@ -10,10 +10,12 @@ endif
 set shortmess=aoO
 badd +1 main.c
 badd +0 Makefile
-badd +0 f3d_mag.c
+badd +58 f3d_mag.c
 badd +0 f3d_i2c.c
-badd +0 f3d_accel.c
+badd +8 f3d_accel.c
 badd +14 ../driver/src/f3d_gyro.c
+badd +0 report.txt
+badd +128 ../lab6/main.c
 args main.c Makefile f3d_mag.c f3d_i2c.c f3d_accel.c
 edit main.c
 set splitbelow splitright
@@ -31,13 +33,13 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 30 - ((29 * winheight(0) + 27) / 55)
+let s:l = 54 - ((25 * winheight(0) + 27) / 55)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-30
-normal! 027|
-tabedit f3d_mag.c
+54
+normal! 017|
+tabedit ../lab6/main.c
 set splitbelow splitright
 set nosplitbelow
 set nosplitright
@@ -45,6 +47,7 @@ wincmd t
 set winheight=1 winwidth=1
 argglobal
 3argu
+edit ../lab6/main.c
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -54,12 +57,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 27) / 55)
+let s:l = 62 - ((25 * winheight(0) + 27) / 55)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1
-normal! 0
+62
+normal! 022|
 tabedit f3d_i2c.c
 set splitbelow splitright
 set nosplitbelow
@@ -77,35 +80,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 53 - ((38 * winheight(0) + 27) / 55)
+let s:l = 140 - ((54 * winheight(0) + 27) / 55)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-53
-normal! 010|
-tabedit f3d_accel.c
-set splitbelow splitright
-set nosplitbelow
-set nosplitright
-wincmd t
-set winheight=1 winwidth=1
-argglobal
-5argu
-setlocal fdm=manual
-setlocal fde=0
-setlocal fmr={{{,}}}
-setlocal fdi=#
-setlocal fdl=0
-setlocal fml=1
-setlocal fdn=20
-setlocal fen
-silent! normal! zE
-let s:l = 8 - ((7 * winheight(0) + 27) / 55)
-if s:l < 1 | let s:l = 1 | endif
-exe s:l
-normal! zt
-8
-normal! 0
+140
+normal! 025|
 tabedit Makefile
 set splitbelow splitright
 set nosplitbelow
@@ -123,13 +103,36 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 28 - ((27 * winheight(0) + 27) / 55)
+let s:l = 27 - ((26 * winheight(0) + 27) / 55)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-28
-normal! 0
-tabnext 3
+27
+normal! 021|
+tabedit report.txt
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winheight=1 winwidth=1
+argglobal
+edit report.txt
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 33 - ((32 * winheight(0) + 27) / 55)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+33
+normal! 075|
+tabnext 1
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf
 endif

@@ -27,6 +27,9 @@
 #define WIDTH ST7735_width
 
 
+int runningCompassApp;
+
+
 void drawString(int startx, int y, const char *str, uint16_t charColor, uint16_t charBGColor){
     int i = 0;
     while(str[i] != '\0'){
@@ -50,6 +53,7 @@ int ledNumberConvert(int led){
  */
 
 void LCD_drawCompassApp(){
+    runningCompassApp = 1;
     f3d_lcd_fillScreen2(BLACK);
     drawString(12, HEIGHT / 2, "SEE LEDs FOR NORTH", RED, BLACK); 
 
@@ -64,7 +68,38 @@ void compassLights(float dir){
         if(i != led)
             f3d_led_off(i);
     }
-    printf("flooredValue:%d\n", led);
+}
+
+void LCD_drawTiltAppScreen() {
+    runningCompassApp = 0;
+    f3d_lcd_fillScreen2(BLACK);
+    //drawString(12, HEIGHT / 2, "This The Tilt App", RED, BLACK); 
+}
+
+void appSwitch(){
+    if (runningCompassApp){
+        LCD_drawTiltAppScreen();
+    } else {
+        LCD_drawCompassApp();
+
+    }
+
+}
+
+
+void drawBubbleAngle(float x, float y, float z){
+    int SQUARESIZE = 10;
+    int SQARE_START_X = WIDTH/2 - (SQUARESIZE / 2);
+    int SQARE_START_Y = HEIGHT/2 - (SQUARESIZE / 2);
+
+    //draw middle square
+    int i, j;
+    for(i = 0; i < 10; i++){ //horizontal
+        for(j = 0; j < 10; j+= 2){ //vertical
+            //if (j == 0 || j == 9)
+                f3d_lcd_drawPixel(SQARE_START_X + i, SQARE_START_Y + j, WHITE);
+        }
+    }
 }
 
 int main(void) {
@@ -73,48 +108,71 @@ int main(void) {
     setvbuf(stderr, NULL, _IONBF, 0);
 
     // Set up your inits before you go ahead
+    f3d_uart_init();
+    delay(10);
+    f3d_gyro_init();
+    delay(10);
+    f3d_led_init();
+    delay(10);
+    f3d_user_btn_init();
+    delay(10);
+    f3d_lcd_init();
+    delay(10);
     f3d_i2c1_init();
     delay(10);
     f3d_accel_init();
     delay(10);
     f3d_mag_init();
     delay(10);
-    f3d_gyro_init();
-    delay(10);
-    f3d_led_init();
-    delay(10);
-    f3d_lcd_init();
-    delay(10);
-    //f3d_user_btn_init();
 
 
     float mag[3];
     float accel[3];
 
-    float pitch;
-    float roll;
-    float Xh;
-    float Yh;
-    float compassAngle;
+    float x, y, z;
+    float compassAngle, Xh, Yh, pitch, roll;
+
 
     LCD_drawCompassApp();
+    runningCompassApp = 1;
     while(1){
         f3d_mag_read(mag);
         f3d_accel_read(accel);
 
 
-        //pitch = (atanf(accel[0] / sqrt(pow(accel[1], 2) + pow(accel[2], 2))));
+        x = accel[0] * 180;
+        y = accel[1] * 180;
+        z = accel[2] * 180;
+
+        printf("x:%f\n", x);
+
+
         pitch = (atanf(accel[0] / sqrt(pow(accel[1], 2) + pow(accel[2], 2))));
         roll = (atanf(accel[1]/sqrt(pow(accel[0], 2) + pow(accel[2], 2))));
+        
         Xh = mag[0]*cos(pitch)+mag[2]*sin(pitch);
         Yh = mag[0]*sin(roll)*sin(pitch)+mag[1]*cos(roll)-mag[2]*sin(roll)*cos(pitch);
+
+        //pitch = (atanf(accel[0] / sqrt(pow(accel[1], 2) + pow(accel[2], 2))));
         compassAngle = fabs((atan2(Yh, Xh)) * 180 / 3.1415926535 + 180.0f);
-        compassLights(compassAngle);
+
+        if (runningCompassApp){
+            compassLights(compassAngle);
+        }
+        else {
+            f3d_led_all_off();
+            drawBubbleAngle(x, y, z);
+        }
+
+        if (user_btn_read()){
+            appSwitch();
+        }
     }
 }
 
 #ifdef USE_FULL_ASSERT
 void assert_failed(uint8_t* file, uint32_t line) {
+    printf("There has been an error, Use GDB to find the source");
     /* Infinite loop */
     /* Use GDB to find out why we're here */
     while (1);

@@ -96,11 +96,11 @@ void drawBar(int starting_x, float *amount, char axis, uint16_t color, uint16_t 
 
 int main(void) {
     //inits
-    f3d_uart_init();
-    f3d_gyro_init();
-    f3d_led_init();
-    f3d_user_btn_init();
-    f3d_lcd_init();
+    f3d_uart_init(); //check
+    f3d_gyro_init(); //check
+    f3d_led_init(); //check
+    f3d_user_btn_init(); //check
+    f3d_lcd_init(); //check
 
 
     uint16_t BGCOLOR = BLACK;

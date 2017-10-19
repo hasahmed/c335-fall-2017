@@ -28,7 +28,9 @@ Q2) Why do we write to the accelerometer/magnetometer before we can read from th
 
 
 Q3) What do the following lines of code do? (it is only necessary to explain the accelerometer)
+    The following code reads in accelerator data from raw data by dividing raw_data by 1000 and casting it to a float.
     
 
 Q4.) Why might it be necessary to tilt compensate your compass computation?
-    This is 
+    This is needed because the information read into when you get the raw data is effected by the tilt of your board. 
+    Hence if you want north to be north while the board is tilted, some compensation is needed.

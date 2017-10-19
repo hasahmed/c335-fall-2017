@@ -2,9 +2,8 @@
  *
  * Filename: main.c
  * Description:
- * Author:
- * Maintainer:
- * Created: Thu Jan 10 11:23:43 2013
+ * Hasan Y Ahmed, Kyle
+ * Created: 10/16/17
 /* Code: */
 
 
@@ -184,20 +183,7 @@ int main(void) {
 
         x = accel[0] * 180;
         y = accel[1] * 180;
-        /*
-        z = accel[2] * 180;
-        */
-        //x = (mag[0] * cos(pitch)) + (mag[2] * sin(pitch));
-        //y = (mag[0] * sin(roll) * sin(pitch)) + (mag[1] * cos(roll)) - (mag[2] * sin(roll) * cos(pitch)); 
-
-
-        //x = (x * 180) / M_PI;
-        //y = (y * 180) / M_PI;
-        //x = Xh;
-        //y = Yh;
         printf("Y:%f\n", y);
-        //z = accel[2] * 180;
-        //printf("x%f\n", x);
 
         if (runningCompassApp){
             compassLights(compassAngle);
@@ -226,3 +212,10 @@ void assert_failed(uint8_t* file, uint32_t line) {
 
 /* main.c ends here */
 
+//z = accel[2] * 180;
+//x = (mag[0] * cos(pitch)) + (mag[2] * sin(pitch));
+//y = (mag[0] * sin(roll) * sin(pitch)) + (mag[1] * cos(roll)) - (mag[2] * sin(roll) * cos(pitch)); 
+//x = (x * 180) / M_PI;
+//y = (y * 180) / M_PI;
+//x = Xh;
+//y = Yh;

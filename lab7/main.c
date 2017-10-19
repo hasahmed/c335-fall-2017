@@ -26,6 +26,10 @@
 #define HEIGHT ST7735_height
 #define WIDTH ST7735_width
 
+#define SQUARESIZE  10 //the size of the "bubble"
+#define SQUARE_START_X  WIDTH/2 - (SQUARESIZE / 2)
+#define SQUARE_START_Y  HEIGHT/2 - (SQUARESIZE / 2)
+
 
 int runningCompassApp;
 
@@ -87,19 +91,45 @@ void appSwitch(){
 }
 
 
-void drawBubbleAngle(float x, float y, float z){
-    int SQUARESIZE = 10;
-    int SQARE_START_X = WIDTH/2 - (SQUARESIZE / 2);
-    int SQARE_START_Y = HEIGHT/2 - (SQUARESIZE / 2);
 
+
+void drawMiddleSquare() {
     //draw middle square
     int i, j;
-    for(i = 0; i < 10; i++){ //horizontal
-        for(j = 0; j < 10; j+= 2){ //vertical
-            //if (j == 0 || j == 9)
-                f3d_lcd_drawPixel(SQARE_START_X + i, SQARE_START_Y + j, WHITE);
+    for(i = 0; i < SQUARESIZE; i++){ //horizontal
+        for(j = 0; j < SQUARESIZE; j++){ //vertical
+            if ((j == 0 || j == SQUARESIZE -1) || (i == 0 || i == SQUARESIZE -1))
+                f3d_lcd_drawPixel(SQUARE_START_X + i, SQUARE_START_Y + j, WHITE);
         }
     }
+}
+
+
+void drawBubble(int x, int y, int* dirtyArea){
+    int bubbleOffset = -2;
+    int bubbleSize = SQUARESIZE + bubbleOffset;
+    int i, j;
+    int drawX = ((SQUARE_START_X) + bubbleOffset) + (int)y;
+    int drawY = ((SQUARE_START_Y) + bubbleOffset) + (int)x;
+    for(i = 0; i < bubbleSize; i++) { //horizontal
+        for(j = 0; j < bubbleSize; j++) { //vertical
+            f3d_lcd_drawPixel(drawX + i, drawY + j, WHITE);
+        }
+    }
+    dirtyArea[0] = drawX;
+    dirtyArea[1] = drawY;
+}
+
+void cleanDirtyArea(int dirtyX, int dirtyY){
+    int bubbleOffset = -2;
+    int bubbleSize = SQUARESIZE + bubbleOffset;
+    int i, j;
+    for(i = 0; i < bubbleSize; i++) { //horizontal
+        for(j = 0; j < bubbleSize; j++) { //vertical
+            f3d_lcd_drawPixel(dirtyX + i, dirtyY + j, BLACK);
+        }
+    }
+
 }
 
 int main(void) {
@@ -128,6 +158,7 @@ int main(void) {
 
     float mag[3];
     float accel[3];
+    int dirtyArea[] = {0, 0};
 
     float x, y, z;
     float compassAngle, Xh, Yh, pitch, roll;
@@ -135,6 +166,7 @@ int main(void) {
 
     LCD_drawCompassApp();
     runningCompassApp = 1;
+    int i = 0;
     while(1){
         f3d_mag_read(mag);
         f3d_accel_read(accel);
@@ -144,12 +176,9 @@ int main(void) {
         y = accel[1] * 180;
         z = accel[2] * 180;
 
-        printf("x:%f\n", x);
-
-
         pitch = (atanf(accel[0] / sqrt(pow(accel[1], 2) + pow(accel[2], 2))));
         roll = (atanf(accel[1]/sqrt(pow(accel[0], 2) + pow(accel[2], 2))));
-        
+
         Xh = mag[0]*cos(pitch)+mag[2]*sin(pitch);
         Yh = mag[0]*sin(roll)*sin(pitch)+mag[1]*cos(roll)-mag[2]*sin(roll)*cos(pitch);
 
@@ -159,9 +188,11 @@ int main(void) {
         if (runningCompassApp){
             compassLights(compassAngle);
         }
-        else {
+        else { //Level App
             f3d_led_all_off();
-            drawBubbleAngle(x, y, z);
+            cleanDirtyArea(dirtyArea[0], dirtyArea[1]);
+            drawMiddleSquare();
+            drawBubble(x, y, dirtyArea);
         }
 
         if (user_btn_read()){

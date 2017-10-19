@@ -31,4 +31,4 @@ Q3) What do the following lines of code do? (it is only necessary to explain the
     
 
 Q4.) Why might it be necessary to tilt compensate your compass computation?
-    This may be necessary because the tilt...
+    This is 

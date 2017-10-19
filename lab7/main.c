@@ -172,18 +172,32 @@ int main(void) {
         f3d_accel_read(accel);
 
 
-        x = accel[0] * 180;
-        y = accel[1] * 180;
-        z = accel[2] * 180;
 
         pitch = (atanf(accel[0] / sqrt(pow(accel[1], 2) + pow(accel[2], 2))));
         roll = (atanf(accel[1]/sqrt(pow(accel[0], 2) + pow(accel[2], 2))));
 
         Xh = mag[0]*cos(pitch)+mag[2]*sin(pitch);
-        Yh = mag[0]*sin(roll)*sin(pitch)+mag[1]*cos(roll)-mag[2]*sin(roll)*cos(pitch);
+        Yh = mag[0]*sin(roll)*sin(pitch) + mag[1] * cos(roll) - mag[2] * sin(roll)*cos(pitch);
 
         //pitch = (atanf(accel[0] / sqrt(pow(accel[1], 2) + pow(accel[2], 2))));
         compassAngle = fabs((atan2(Yh, Xh)) * 180 / 3.1415926535 + 180.0f);
+
+        x = accel[0] * 180;
+        y = accel[1] * 180;
+        /*
+        z = accel[2] * 180;
+        */
+        //x = (mag[0] * cos(pitch)) + (mag[2] * sin(pitch));
+        //y = (mag[0] * sin(roll) * sin(pitch)) + (mag[1] * cos(roll)) - (mag[2] * sin(roll) * cos(pitch)); 
+
+
+        //x = (x * 180) / M_PI;
+        //y = (y * 180) / M_PI;
+        //x = Xh;
+        //y = Yh;
+        printf("Y:%f\n", y);
+        //z = accel[2] * 180;
+        //printf("x%f\n", x);
 
         if (runningCompassApp){
             compassLights(compassAngle);

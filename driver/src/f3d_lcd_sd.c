@@ -178,10 +178,10 @@ void f3d_lcd_init(void) {
     }
 }
 
-static void LcdWrite(char dc,const char *data,int nbytes) {
+static void LcdWrite(char dc, const char *data, int nbytes) {
     GPIO_WriteBit(LCD_PORT,GPIO_PIN_DC,dc); // dc 1 = data , 0 = control
     GPIO_ResetBits(LCD_PORT,GPIO_PIN_SCE);
-    spiReadWrite(SPILCD,0,data,nbytes,LCDSPEED);
+    spiReadWrite(SPILCD, 0, data, nbytes, LCDSPEED);
     GPIO_SetBits(LCD_PORT,GPIO_PIN_SCE);
 }
 
@@ -192,7 +192,7 @@ static void LcdWrite16(char dc,const uint16_t *data,int cnt) {
     GPIO_SetBits(LCD_PORT,GPIO_PIN_SCE);
 }
 
-int spiReadWrite(SPI_TypeDef *SPIx,uint8_t *rbuf, const uint8_t *tbuf, int cnt, uint16_t speed) {
+int spiReadWrite(SPI_TypeDef *SPIx, uint8_t *rbuf, const uint8_t *tbuf, int cnt, uint16_t speed) {
     int i;
     int timeout;
 
@@ -295,16 +295,17 @@ void f3d_lcd_drawPixel(uint8_t x, uint8_t y, uint16_t color) {
 
 void f3d_lcd_drawChar(uint8_t x, uint8_t y, unsigned char c, uint16_t color, uint16_t background_color) {
     int i, j;
+    // loop draws a rectangle of color behind character
     for (i = 0; i < 5; i++) {
         for (j = 0; j < 8; j++){ 
-            f3d_lcd_drawPixel(x+i,y+j, background_color);
+            f3d_lcd_drawPixel(x+i,y+j, background_color); 
         }
     }
     for (i = 0; i < 5; i++) {
-        uint8_t byte = ASCII[c*5 + i];
+        uint8_t byte = ASCII[c*5 + i]; // starts at the first hex number of the character in ascii array representing the character
         for (j = 0; j < 8; j++){
-            if (byte & (1)) {
-                f3d_lcd_drawPixel(x+i,y+j, color);
+            if (byte & (1)) { //checks the if MSB is 1 
+                f3d_lcd_drawPixel(x + i, y + j, color); //if it is, then draw
             }
             byte >>= 1;
         }

@@ -1,0 +1,40 @@
+Hasan Y Ahmed
+Lab 6 : LCD
+Partner : 
+10/8/17
+
+
+- Discuss the advantages and disadvantages of printf debugging? Note: 
+    there is no right answer to this, we are just looking for your thoughts on the issue.
+
+    The advantages of printf debugging is its very quick, and helps you get to the root of simple issues very quickly. 
+    The disadvantage of printf debugging over using another debugger lets say GDB for example, is that at any point of 
+    your stepping through gdb, you can print any of the variables that you like at any moment. Using printf you have to 
+    know specifically which vairables you would like to see before hand, and put the statements in the as you see fit.
+
+
+- Explain why the spiReadWrite function is called inside a higher level peripheral function (the lcdWrite function).
+   The spiReadWrite function is called inside the LcdWrite function because the lcd screen is an SPI device, and it needs
+   to be written to to configure it to its proper settings.
+
+
+- Why does LCD_CS_DEASSERT() do? Why is it important?
+   LCD_CS_DEASSERT() unintializes the pin that the LCD screen is attatched to, and its important because using that functionality
+   is how we would have mulitple devices using the same GPIO pin.
+
+
+- Explain how the character data from the ASCII array in glcdfont.c gets converted to pixels.
+    The data from ASCII is used to check weather or not a specific pixel should be drawn or not. It does this by looking at the
+    binary representation of the character information that is stored in the ASCII array. Its basically if its a 1, then draw
+    a pixel, if its not then don't.
+
+
+- Give the exact timing difference between the two versions of f3d_lcd_fillScreen, from the Salae analyzer, and explain why the new function is faster.
+   **I haven't seen anyone able to get the Salea analyzer to work. I asked 3 different UIs for help, and none of them were able
+   get it to work. So I don't know.
+
+
+- Difficulties
+    Couldn't get the Salea Analyzer to work. Other than that, the lab was pretty straight forward. It was a bit difficult to
+    decipher exactly what was going on with the drawing of character data to the screen, but not too hard. Overall, it was good.
+    

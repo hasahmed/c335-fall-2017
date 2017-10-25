@@ -26,6 +26,7 @@ OBJS=  $(STARTUP) 	main.o \
 			f3d_gyro.o \
 			f3d_led.o \
 			f3d_nunchuk.o \
+			compassApp.o \
 			#accel.
 
 # include common make file

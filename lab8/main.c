@@ -17,9 +17,10 @@
 #include <f3d_gyro.h>
 #include <f3d_led.h>
 #include <f3d_nunchuk.h>
-
 #include <math.h>
 #include <stdio.h>
+
+#include "apps.h"
 
 #define TIMER 20000
 #define CHARSTEP 6 //the amount of space to put between characters
@@ -60,9 +61,9 @@ void LCD_drawCompassApp(){
     runningCompassApp = 1;
     f3d_lcd_fillScreen2(BLACK);
     drawString(12, HEIGHT / 2, "SEE LEDs FOR NORTH", RED, BLACK); 
-
 }
 
+/*
 void compassLights(float dir){
     int led = (int)floor(dir / 45.0f) + 1;
     led = ledNumberConvert(led);
@@ -73,6 +74,7 @@ void compassLights(float dir){
             f3d_led_off(i);
     }
 }
+*/
 
 void LCD_drawTiltAppScreen() {
     runningCompassApp = 0;
@@ -132,19 +134,14 @@ void cleanDirtyArea(int dirtyX, int dirtyY){
 
 }
 void printNunData(nunchuk_t * nunt){
-    //printf("jx: %u, jy: %u\n",nunt->jx, nunt->jy);
-    printf("ax: %hu, ay: %hu, az: %hu\n",nunt->ax, nunt->ay, nunt->az);
-    //printf("c: %u, z: %u\n",nunt->c, nunt->z);
+    //printf("jx: %u, jy: %u\n",nunt->jx, nunt->jy); //analog stick
+    //printf("ax: %hu, ay: %hu, az: %hu\n",nunt->ax, nunt->ay, nunt->az); //tilts
+    printf("c: %u, z: %u\n",nunt->c, nunt->z); //buttons
     //printf("----------------------------------\n");
 }
 
-int main(void) {
-    setvbuf(stdin, NULL, _IONBF, 0);
-    setvbuf(stdout, NULL, _IONBF, 0);
-    setvbuf(stderr, NULL, _IONBF, 0);
 
-    // Set up your inits before you go ahead
-    /*
+void initAll(){
     f3d_uart_init();
     delay(10);
     f3d_gyro_init();
@@ -162,30 +159,18 @@ int main(void) {
     f3d_mag_init();
     delay(10);
     f3d_nunchuk_init();
-    */
+    delay(10);
+}
 
+void setBuffs(){
+    setvbuf(stdin, NULL, _IONBF, 0);
+    setvbuf(stdout, NULL, _IONBF, 0);
+    setvbuf(stderr, NULL, _IONBF, 0);
+}
 
-
-
-    f3d_uart_init();
-    delay(10);
-    f3d_gyro_init();
-    delay(10);
-    f3d_led_init();
-    delay(10);
-    f3d_user_btn_init();
-    delay(10);
-    f3d_lcd_init();
-    delay(10);
-    f3d_i2c1_init();
-    delay(10);
-    f3d_accel_init();
-    delay(10);
-    f3d_mag_init();
-    delay(10);
-    //f3d_nunchuk_init();
-    delay(10);
-
+int main(void) {
+    setBuffs();
+    initAll();
 
     float mag[3];
     float accel[3];
@@ -203,26 +188,15 @@ int main(void) {
         f3d_mag_read(mag);
         f3d_accel_read(accel);
         f3d_nunchuk_read(&chuky);
-        printNunData(&chuky);
-        printf("%d\n", 1);
+        //printNunData(&chuky);
 
-
-
-        pitch = (atanf(accel[0] / sqrt(pow(accel[1], 2) + pow(accel[2], 2))));
-        roll = (atanf(accel[1]/sqrt(pow(accel[0], 2) + pow(accel[2], 2))));
-
-        Xh = mag[0]*cos(pitch)+mag[2]*sin(pitch);
-        Yh = mag[0]*sin(roll)*sin(pitch) + mag[1] * cos(roll) - mag[2] * sin(roll)*cos(pitch);
-
-        //pitch = (atanf(accel[0] / sqrt(pow(accel[1], 2) + pow(accel[2], 2))));
-        compassAngle = fabs((atan2(Yh, Xh)) * 180 / 3.1415926535 + 180.0f);
+        compassApp(accel, mag);
 
         x = accel[0] * 180;
         y = accel[1] * 180;
-        printf("Y:%f\n", y);
 
         if (runningCompassApp){
-            compassLights(compassAngle);
+            //compassLights(compassAngle);
         }
         else { //Level App
             f3d_led_all_off();

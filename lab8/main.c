@@ -131,6 +131,12 @@ void cleanDirtyArea(int dirtyX, int dirtyY){
     }
 
 }
+void printNunData(nunchuk_t * nunt){
+    //printf("jx: %u, jy: %u\n",nunt->jx, nunt->jy);
+    printf("ax: %hu, ay: %hu, az: %hu\n",nunt->ax, nunt->ay, nunt->az);
+    //printf("c: %u, z: %u\n",nunt->c, nunt->z);
+    //printf("----------------------------------\n");
+}
 
 int main(void) {
     setvbuf(stdin, NULL, _IONBF, 0);
@@ -138,6 +144,7 @@ int main(void) {
     setvbuf(stderr, NULL, _IONBF, 0);
 
     // Set up your inits before you go ahead
+    /*
     f3d_uart_init();
     delay(10);
     f3d_gyro_init();
@@ -154,6 +161,30 @@ int main(void) {
     delay(10);
     f3d_mag_init();
     delay(10);
+    f3d_nunchuk_init();
+    */
+
+
+
+
+    f3d_uart_init();
+    delay(10);
+    f3d_gyro_init();
+    delay(10);
+    f3d_led_init();
+    delay(10);
+    f3d_user_btn_init();
+    delay(10);
+    f3d_lcd_init();
+    delay(10);
+    f3d_i2c1_init();
+    delay(10);
+    f3d_accel_init();
+    delay(10);
+    f3d_mag_init();
+    delay(10);
+    //f3d_nunchuk_init();
+    delay(10);
 
 
     float mag[3];
@@ -164,12 +195,16 @@ int main(void) {
     float compassAngle, Xh, Yh, pitch, roll;
 
 
+    nunchuk_t chuky;
     LCD_drawCompassApp();
     runningCompassApp = 1;
     int i = 0;
     while(1){
         f3d_mag_read(mag);
         f3d_accel_read(accel);
+        f3d_nunchuk_read(&chuky);
+        printNunData(&chuky);
+        printf("%d\n", 1);
 
 
 

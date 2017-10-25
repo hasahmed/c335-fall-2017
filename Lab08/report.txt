@@ -1,0 +1,13 @@
+
+Questions
+=========
+
+Q1) Because we already initialized the required i2c pins PB6 and PB7 in
+    f3d_i2c.c
+Q2) i2c1_read is a generalized form of i2c1_read_nunchuk. In the read_nunchuk variant,
+    a specific register and device address are passed in to be used, an dthis is constant every time
+    since the function is only being used to communicate with the nunchuk.
+Q4) this gets the first 2 bits of the last element of the data array, which indicates the states of
+    the two buttons. There are four possible states, both c and z pressed, both unpressed, and just
+    c or just z pressed. These four states can be represented with the bits 00, 01, 10, and 11 which
+    are retrieved from the data array.

@@ -57,6 +57,9 @@
 #define SD_CS_HIGH() GPIO_ResetBits(GPIOB, GPIO_Pin_8)
 #define SD_CS_LOW() GPIO_SetBits(GPIOB, GPIO_Pin_8)
 
+//#define SD_CS_HIGH() GPIO_SetBits(GPIOB, GPIO_Pin_8)
+//#define SD_CS_LOW() GPIO_ResetBits(GPIOB, GPIO_Pin_8)
+
 #define GPIO_PIN_SCE GPIO_Pin_12    
 
 #define ST7735_CASET 0x2A

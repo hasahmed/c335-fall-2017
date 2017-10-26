@@ -1,3 +1,7 @@
+Hasan Y Ahmed
+Partner: Mac Vogelsang
+Lab 8
+
 Q1) In previous labs, adding a peripheral has required pin initializations. Why were able to add the nunchuk without initializing anything?
     We were able to use the nuncuck without initializing anything because the accelerometer and magnomiter are already internally wired
     to the same IO pins, the we initilize those pins in the I2C initialization functions in the I2C header file

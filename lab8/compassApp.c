@@ -1,8 +1,18 @@
 #include <f3d_led.h>
+#include <f3d_lcd_sd.h>
 #include <stdio.h>
 #include <math.h>
 #include "apps.h"
-void compassApp(float *accelData, float *magData){
+
+
+
+void compassApp_callOnce(){
+    LCD_drawCompassApp();
+
+}
+void compassApp(float *accelData, float *magData, int appHasChanged){
+    if (appHasChanged)
+        compassApp_callOnce();
     float compassAngle = getCompassAngle(accelData, magData);
     compassLights(compassAngle);
 }
@@ -18,7 +28,6 @@ float getCompassAngle(float *accelData, float *magData){
     compassAngle = fabs((atan2(Yh, Xh)) * 180 / M_PI + 180.0f);
     return compassAngle;
 }
-
 void compassLights(float dir){
     int led = (int)floor(dir / 45.0f) + 1;
     led = ledNumberConvert(led);
@@ -27,5 +36,18 @@ void compassLights(float dir){
     for(i; i < 8; i++){
         if(i != led)
             f3d_led_off(i);
+    }
+}
+void LCD_drawCompassApp(){
+    //runningCompassApp = 1;
+    f3d_lcd_fillScreen2(BLACK);
+    drawString(12, HEIGHT / 2, "SEE LEDs FOR NORTH", RED, BLACK); 
+}
+int ledNumberConvert(int led){
+    led = 9 - led;
+    switch(led){
+        case 8:
+            return 0;
+        default: return led;
     }
 }

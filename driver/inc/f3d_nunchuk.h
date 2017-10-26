@@ -33,6 +33,8 @@
  */
 
 /* Code: */
+#ifndef _NUNCHUK_
+#define _NUNCHUK_
 #include <stm32f30x.h>
 
 typedef struct nunchuk_data { 
@@ -47,5 +49,6 @@ typedef struct nunchuk_data {
 
 void f3d_nunchuk_init(void);
 void f3d_nunchuk_read(nunchuk_t *);
+#endif
 
 /* f3d_nunchuk.h ends here */

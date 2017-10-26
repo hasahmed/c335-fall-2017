@@ -9,7 +9,13 @@ Q2) What are the major differences between these two functions and what does tha
 
 
 Q3) What do all of these variables correspond to in the nunchuk? Hint: It may be best to answer this question after the checkpoint
-    
+    unsigned char jx; //joystick x axis
+    unsigned char jy; //joystick y axis
+    unsigned short ax; //accellerometer x axis
+    unsigned short ay; //accelerometer y axis
+    unsigned short az; //accellerometer z axis
+    unsigned char c; //corrisponds to weather or not c button is pressed
+    unsigned char z; //corrisponds to whether or not z button is pressed
 
 
 Q4) Explain the code above.

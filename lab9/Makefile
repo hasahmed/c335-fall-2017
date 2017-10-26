@@ -3,7 +3,7 @@ TEMPLATEROOT = ../fall2017-lab
 # compilation flags for gdb
 
 CFLAGS  = -O1 -g
-ASFLAGS = -g
+ASFLAGS = -g 
 
 # object files
 
@@ -16,8 +16,6 @@ OBJS=  $(STARTUP) 	main.o \
 			f3d_accel.o \
 			f3d_i2c.o \
 			f3d_mag.o \
-			f3d_nunchuk.o \
-			f3d_led.o \
 			stm32f30x_i2c.o \
 			stm32f30x_tim.o \
 			stm32f30x_rcc.o \
@@ -25,9 +23,13 @@ OBJS=  $(STARTUP) 	main.o \
 			stm32f30x_usart.o \
 			stm32f30x_spi.o \
 			newlib_stubs.o \
-			#accel.o
+			f3d_gyro.o \
+			f3d_led.o \
+			f3d_nunchuk.o \
+			compassApp.o \
+			nun_util.o \
+			tiltapp.o \
 
 # include common make file
-# original \/
-# include $(TEMPLATEROOT)/Makefile.common
+
 include $(TEMPLATEROOT)/c335.mk

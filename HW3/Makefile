@@ -19,6 +19,8 @@ asm:
 	hexdump -x test.bin |sed -e 's/^[^ ]*//' > test.hex
 
 clean:
-	@rm -f *.o test.bin test.hex test.out test.diff
+	@echo "Cleaning"
+	@rm -f *.o test.bin test.hex test.out test.diff disassembler
+	@echo "Done"
 
 .SILENT : test asm

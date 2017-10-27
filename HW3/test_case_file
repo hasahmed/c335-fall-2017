@@ -1,4 +1,0 @@
-.text
-.syntax unified
-.thumb
-    adds r0,r1,r2

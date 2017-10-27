@@ -15,3 +15,4 @@
     adds r1, 8
     subs r1, 6
     movs r7, 200
+    adds r7, r3, r1

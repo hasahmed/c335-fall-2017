@@ -1,10 +1,10 @@
-/* f3d_nunchuk.h --- 
+/* f3d_rtc.h --- 
  * 
- * Filename: f3d_nunchuk.h
+ * Filename: f3d_rtc.h
  * Description: 
  * Author: Bryce Himebaugh
  * Maintainer: 
- * Created: Thu Oct 31 09:41:40 2013
+ * Created: Thu Nov  7 09:12:43 2013
  * Last-Updated: 
  *           By: 
  *     Update #: 0
@@ -33,22 +33,10 @@
  */
 
 /* Code: */
-#ifndef _NUNCHUK_
-#define _NUNCHUK_
+
 #include <stm32f30x.h>
 
-typedef struct nunchuk_data { 
-  unsigned char jx;
-  unsigned char jy;
-  unsigned short ax;
-  unsigned short ay;
-  unsigned short az;
-  unsigned char c;
-  unsigned char z;
-} nunchuk_t; 
+void f3d_rtc_init(void);
+uint32_t get_fattime(void);
 
-void f3d_nunchuk_init(void);
-void f3d_nunchuk_read(nunchuk_t *);
-#endif
-
-/* f3d_nunchuk.h ends here */
+/* f3d_rtc.h ends here */

@@ -11,6 +11,7 @@
 //4
 #define rdn(x) ((x >> 8) & 0x7) //4
 #define imm8(x) (x & 0xFF)
+#define imm3(x) ((x >> 6) & 0x7)
 
 //5
 #define RM(x) (((x) >> 3) & 0x7) //5
@@ -49,9 +50,13 @@ int main(){
     while(scanf("%x", &hex_num) == 1){
 
     if (IS_ADD_SUB_REG(hex_num)) //2
-        printf("    %s %s, %s, %s\n", adsr_opnames[ASR_I_OPPCODE(hex_num)], regnames[rd(hex_num)], regnames[rn(hex_num)], regnames[rm(hex_num)]);
+        printf("    %s %s, %s, %s\n", 
+                adsr_opnames[ASR_I_OPPCODE(hex_num)],
+                regnames[rd(hex_num)], 
+                regnames[rn(hex_num)], 
+                regnames[rm(hex_num)]);
     else if (IS_ADD_SUB_IMMEDIATE(hex_num)) //3
-        printf("    %s %u, %s, %s\n", adsr_opnames[ASR_I_OPPCODE(hex_num)], rd(hex_num), regnames[rn(hex_num)], regnames[rm(hex_num)]);
+        printf("    %s %s, %s, %u\n", adsr_opnames[ASR_I_OPPCODE(hex_num)], regnames[rd(hex_num)], regnames[rn(hex_num)], imm3(hex_num));
     else if (IS_ADD_SUB_CMP_MOV_IMMEDIATE(hex_num)) //4
         printf("    %s %s, %d\n", ascm_opnames[ASCM_OPPCODE(hex_num)], regnames[rdn(hex_num)], imm8(hex_num));
     else if (IS_DATA_PROC_REG(hex_num)) //5

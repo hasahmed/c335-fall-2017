@@ -82,7 +82,7 @@ int main(void) {
     FRESULT rc;			/* Result code */
     DIR dir;			/* Directory object */
     FILINFO fno;			/* File information object */
-    UINT bw, br;
+    UINT bw, br; //?
     unsigned int retval;
 
     setBuffs();
@@ -101,7 +101,7 @@ int main(void) {
     rc = f_open(&Fil, "MESSAGE.TXT", FA_READ);
     if (rc) die(rc);
 
-    printf("\nType the file content.\n");
+    printf("\nThis is the contents of the file message.txt\n\n     ");
     for (;;) {
         rc = f_read(&Fil, Buff, sizeof Buff, &br);	/* Read a chunk of file */
         if (rc || !br) break;			/* Error or end of file */

@@ -76,25 +76,31 @@ void setBuffs(){
 
 int main(void) { 
     char footer[20];
-    int count = 0;
+    int count=0;
     int i;
 
     FRESULT rc;			/* Result code */
     DIR dir;			/* Directory object */
     FILINFO fno;			/* File information object */
-    UINT bw;
-    UINT br; //number of bytes to read
+    UINT bw, br; //?
     unsigned int retval;
 
     setBuffs();
     initAll();
-    f3d_lcd_fillScreen2(BLACK);
+
+    /*
+       f3d_uart_init();
+       f3d_lcd_init();
+       f3d_delay_init();
+       f3d_rtc_init();
+       */
 
     f_mount(0, &Fatfs);		/* Register volume work area (never fails) */
 
     printf("\nOpen an existing file (message.txt).\n");
     rc = f_open(&Fil, "MESSAGE.TXT", FA_READ);
     if (rc) die(rc);
+
     printf("\nThis is the contents of the file message.txt\n\n     ");
     for (;;) {
         rc = f_read(&Fil, Buff, sizeof Buff, &br);	/* Read a chunk of file */

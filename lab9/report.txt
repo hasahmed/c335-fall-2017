@@ -9,13 +9,14 @@ Q2.) Explain how you might use the *f3d_delay_uS()* function
         advantage of using this would be being less wateful in terms of cpu cycles
 
 
-
 Q3.) Read chapter 12 in the lab manual which covers DMA (direct memory access). Why might DMA be important in improving the performance of your image display application?
-    DMA will help improve the performance of our application by bypassing expensive transfers to and from main memory by allowing the cpu to write directly to the memory of
+    -DMA will help improve the performance of our application by bypassing expensive transfers to and from main memory by allowing the cpu to write directly to the memory of
     the perepheral. 
 
 
 
 Q4.) Research the FAT file system and describe the function of the file allocation table. Explain how the corruption of an entry in the table can cause part of a file to be lost.
+    -Corruption with an entry in the table could cause corruption by writing to a space that doesn't belong to it. 
 
 Q5.) What is the difference between FAT16 and FAT32?
+    -The difference is the number of bits per entry. FAT16 uses 16, and FAT32 uses 32.

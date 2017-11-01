@@ -95,7 +95,7 @@ int main(void) {
     printf("\nOpen an existing file (message.txt).\n");
     rc = f_open(&Fil, "MESSAGE.TXT", FA_READ);
     if (rc) die(rc);
-    printf("\nThis is the contents of the file message.txt\n\n     ");
+    printf("\nThis is the contents of the file 'message.txt'\n\n     ");
     for (;;) {
         rc = f_read(&Fil, Buff, sizeof Buff, &br);	/* Read a chunk of file */
         if (rc || !br) break;			/* Error or end of file */

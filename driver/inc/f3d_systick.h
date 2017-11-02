@@ -1,10 +1,10 @@
-/* f3d_uart.h --- 
+/* f3d_systick.h --- 
  * 
- * Filename: f3d_uart.h
+ * Filename: f3d_systick.h
  * Description: 
  * Author: Bryce Himebaugh
  * Maintainer: 
- * Created: Thu Sep 26 07:05:43 2013
+ * Created: Thu Nov 14 08:02:24 2013
  * Last-Updated: 
  *           By: 
  *     Update #: 0
@@ -33,16 +33,13 @@
  */
 
 /* Code: */
+#include <stm32f30x.h>
 
-//#include "../../lab10/queue.h"
-#include <queue.h>
-queue_t rxbuf;
-queue_t txbuf;
+#define SYSTICK_INT_SEC 100
 
-void f3d_uart_init(void);
-int putchar(int);
-int getchar(void);
-void putstring(char *);
-void USART1_IRQHandler(void);
+void f3d_systick_init(void);
 
-/* f3d_uart.h ends here */
+
+
+/* f3d_systick.h ends here */
+

@@ -22,15 +22,21 @@ void draw_image(image_info_t *imageinfo, struct bmppixel *pixel_buffer){
     uint32_t pixel_entry;
     int row_size = ((24 * imageinfo->width + 31)/ 32) * 4;
     int pixel_array_size = row_size * imageinfo->height;
-    //printf("row_size %d\n", row_size);
-    //printf("pixel_array_size %d\n", pixel_array_size);
 
     for(y = 0; y < imageinfo->height; y++){
-        rc = f_read(&f, (void*)pixel_buffer, sizeof(*pixel_buffer), &bytes_read);
+        rc = f_read(&f, (void*)pixel_buffer, sizeof(*pixel_buffer) * imageinfo->width, &bytes_read);
         if (rc || !bytes_read)
             goto done;
         for(x = 0; x < imageinfo->width; x++){
-            f3d_lcd_drawPixel(x, y, pixel_buffer[x].r);
+            printf("the first pixel color R is %x\n", pixel_buffer[x].r);
+            printf("the first pixel color G is %x\n", pixel_buffer[x].g);
+            printf("the first pixel color B is %x\n", pixel_buffer[x].b);
+            color = (pixel_buffer[x].r << 11) & 0xf800;
+            color =  color & (pixel_buffer[x].g << 5);
+            color = color &  pixel_buffer[x].b & 0x1f;
+            printf("the first pixel color is %x\n", color);
+            goto done;
+            f3d_lcd_drawPixel(x, y, color);
         }
     }
 

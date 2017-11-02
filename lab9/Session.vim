@@ -19,7 +19,7 @@ badd +259 newlib_stubs.c
 badd +1 bmplib.h
 badd +1 bmplib.c
 badd +1 Makefile
-badd +0 ../driver/src/f3d_lcd_sd.c
+badd +1 ../driver/src/f3d_lcd_sd.c
 args main.c
 edit main.c
 set splitbelow splitright
@@ -37,7 +37,7 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 99 - ((47 * winheight(0) + 27) / 55)
+let s:l = 99 - ((48 * winheight(0) + 28) / 56)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -59,12 +59,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 26 - ((23 * winheight(0) + 27) / 55)
+let s:l = 35 - ((31 * winheight(0) + 27) / 55)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-26
-normal! 06|
+35
+normal! 047|
 tabedit bmplib.h
 set splitbelow splitright
 set nosplitbelow

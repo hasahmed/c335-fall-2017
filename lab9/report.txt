@@ -1,3 +1,7 @@
+Hasan Y Ahmed
+Partner: Mac Vogelsang
+
+
 Q1.) What are we doing here and how does it relate to what we know about SPI?
    - We are initializing the pins, getting the device ready to recieve input
 

@@ -1,18 +1,20 @@
 #include <stdint.h>
-typedef struct bmp_file_info{
+/*
+typedef struct bmpfile_header{
     unsigned int size; //size of bmp file in 4 bytes
     unsigned int data_start_offset; //the starting address of the pixel information within the file
 
-} bmp_file_info_t;
+} bmpfile_info_t;
+*/
 
-struct bmpfile_magic {
+struct bmpfile_magic { //magic numbers associated with the bmp files
     unsigned char magic[2];
 };
 
 struct bmpfile_header {
-    uint32_t filesz;
-    uint16_t creator1;
-    uint16_t creator2;
+    uint32_t file_size;
+    uint16_t unknown1;
+    uint16_t unknown2;
     uint32_t bmp_offset;
 };
 
@@ -30,12 +32,28 @@ typedef struct {
     uint32_t nimpcolors;
 } BITMAPINFOHEADER;
 
+typedef struct {
+    uint32_t file_size;
+    uint32_t bmp_offset;
+    int32_t width;
+    int32_t height;
+    char filename[60];
+} image_info_t;
+
 struct bmppixel { // little endian byte order
     uint8_t b;
     uint8_t g;
     uint8_t r;
 };
+void draw_image(image_info_t *imageinfo, struct bmppixel *pixel_buffer);
+
+//void drawImage(char *filename, struct bmpfile_header BITMAPINFOHEADER *info);
 
 
-void get_image_info(char *filename, bmp_file_info_t *bmpinfo);
+/*
+void get_image_info(char *filename, 
+        struct bmpfile_magic *magic, 
+        struct bmpfile_header *header, 
+        BITMAPINFOHEADER *bmpinfo);
+        */
 void die (FRESULT rc);

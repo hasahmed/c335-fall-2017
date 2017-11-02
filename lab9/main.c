@@ -38,15 +38,21 @@
 #include <ff.h>
 #include <diskio.h>
 #include <stdio.h>
+#include "bmplib.h"
 
+/*
 void die (FRESULT rc) {
     printf("Failed with rc=%u.\n", rc);
     while (1);
 }
+*/
 
 FATFS Fatfs;		/* File system object */
 FIL Fil;		/* File object */
 BYTE Buff[128];		/* File read buffer */
+
+
+
 void initAll(){
     f3d_delay_init();
     delay(310);
@@ -67,6 +73,8 @@ void initAll(){
     f3d_nunchuk_init();
     delay(310);
     f3d_rtc_init();
+
+    f_mount(0, &Fatfs);		/* Register volume work area (never fails) */
 }
 void setBuffs(){
     setvbuf(stdin, NULL, _IONBF, 0);
@@ -89,17 +97,22 @@ int main(void) {
     setBuffs();
     initAll();
     f3d_lcd_fillScreen2(BLACK);
+    bmp_file_info_t bmpinfo;
 
-    f_mount(0, &Fatfs);		/* Register volume work area (never fails) */
+    get_image_info("friends.bmp", &bmpinfo);
+
+    
+
+    /*
 
     printf("\nOpen an existing file (message.txt).\n");
     rc = f_open(&Fil, "MESSAGE.TXT", FA_READ);
     if (rc) die(rc);
     printf("\nThis is the contents of the file 'message.txt'\n\n     ");
     for (;;) {
-        rc = f_read(&Fil, Buff, sizeof Buff, &br);	/* Read a chunk of file */
-        if (rc || !br) break;			/* Error or end of file */
-        for (i = 0; i < br; i++)		        /* Type the data */
+        rc = f_read(&Fil, Buff, sizeof Buff, &br);	
+        if (rc || !br) break;			
+        for (i = 0; i < br; i++)	
             putchar(Buff[i]);
     }
     if (rc) die(rc);
@@ -127,8 +140,8 @@ int main(void) {
 
     printf("\nDirectory listing...\n");
     for (;;) {
-        rc = f_readdir(&dir, &fno);		/* Read a directory item */
-        if (rc || !fno.fname[0]) break;	/* Error or end of dir */
+        rc = f_readdir(&dir, &fno);		// Read a directory item 
+        if (rc || !fno.fname[0]) break;	//Error or end of dir
         if (fno.fattrib & AM_DIR)
             printf("   <dir>  %s\n", fno.fname);
         else
@@ -140,6 +153,10 @@ int main(void) {
 
     rc = disk_ioctl(0,GET_SECTOR_COUNT,&retval);
     printf("%d %d\n",rc,retval);
+    */
+
+
+    printf("size of int: %d\n", sizeof(int));
 
     while (1);
 }

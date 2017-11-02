@@ -29,7 +29,8 @@ OBJS=  $(STARTUP) 	main.o \
 			stm32f30x_pwr.o \
 			ff.o \
 			mmcbb.o \
-			newlib_stubs.o
+			newlib_stubs.o \
+			bmplib.o
 # include common make file
 
 include $(TEMPLATEROOT)/c335.mk

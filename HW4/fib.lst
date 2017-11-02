@@ -1,0 +1,10 @@
+
+fib.o:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00000000 <fib>:
+   0:	b4f0      	push	{r4, r5, r6, r7}
+   2:	bcf0      	pop	{r4, r5, r6, r7}
+   4:	4770      	bx	lr

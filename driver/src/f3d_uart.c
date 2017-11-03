@@ -60,14 +60,19 @@ void f3d_uart_init(void) {
 
 //sends a character
 int putchar(int c) {
-    while (USART_GetFlagStatus(USART1,USART_FLAG_TXE) == (uint16_t)RESET);
-    USART_SendData(USART1, c);
-    return 0;
+    if (!queue_empty(&txbuf)) {
+          flush_uart();
+    }
+    return !enqueue(&txbuf, c);
+    //while (USART_GetFlagStatus(USART1,USART_FLAG_TXE) == (uint16_t)RESET);
+    //USART_SendData(USART1, c);
+    //return 0;
 } 
 //gets a character
 int getchar(void) {
-    while (USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == (uint16_t)RESET);
-    int c = USART_ReceiveData(USART1);
+    int c = dequeue(&txbuf);
+    //while (USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == (uint16_t)RESET);
+    //int c = USART_ReceiveData(USART1);
     return c;
 }
 //sends a string
@@ -99,6 +104,11 @@ void USART1_IRQHandler(void) {
       TxPrimed = 0;               // signal putchar to reenable
     }
   }
+}
+
+
+void flush_uart(void) {
+      USART_ITConfig(USART1,USART_IT_TXE,ENABLE);
 }
 
 /* f3d_uart.c ends here */

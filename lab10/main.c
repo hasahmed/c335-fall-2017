@@ -50,7 +50,10 @@ void setBuffs(){
 int main(void) { 
     setBuffs();
     initAll();
-    while (1);
+    while (1){
+        //printf("Its on");
+        putchar(getchar());
+    }
 }
 
 #ifdef USE_FULL_ASSERT

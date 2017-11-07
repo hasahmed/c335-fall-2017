@@ -55,7 +55,7 @@ void f3d_uart_init(void) {
     NVIC_Init(&NVIC_InitStructure);
 
     // Enable the RX interrupt
-    USART_ITConfig(USART1,USART_IT_RXNE,ENABLE);
+    USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
 }
 
 //sends a character
@@ -89,18 +89,19 @@ static int TxPrimed = 0;
 void USART1_IRQHandler(void) {
   int ch;
 
-  if (USART_GetFlagStatus(USART1, USART_FLAG_RXNE)) {
+  if (USART_GetFlagStatus(USART1, USART_FLAG_RXNE)) { //USART flag status is recieve
     ch = USART_ReceiveData(USART1);
-    if (!enqueue(&rxbuf,ch)) {}    // overflow case --
-                                   // throw away data and perhaps flag status
+    if (!enqueue(&rxbuf, ch)) { //if the queue is full
+        // the overflow case -- do nothing
+    } // throw away data and perhaps flag status
   }
-  if (USART_GetFlagStatus(USART1,USART_FLAG_TXE)) {
-    ch = dequeue(&txbuf);
-    if (ch) {
-      USART_SendData(USART1,ch);
-    }
-    else {                        // Queue is empty, disable interrupt
-      USART_ITConfig(USART1,USART_IT_TXE,DISABLE);
+
+  if (USART_GetFlagStatus(USART1, USART_FLAG_TXE)) { //USART flag status is transmit
+    ch = dequeue(&txbuf); //pop the the character off the txbuffer
+    if (ch) { //if the txbuf isn't empty
+      USART_SendData(USART1, ch); //send ch to usart1
+    } else {                        // Queue is empty, disable interrupt
+      USART_ITConfig(USART1, USART_IT_TXE, DISABLE);
       TxPrimed = 0;               // signal putchar to reenable
     }
   }

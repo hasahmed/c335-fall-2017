@@ -8,13 +8,13 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
-badd +31 Makefile
+badd +32 Makefile
 badd +1 main.c
 badd +1 ../driver/inc/f3d_uart.h
 badd +80 ../driver/src/f3d_uart.c
 badd +1 queue.c
 badd +1 queue.h
-badd +0 ~/queuetest.c
+badd +1 ~/queuetest.c
 badd +1 ~/qtest/queue.c
 badd +1 ~/qtest/queue.h
 args Makefile main.c
@@ -35,7 +35,7 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 54 - ((50 * winheight(0) + 27) / 55)
+let s:l = 54 - ((51 * winheight(0) + 28) / 56)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -58,12 +58,35 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 79 - ((19 * winheight(0) + 27) / 55)
+let s:l = 58 - ((44 * winheight(0) + 27) / 55)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-79
-normal! 025|
+58
+normal! 042|
+tabedit queue.c
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winheight=1 winwidth=1
+argglobal
+edit queue.c
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 20 - ((19 * winheight(0) + 27) / 55)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+20
+normal! 016|
 tabedit ../driver/inc/f3d_uart.h
 set splitbelow splitright
 set nosplitbelow
@@ -81,11 +104,11 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 48 - ((47 * winheight(0) + 27) / 55)
+let s:l = 49 - ((48 * winheight(0) + 27) / 55)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-48
+49
 normal! 0
 tabedit Makefile
 set splitbelow splitright

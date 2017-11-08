@@ -8,13 +8,24 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
-badd +8 abs.s
-badd +0 Makefile
-badd +0 test_functions.c
+badd +5 abs.s
+badd +42 Makefile
+badd +1 test_functions.c
 badd +39 test_functions.h
-badd +0 main.c
+badd +1 main.c
+badd +1 abs.lst
+badd +2 abs.h
+badd +1 abs_c.c
+badd +8 fib_c.c
+badd +2 fib.h
+badd +45 fib.s
+badd +1 0
+badd +1 asm_test.s
+badd +1 asm_test.h
+badd +0 gcd_c.c
+badd +0 gcd.s
 args abs.s
-edit main.c
+edit test_functions.c
 set splitbelow splitright
 set nosplitbelow
 set nosplitright
@@ -30,13 +41,57 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 49 - ((47 * winheight(0) + 24) / 49)
+let s:l = 35 - ((9 * winheight(0) + 23) / 47)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-49
+35
+normal! 09|
+tabedit main.c
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winheight=1 winwidth=1
+argglobal
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 15 - ((11 * winheight(0) + 23) / 47)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+15
+normal! 06|
+tabedit gcd_c.c
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winheight=1 winwidth=1
+argglobal
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 1 - ((0 * winheight(0) + 23) / 47)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+1
 normal! 0
-tabedit test_functions.c
+tabedit gcd.s
 set splitbelow splitright
 set nosplitbelow
 set nosplitright
@@ -52,12 +107,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 51 - ((26 * winheight(0) + 24) / 49)
+let s:l = 10 - ((9 * winheight(0) + 23) / 47)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-51
-normal! 017|
+10
+normal! 0
 tabedit Makefile
 set splitbelow splitright
 set nosplitbelow
@@ -74,12 +129,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 12 - ((11 * winheight(0) + 24) / 49)
+let s:l = 1 - ((0 * winheight(0) + 23) / 47)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-12
-normal! 05|
+1
+normal! 072|
 tabnext 3
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf

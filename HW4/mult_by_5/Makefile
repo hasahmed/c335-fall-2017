@@ -1,4 +1,7 @@
-OBJS = main.o test_functions.o fib_c.o fib.o abs_c.o abs.o gcd_c.o gcd.o
+OBJS = main.o \
+	   mult_by_5_c.o \
+	   mult_by_5.o \
+	   test.o
 
 ELF=$(notdir $(CURDIR)).elf
 TOOLROOT=/l/arm2/devtools/bin

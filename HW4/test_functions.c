@@ -1,39 +1,9 @@
-/* test2.c --- 
- * 
- * Filename: test2.c
- * Description: 
- * Author: Bryce Himebaugh
- * Maintainer: 
- * Created: Tue Oct 27 12:32:24 2015
- * Last-Updated: 
- *           By: 
- *     Update #: 0
- * Keywords: 
- * Compatibility: 
- * 
+/**
+ * Hasan Y Ahmed
+ * CSCI-C335
+ * HW4
+ * 11/08/17
  */
-
-/* Commentary: 
- * 
- * 
- * 
- */
-
-/* Change log:
- * 
- * 
- */
-
-/* Copyright (c) 2004-2007 The Trustees of Indiana University and 
- * Indiana University Research and Technology Corporation.  
- * 
- * All rights reserved. 
- * 
- * Additional copyrights may follow 
- */
-
-/* Code: */
-
 #include <stdio.h>
 #include <stdint.h> 
 #include <stddef.h>
@@ -48,8 +18,8 @@ void abs_test(void) {
     int error_count=0;
     int i;
     for (i = -100; i < 100; i++) {
-        if (abs(i) != abs_c(i)) {    
-            printf("ABS Error: Input %d, Expected %d, Received %d\n",i,abs_c(i),abs(i));
+        if (abs_s(i) != abs_c(i)) {    
+            printf("ABS Error: Input %d, Expected %d, Received %d\n",i,abs_c(i), abs_s(i));
             error_count++;
         }
     }

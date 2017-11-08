@@ -4,5 +4,5 @@
  * HW4
  * 11/08/17
  */
-int mult_by_5(int);        // Assembly function from abs.s
-int mult_by_5_c(int);      // C function in abs_c.c
+unsigned int mult_by_5(unsigned int);        // Assembly function from abs.s
+unsigned int mult_by_5_c(unsigned int);      // C function in abs_c.c

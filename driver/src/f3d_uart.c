@@ -58,22 +58,31 @@ void f3d_uart_init(void) {
     USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
 }
 
-//sends a character
+static int TxPrimed = 0; //transmit primed
+//sends a character.
+//returns status of transfer
 int putchar(int c) {
+    /*
     if (!queue_empty(&txbuf)) {
           flush_uart();
     }
-    return !enqueue(&txbuf, c);
-    //while (USART_GetFlagStatus(USART1,USART_FLAG_TXE) == (uint16_t)RESET);
-    //USART_SendData(USART1, c);
-    //return 0;
+    */
+    while(!enqueue(&txbuf, c));
+    if (!TxPrimed){
+        TxPrimed = 1;
+        USART_ITConfig(USART1, USART_IT_TXE, ENABLE);
+    }
+    return 0;
 } 
 //gets a character
 int getchar(void) {
-    int c = dequeue(&txbuf);
+    uint8_t data;
+    while(!(data = dequeue(&rxbuf)));
+    return data;
+    //return dequeue(&txbuf);
     //while (USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == (uint16_t)RESET);
     //int c = USART_ReceiveData(USART1);
-    return c;
+    //return c;
 }
 //sends a string
 void putstring(char *s) {
@@ -84,14 +93,12 @@ void putstring(char *s) {
     }
 }
 
-static int TxPrimed = 0;
-
 void USART1_IRQHandler(void) {
   int ch;
 
   if (USART_GetFlagStatus(USART1, USART_FLAG_RXNE)) { //USART flag status is recieve
-    ch = USART_ReceiveData(USART1);
-    if (!enqueue(&rxbuf, ch)) { //if the queue is full
+    ch = USART_ReceiveData(USART1); //save data from usart
+    if (!enqueue(&rxbuf, ch)) { //push character to rxbuf unless its full
         // the overflow case -- do nothing
     } // throw away data and perhaps flag status
   }

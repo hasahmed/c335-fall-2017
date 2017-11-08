@@ -17,6 +17,8 @@ badd +1 queue.h
 badd +1 ~/queuetest.c
 badd +1 ~/qtest/queue.c
 badd +1 ~/qtest/queue.h
+badd +0 ../driver/src/f3d_systick.c
+badd +0 ../driver/inc/f3d_systick.h
 args Makefile main.c
 edit main.c
 set splitbelow splitright
@@ -35,12 +37,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 54 - ((51 * winheight(0) + 28) / 56)
+let s:l = 11 - ((10 * winheight(0) + 27) / 55)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-54
-normal! 010|
+11
+normal! 021|
 tabedit ../driver/src/f3d_uart.c
 set splitbelow splitright
 set nosplitbelow
@@ -58,12 +60,58 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 58 - ((44 * winheight(0) + 27) / 55)
+let s:l = 80 - ((24 * winheight(0) + 27) / 55)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-58
-normal! 042|
+80
+normal! 036|
+tabedit ../driver/src/f3d_systick.c
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winheight=1 winwidth=1
+argglobal
+edit ../driver/src/f3d_systick.c
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 40 - ((39 * winheight(0) + 27) / 55)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+40
+normal! 02|
+tabedit ../driver/inc/f3d_systick.h
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winheight=1 winwidth=1
+argglobal
+edit ../driver/inc/f3d_systick.h
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 43 - ((42 * winheight(0) + 27) / 55)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+43
+normal! 0
 tabedit queue.c
 set splitbelow splitright
 set nosplitbelow
@@ -81,12 +129,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 20 - ((19 * winheight(0) + 27) / 55)
+let s:l = 24 - ((23 * winheight(0) + 27) / 55)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-20
-normal! 016|
+24
+normal! 030|
 tabedit ../driver/inc/f3d_uart.h
 set splitbelow splitright
 set nosplitbelow
@@ -127,13 +175,13 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 32 - ((31 * winheight(0) + 27) / 55)
+let s:l = 33 - ((32 * winheight(0) + 27) / 55)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-32
-normal! 013|
-tabnext 2
+33
+normal! 025|
+tabnext 3
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf
 endif

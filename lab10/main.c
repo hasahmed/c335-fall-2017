@@ -8,6 +8,7 @@
 #include <f3d_mag.h>
 #include <f3d_nunchuk.h>
 #include <f3d_rtc.h>
+#include <f3d_systick.h>
 #include <stdio.h>
 
 #include "queue.h"
@@ -51,7 +52,7 @@ int main(void) {
     setBuffs();
     initAll();
     while (1){
-        //printf("Its on");
+        //printf("Hello");
         putchar(getchar());
     }
 }

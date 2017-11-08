@@ -35,9 +35,9 @@
 /* Code: */
 
 #include <f3d_systick.h>
-#include <f3d_led.h> 
-#include <f3d_button.h>
-#include <f3d_uart.h>
+//#include <f3d_led.h> 
+//#include <f3d_button.h>
+//#include <f3d_uart.h>
 
 volatile int systick_flag = 0;
 

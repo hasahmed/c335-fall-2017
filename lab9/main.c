@@ -14,13 +14,6 @@
 #include <string.h>
 #include "bmplib.h"
 
-/*
-void die (FRESULT rc) {
-    printf("Failed with rc=%u.\n", rc);
-    while (1);
-}
-*/
-
 FATFS Fatfs;
 
 struct bmpfile_magic magic;
@@ -95,13 +88,10 @@ int main(void) {
     setBuffs();
     initAll();
     f3d_lcd_fillScreen2(BLACK);
-    get_image_info("friends.bmp", &imageinfo);
-    draw_image(&imageinfo, pixel_bufer);
-    /*
-    char footer[20];
-    int count = 0;
-    int i;
 
+
+
+    //Test for SD card
     FRESULT rc;			
     DIR dir;		
     FILINFO fno;
@@ -109,12 +99,36 @@ int main(void) {
     UINT br; //number of bytes to read
     unsigned int retval;
 
+    FIL Fil;
+    printf("\nCreate a new file (hello.txt).\n");
+    rc = f_open(&Fil, "HELLO.TXT", FA_WRITE | FA_CREATE_ALWAYS);
+    if (rc) die(rc);
+
+    printf("\nWrite a text data. (Hello world!)\n");
+    rc = f_write(&Fil, "Hello world!\r\n", 14, &bw);
+    if (rc) die(rc);
+    printf("%u bytes written.\n", bw);
+
+    //get_image_info("friends.bmp", &imageinfo);
+    //draw_image(&imageinfo, pixel_bufer);
+    /*
+       char footer[20];
+       int count = 0;
+       int i;
+
+       FRESULT rc;			
+       DIR dir;		
+       FILINFO fno;
+       UINT bw;
+       UINT br; //number of bytes to read
+       unsigned int retval;
 
 
 
 
 
-    */
+
+*/
     /*
 
        printf("\nOpen an existing file (message.txt).\n");

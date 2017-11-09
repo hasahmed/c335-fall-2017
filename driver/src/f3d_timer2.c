@@ -1,39 +1,3 @@
-/* f3d_timer2.c --- 
- * 
- * Filename: f3d_timer2.c
- * Description: 
- * Author: Bryce Himebaugh
- * Maintainer: 
- * Created: Mon Nov 18 14:08:23 2013
- * Last-Updated: 
- *           By: 
- *     Update #: 0
- * Keywords: 
- * Compatibility: 
- * 
- */
-
-/* Commentary: 
- * 
- * 
- * 
- */
-
-/* Change log:
- * 
- * 
- */
-
-/* Copyright (c) 2004-2007 The Trustees of Indiana University and 
- * Indiana University Research and Technology Corporation.  
- * 
- * All rights reserved. 
- * 
- * Additional copyrights may follow 
- */
-
-/* Code: */
-
 #include <f3d_timer2.h> 
 
 void f3d_timer2_init(void) {

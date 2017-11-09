@@ -27,13 +27,18 @@ OBJS=  $(STARTUP) 	main.o \
 			stm32f30x_rtc.o \
 			stm32f30x_tim.o \
 			stm32f30x_pwr.o \
-			ff.o \
-			queue.o \
+			newlib_stubs.o \
+			stm32f30x_dac.o \
 			stm32f30x_dma.o \
 			stm32f30x_misc.o \
+			queue.o \
+			f3d_systick.o \
+			f3d_user_btn.o \
+			f3d_timer2.o \
+			f3d_dac.o \
+			ff.o \
 			mmcbb.o \
-			newlib_stubs.o \
-			bmplib.o
+			#f3d_systick.o \
 # include common make file
 
 include $(TEMPLATEROOT)/c335.mk

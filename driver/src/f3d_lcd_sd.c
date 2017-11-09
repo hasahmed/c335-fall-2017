@@ -1,43 +1,90 @@
-/* f3d_lcd_sd.c --- 
- * 
- * Filename: f3d_lcd_sd.c
- * Description: 
- * Author: Bryce Himebaugh
- * Maintainer: 
- * Created: Thu Oct 24 05:18:36 2013
- * Last-Updated: 
- *           By: 
- *     Update #: 0
- * Keywords: 
- * Compatibility: 
- * 
- */
-
-/* Commentary: 
- * 
- * 
- * 
- */
-
-/* Change log:
- * 
- * 
- */
-
-/* Copyright (c) 2004-2007 The Trustees of Indiana University and 
- * Indiana University Research and Technology Corporation.  
- * 
- * All rights reserved. 
- * 
- * Additional copyrights may follow 
- */
-
-/* Code: */
 #include <f3d_lcd_sd.h>
 #include <f3d_delay.h>
 #include <glcdfont.h>
 
 static uint8_t madctlcurrent = MADVAL(MADCTLGRAPHICS);
+
+
+static int xchng_datablock(SPI_TypeDef *SPIx, int half, const void *tbuf, void *rbuf, unsigned count) {
+    DMA_InitTypeDef DMA_InitStructure;
+    uint16_t dummy[] = {0xffff};
+
+    DMA_Channel_TypeDef *rxChan;
+    DMA_Channel_TypeDef *txChan;
+    uint32_t dmaflag;
+
+    if (count & 1)
+        return -1;
+
+    if (SPIx == SPI1) {
+        rxChan = DMA1_Channel2;
+        txChan = DMA1_Channel3;
+        dmaflag = DMA1_FLAG_TC2;
+    }
+    else if (SPIx == SPI2) {
+        rxChan = DMA1_Channel4;
+        txChan = DMA1_Channel5;
+        dmaflag = DMA1_FLAG_TC4;
+    }
+    else
+        return -1;
+
+    DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)(&(SPIx->DR));
+    if (half) {
+        DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
+        DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
+    }
+    else {
+        DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
+        DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
+    }
+    DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+    DMA_InitStructure.DMA_BufferSize = count;
+    DMA_InitStructure.DMA_Mode = DMA_Mode_Normal;
+    DMA_InitStructure.DMA_Priority = DMA_Priority_VeryHigh;
+    DMA_InitStructure.DMA_M2M = DMA_M2M_Disable;
+
+    DMA_DeInit(rxChan);
+    DMA_DeInit(txChan);
+
+    if (rbuf) {
+        DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t)rbuf;
+        DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
+    }
+    else {
+        DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t) dummy;
+        DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Disable;
+    }
+    DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralSRC;
+    DMA_Init(rxChan, &DMA_InitStructure);
+
+    if (tbuf) {
+        DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t)tbuf;
+        DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
+    }
+    else {
+        DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t) dummy;
+        DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Disable;
+    }
+    DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralDST;
+    DMA_Init(txChan, &DMA_InitStructure);
+
+    // Enable channels
+    DMA_Cmd(rxChan, ENABLE);
+    DMA_Cmd(txChan, ENABLE);
+
+    // Enable SPI TX/RX request
+    SPI_I2S_DMACmd(SPIx, SPI_I2S_DMAReq_Rx | SPI_I2S_DMAReq_Tx, ENABLE);
+
+    // Wait for completion
+    while (DMA_GetFlagStatus(dmaflag) == RESET) { ; }
+
+    // Disable channels
+    DMA_Cmd(rxChan, DISABLE);
+    DMA_Cmd(txChan, DISABLE);
+    SPI_I2S_DMACmd(SPIx, SPI_I2S_DMAReq_Rx | SPI_I2S_DMAReq_Tx, DISABLE);
+    return count;
+}
 
 void f3d_lcd_sd_interface_init(void) {
     /* vvvvvvvvvvv pin initialization for the LCD goes here vvvvvvvvvv*/ 

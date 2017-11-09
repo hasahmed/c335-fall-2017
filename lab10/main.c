@@ -40,6 +40,8 @@ void initAll(){
     f3d_nunchuk_init();
     delay(310);
     f3d_rtc_init();
+    delay(310);
+    f3d_systick_init();
     f3d_lcd_fillScreen2(BLACK);
 }
 void setBuffs(){
@@ -51,6 +53,7 @@ void setBuffs(){
 int main(void) { 
     setBuffs();
     initAll();
+    f3d_led_all_off();
     while (1){
         //printf("Hello");
         putchar(getchar());

@@ -11,14 +11,20 @@ set shortmess=aoO
 badd +32 Makefile
 badd +1 main.c
 badd +1 ../driver/inc/f3d_uart.h
-badd +80 ../driver/src/f3d_uart.c
+badd +78 ../driver/src/f3d_uart.c
 badd +1 queue.c
 badd +1 queue.h
 badd +1 ~/queuetest.c
 badd +1 ~/qtest/queue.c
 badd +1 ~/qtest/queue.h
-badd +0 ../driver/src/f3d_systick.c
-badd +0 ../driver/inc/f3d_systick.h
+badd +1 ../driver/src/f3d_systick.c
+badd +1 ../driver/inc/f3d_systick.h
+badd +4 ../driver/src/f3d_rtc.c
+badd +95 ../driver/src/f3d_led.c
+badd +16 ../driver/src/f3d_user_btn.c
+badd +0 report.txt
+badd +0 ../driver/inc/f3d_led.h
+badd +0 ../fall2017-lab/driver/inc/f3d_led.h
 args Makefile main.c
 edit main.c
 set splitbelow splitright
@@ -37,35 +43,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 11 - ((10 * winheight(0) + 27) / 55)
+let s:l = 56 - ((22 * winheight(0) + 27) / 55)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-11
-normal! 021|
-tabedit ../driver/src/f3d_uart.c
-set splitbelow splitright
-set nosplitbelow
-set nosplitright
-wincmd t
-set winheight=1 winwidth=1
-argglobal
-edit ../driver/src/f3d_uart.c
-setlocal fdm=manual
-setlocal fde=0
-setlocal fmr={{{,}}}
-setlocal fdi=#
-setlocal fdl=0
-setlocal fml=1
-setlocal fdn=20
-setlocal fen
-silent! normal! zE
-let s:l = 80 - ((24 * winheight(0) + 27) / 55)
-if s:l < 1 | let s:l = 1 | endif
-exe s:l
-normal! zt
-80
-normal! 036|
+56
+normal! 016|
 tabedit ../driver/src/f3d_systick.c
 set splitbelow splitright
 set nosplitbelow
@@ -83,11 +66,57 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 40 - ((39 * winheight(0) + 27) / 55)
+let s:l = 45 - ((34 * winheight(0) + 27) / 55)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-40
+45
+normal! 0
+tabedit ../driver/src/f3d_led.c
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winheight=1 winwidth=1
+argglobal
+edit ../driver/src/f3d_led.c
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 110 - ((46 * winheight(0) + 27) / 55)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+110
+normal! 014|
+tabedit ../driver/inc/f3d_led.h
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winheight=1 winwidth=1
+argglobal
+edit ../driver/inc/f3d_led.h
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 1 - ((0 * winheight(0) + 27) / 55)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+1
 normal! 02|
 tabedit ../driver/inc/f3d_systick.h
 set splitbelow splitright
@@ -106,12 +135,35 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 43 - ((42 * winheight(0) + 27) / 55)
+let s:l = 1 - ((0 * winheight(0) + 27) / 55)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-43
-normal! 0
+1
+normal! 05|
+tabedit report.txt
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winheight=1 winwidth=1
+argglobal
+edit report.txt
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 9 - ((8 * winheight(0) + 27) / 55)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+9
+normal! 0121|
 tabedit queue.c
 set splitbelow splitright
 set nosplitbelow
@@ -152,11 +204,11 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 49 - ((48 * winheight(0) + 27) / 55)
+let s:l = 42 - ((40 * winheight(0) + 27) / 55)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-49
+42
 normal! 0
 tabedit Makefile
 set splitbelow splitright
@@ -175,13 +227,13 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 33 - ((32 * winheight(0) + 27) / 55)
+let s:l = 34 - ((32 * winheight(0) + 27) / 55)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-33
-normal! 025|
-tabnext 3
+34
+normal! 024|
+tabnext 2
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf
 endif

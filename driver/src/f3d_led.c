@@ -106,6 +106,13 @@ void f3d_led_all_off(void) {
         f3d_led_off(i);
     }
 } 
+void f3d_led_all_off_except(int led) {
+    int i = 0;
+    for(i; i < 8; i++){
+        if(i != led)
+            f3d_led_off(i);
+    }
+} 
 
 /* led.c ends here */
 

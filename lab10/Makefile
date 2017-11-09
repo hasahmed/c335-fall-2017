@@ -31,6 +31,7 @@ OBJS=  $(STARTUP) 	main.o \
 			stm32f30x_misc.o \
 			queue.o \
 			f3d_systick.o \
+			f3d_user_btn.o \
 # include common make file
 
 include $(TEMPLATEROOT)/c335.mk

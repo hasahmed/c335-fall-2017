@@ -1,0 +1,9 @@
+Hasan Y Ahmed
+Lab 10
+
+Difficulties
+
+The difficulties I ran into were mostly along the lines of tryig to understand how these things that i'm writing
+are being read to and written to. I'm still a bit hazey on that. Other than the understanding aspects, it was also
+difficult to try to make sure my implementation of the circular ques was bug-free, as it is difficult to test from
+the board. Ultimatly I decided to implement the queue in another directory to make certain my implementation was correct.

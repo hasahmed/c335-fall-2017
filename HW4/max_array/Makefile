@@ -1,6 +1,6 @@
 OBJS = main.o \
-	   string_length.o \
-	   string_length_c.o \
+	   max_array.o \
+	   max_array_c.o \
 	   test.o
 
 ELF=$(notdir $(CURDIR)).elf

@@ -7,7 +7,5 @@
 #include <stdio.h>
 #include "test.h"
 int main(void){
-    test_string_length();
+    test_max_array();
 } 
-
-/* main.c ends here */

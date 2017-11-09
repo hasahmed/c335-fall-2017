@@ -1,1 +1,1 @@
-void test_string_length();
+void test_max_array();

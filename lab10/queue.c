@@ -14,7 +14,6 @@ int enqueue(queue_t *q, int i){
     return 0;
 }
 
-
 int dequeue(queue_t *q){
     if(queue_empty(q))
         return 0;

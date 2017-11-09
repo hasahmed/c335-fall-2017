@@ -1,5 +1,9 @@
 Hasan Y Ahmed
 Lab 10
+partner: none
+11/9/17
+
+
 
 Difficulties
 
@@ -7,3 +11,6 @@ The difficulties I ran into were mostly along the lines of tryig to understand h
 are being read to and written to. I'm still a bit hazey on that. Other than the understanding aspects, it was also
 difficult to try to make sure my implementation of the circular ques was bug-free, as it is difficult to test from
 the board. Ultimatly I decided to implement the queue in another directory to make certain my implementation was correct.
+
+As far as what I learned, I learned a few things about how to use the interrupts as they are implemented within the stm32, and
+I refamilarized myself with issues of pass by refrence/value difficulties.

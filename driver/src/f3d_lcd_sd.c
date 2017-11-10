@@ -217,6 +217,7 @@ void f3d_lcd_init(void) {
     delay(100);
     LCD_RESET_DEASSERT();
     delay(100);
+    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);
 
     // Write initialization sequence to the lcd
     for (cmd=initializers; cmd->command; cmd++) {
@@ -244,30 +245,51 @@ static void LcdWrite16(char dc,const uint16_t *data,int cnt) {
 }
 
 int spiReadWrite(SPI_TypeDef *SPIx, uint8_t *rbuf, const uint8_t *tbuf, int cnt, uint16_t speed) {
-    int i;
-    int timeout;
+    /*
+       int i;
+       int timeout;
 
-    SPIx->CR1 = (SPIx->CR1&~SPI_BaudRatePrescaler_256)|speed;
-    for (i = 0; i < cnt; i++){
-        if (tbuf) {
-            SPI_SendData8(SPIx,*tbuf++);
-        } 
-        else {
-            SPI_SendData8(SPIx,0xff);
-        }
-        timeout = 100;
-        while (SPI_I2S_GetFlagStatus(SPIx,SPI_I2S_FLAG_RXNE) == RESET);
-        if (rbuf) {
-            *rbuf++ = SPI_ReceiveData8(SPIx);
-        } 
-        else {
-            SPI_ReceiveData8(SPIx);
-        }
+       SPIx->CR1 = (SPIx->CR1&~SPI_BaudRatePrescaler_256)|speed;
+       for (i = 0; i < cnt; i++){
+       if (tbuf) {
+       SPI_SendData8(SPIx,*tbuf++);
+       } 
+       else {
+       SPI_SendData8(SPIx,0xff);
+       }
+       timeout = 100;
+       while (SPI_I2S_GetFlagStatus(SPIx,SPI_I2S_FLAG_RXNE) == RESET);
+       if (rbuf) {
+     *rbuf++ = SPI_ReceiveData8(SPIx);
+     } 
+     else {
+     SPI_ReceiveData8(SPIx);
+     }
+     }
+     return i;
+     */
+    int i;
+    SPIx->CR1 = (SPIx->CR1 & ~SPI_BaudRatePrescaler_256) | speed;
+
+    if ((cnt > 4) && !(cnt & 1)) {
+        return xchng_datablock(SPIx, 0, tbuf, rbuf , cnt);
     }
-    return i;
+    else {
+        for (i = 0; i < cnt; i++){
+            SPI_SendData8(SPIx, tbuf ? *tbuf++ : 0xff);
+            while (SPI_I2S_GetFlagStatus(SPIx, SPI_I2S_FLAG_RXNE) == RESET);
+            if (rbuf) {
+                *rbuf++ = SPI_ReceiveData8(SPIx);
+            } else  {
+                SPI_ReceiveData8(SPIx);
+            }
+        }
+        return i;
+    }
 }
 
 int spiReadWrite16(SPI_TypeDef *SPIx,uint8_t *rbuf, const uint16_t *tbuf, int cnt, uint16_t speed) {
+    /*
     int i;
 
     SPIx->CR1 = (SPIx->CR1&~SPI_BaudRatePrescaler_256)|speed;
@@ -292,6 +314,28 @@ int spiReadWrite16(SPI_TypeDef *SPIx,uint8_t *rbuf, const uint16_t *tbuf, int cn
     SPI_DataSizeConfig(SPIx, SPI_DataSize_8b);
 
     return i;
+    */
+
+    int i;
+    SPIx->CR1 = (SPIx->CR1 & ~SPI_BaudRatePrescaler_256) | speed;
+    SPI_DataSizeConfig(SPIx, SPI_DataSize_16b);
+    if ((cnt > 4) && !(cnt & 3)) {
+        i =  xchng_datablock(SPIx, 1, tbuf, rbuf , cnt);
+    }
+    else {
+        for (i = 0; i < cnt; i++){
+            SPI_I2S_SendData16(SPIx, tbuf ? *tbuf++ : 0xffff);
+            while (SPI_I2S_GetFlagStatus(SPIx, SPI_I2S_FLAG_RXNE) == RESET);
+            if (rbuf) {
+                *rbuf++ = SPI_I2S_ReceiveData16(SPIx);
+            } else {
+                SPI_I2S_ReceiveData16(SPIx);
+            }
+        }
+    }
+    SPI_DataSizeConfig(SPIx, SPI_DataSize_8b);
+    return i;
+
 }
 
 void f3d_lcd_setAddrWindow ( uint16_t x0 , uint16_t y0 , uint16_t x1 , uint16_t y1 , uint8_t madctl) {

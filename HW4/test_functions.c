@@ -42,6 +42,13 @@ void gcd_test(void) {
             }
         }
     }
+    /*
+       for (i=1;i<100;i++) {
+       for (j=1;j<100;j++) {
+       printf("GCD of %d, %d : %d\n", i, j, gcd_c(i, j));
+       }
+       }
+       */
     if (!error_count) {
         printf("GCD Tests Passed\n");
     }

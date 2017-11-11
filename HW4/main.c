@@ -12,9 +12,9 @@
 #include "test_functions.h"
 
 int main(void){
-    //fib_test();
+    fib_test();
+    abs_test();
     gcd_test();
-    //abs_test();
     return 0;
 } 
 

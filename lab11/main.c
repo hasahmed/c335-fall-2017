@@ -113,6 +113,7 @@ int main(void) {
     initAll();
     f_mount(0, &Fatfs);
     printf("\n\n\n\n\n\n\n");
+    printf("New Trial");
 
 
 

@@ -15,6 +15,8 @@ int audioplayerWhole;
 int ret;
 
 void play_audio(char *filename){
+    FATFS Fatfs; //global file system
+    f_mount(0, &Fatfs);
     FIL fid;
     FRESULT rc;	
     DIR dir;	
@@ -41,6 +43,7 @@ void play_audio(char *filename){
         printf("ret: %d\n", ret);
         if ((ret != sizeof(waveid)) || (waveid != 'EVAW'))
             die(rc);
+        printf("we've made it to here");
         readckhd(&fid, &hd, ' tmf', ret);
 
         f_read(&fid, &fck, sizeof(fck), &ret);

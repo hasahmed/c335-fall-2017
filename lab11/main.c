@@ -26,15 +26,21 @@
 #include "play_audio.h"
 
 
-FATFS Fatfs; //global file system
 
 #define TIMER 20000
 #define AUDIOBUFSIZE 128
+#define BGCOLOR BLACK
+#define TEXTCOLOR WHITE
+#define L_INDENT 40 //indent for files
+#define L_SEP 20 //seperation for lines for file names
+#define L_START 50
+#define SEL_SIZE 6
 
 extern int8_t Audiobuf[AUDIOBUFSIZE];
 extern int audioplayerHalf;
 extern int audioplayerWhole;
 int ret;
+int audiofile_index = 0;
 
 void initAll(){
     f3d_delay_init();
@@ -63,7 +69,6 @@ void initAll(){
     delay(310);
     f3d_timer2_init();
     f3d_lcd_fillScreen2(BLACK);
-    f_mount(0, &Fatfs);
 }
 void setBuffs(){
     setvbuf(stdin, NULL, _IONBF, 0);
@@ -75,11 +80,19 @@ int main(void) {
     setBuffs();
     initAll();
     //play_audio("thermo.wav");
-    char *audiofiles[] = {"thermo.wav", "taco.wav", "lettuce.wav"};
+    char *audiofiles[] = {"thermo.wav", "bell.wav", "ocean.wav"};
+    draw_stringlist(L_INDENT, L_START, audiofiles, 3, L_SEP,  TEXTCOLOR, BGCOLOR);
+    draw_rect(L_INDENT - 10, L_START + (L_START * audiofile_index), SEL_SIZE, SEL_SIZE, TEXTCOLOR);
+
+    struct nunchuk_data nundata;
+    f3d_nunchuk_read(&nundata);
+
 
     if(1){
+        FATFS Fatfs; //global file system
+        f_mount(0, &Fatfs);
         FRESULT rc;	
-        DIR dir;	
+        DIR dir;
         FILINFO fno;	
         UINT bw, br;
         unsigned int retval;
@@ -87,8 +100,8 @@ int main(void) {
         FIL fid;
 
         printf("Reset\n");
-        printf("\nOpen thermo.wav\n");
-        rc = f_open(&fid, audiofiles[0], FA_READ);
+        printf("\nOpen %s\n", audiofiles[audiofile_index]);
+        rc = f_open(&fid, audiofiles[audiofile_index], FA_READ);
         printf("successfully opened");
 
         if (!rc) {
@@ -99,9 +112,6 @@ int main(void) {
             readckhd(&fid, &hd, 'FFIR', ret);
 
             f_read(&fid, &waveid, sizeof(waveid), &ret);
-            printf("sizeof waveid: %lu\n", sizeof(waveid));
-            printf("wtf is 'EVAW': %d\n", 'EVAW');
-            printf("ret: %d\n", ret);
             if ((ret != sizeof(waveid)) || (waveid != 'EVAW'))
                 return -1;
 
@@ -167,6 +177,7 @@ int main(void) {
         if (rc) die(rc);
         while (1);
     }
+    while(1);
 }
 
 #ifdef USE_FULL_ASSERT

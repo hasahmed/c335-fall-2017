@@ -39,6 +39,7 @@ OBJS=  $(STARTUP) 	main.o \
 			ff.o \
 			mmcbb.o \
 			play_audio.o \
+			lcdutil.o \
 # include common make file
 
 include $(TEMPLATEROOT)/c335.mk

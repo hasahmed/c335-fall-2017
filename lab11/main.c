@@ -1,5 +1,5 @@
 /*
- * Hasan Y Ahmed - hasahmed - hasahmed@iu.edu
+ * Hasan Y Ahmed
  * Partner: Cas Sinders
  * Lab 11
  * 11/09/17
@@ -23,51 +23,18 @@
 #include <string.h>
 #include <stm32f30x_dma.h>
 #include <stm32f30x_dac.h>
+#include "play_audio.h"
+
+
+FATFS Fatfs; //global file system
 
 #define TIMER 20000
 #define AUDIOBUFSIZE 128
 
-extern uint8_t Audiobuf[AUDIOBUFSIZE];
+extern int8_t Audiobuf[AUDIOBUFSIZE];
 extern int audioplayerHalf;
 extern int audioplayerWhole;
-
-FATFS Fatfs;		
-FIL fid;		
-BYTE Buff[512];		
 int ret;
-uint16_t backGroundColor = BLACK;
-uint16_t foreGroundColor = WHITE;
-
-struct ckhd {
-    uint32_t ckID;
-    uint32_t cksize;
-};
-
-struct fmtck {
-    uint16_t wFormatTag;      
-    uint16_t nChannels;
-    uint32_t nSamplesPerSec;
-    uint32_t nAvgBytesPerSec;
-    uint16_t nBlockAlign;
-    uint16_t wBitsPerSample;
-};
-
-void readckhd(FIL *fid, struct ckhd *hd, uint32_t ckID) {
-    f_read(fid, hd, sizeof(struct ckhd), &ret);
-    if (ret != sizeof(struct ckhd))
-        exit(-1);
-    if (ckID && (ckID != hd->ckID))
-        exit(-1);
-}
-void drawRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint16_t color) {
-    uint8_t y;
-    uint16_t x[x2];
-    for (y = 0; y < x2; y++) x[y] = color;
-    f3d_lcd_setAddrWindow(x1,y1, x2,y2, MADCTLGRAPHICS);
-    for (y = 0; y < y2; y++) {
-        f3d_lcd_pushColor(x,x2);
-    }
-}
 
 void initAll(){
     f3d_delay_init();
@@ -96,6 +63,7 @@ void initAll(){
     delay(310);
     f3d_timer2_init();
     f3d_lcd_fillScreen2(BLACK);
+    f_mount(0, &Fatfs);
 }
 void setBuffs(){
     setvbuf(stdin, NULL, _IONBF, 0);
@@ -103,144 +71,101 @@ void setBuffs(){
     setvbuf(stderr, NULL, _IONBF, 0);
 }
 
-void die (FRESULT rc) {
-    printf("Failed with rc=%u.\n", rc);
-    while (1);
-}
-
 int main(void) { 
     setBuffs();
     initAll();
-    f_mount(0, &Fatfs);
-    printf("\n\n\n\n\n\n\n");
-    printf("New Trial");
+    //play_audio("thermo.wav");
+    char *audiofiles[] = {"thermo.wav", "taco.wav", "lettuce.wav"};
 
+    if(1){
+        FRESULT rc;	
+        DIR dir;	
+        FILINFO fno;	
+        UINT bw, br;
+        unsigned int retval;
+        int bytesread;
+        FIL fid;
 
+        printf("Reset\n");
+        printf("\nOpen thermo.wav\n");
+        rc = f_open(&fid, audiofiles[0], FA_READ);
+        printf("successfully opened");
 
+        if (!rc) {
+            struct ckhd hd;
+            uint32_t  waveid;
+            struct fmtck fck;
 
-    FRESULT rc;	
-    DIR dir;	
-    FILINFO fno;	
-    UINT bw, br;
-    unsigned int retval;
-    int bytesread;
+            readckhd(&fid, &hd, 'FFIR', ret);
 
-    int state = 0;
-    char * wavFiles[] = {"bell.wav", "ocean.wav", "thermo.wav"};
-    f3d_lcd_fillScreen2(BLACK);
-    /*
-       print onto screen the three wav files
-       */
-    int i = 0;
-    for (i = 0; i < 3; i++) {
-        f3d_lcd_drawString(70, 30 + (i * 30),wavFiles[i], foreGroundColor, backGroundColor);
-    }
-    drawRectangle(40, 30 + (state * 30) + 6, 50, 30 + (state * 30), foreGroundColor);
+            f_read(&fid, &waveid, sizeof(waveid), &ret);
+            printf("sizeof waveid: %lu\n", sizeof(waveid));
+            printf("wtf is 'EVAW': %d\n", 'EVAW');
+            printf("ret: %d\n", ret);
+            if ((ret != sizeof(waveid)) || (waveid != 'EVAW'))
+                return -1;
 
+            readckhd(&fid, &hd, ' tmf', ret);
 
-    while(1) {
+            f_read(&fid, &fck, sizeof(fck), &ret);
 
-        // read data from nunchuk
-        struct nunchuk_data nundata;
-        f3d_nunchuk_read(&nundata);
-        delay(150);
+            // skip over extra info
 
-        if (nundata.jy > 156) {
-            drawRectangle(40, 30 + (state * 30) + 6, 50, 30 + (state * 30), backGroundColor);
-            state  = ++state % 3;
-            drawRectangle(40, 30 + (state * 30) + 6, 50, 30 + (state * 30), foreGroundColor);
-        }
-        if (nundata.jy < 96) {
-            drawRectangle(40, 30 + (state * 30) + 6, 50, 30 + (state * 30), backGroundColor);
-            state--;
-            if (state < 0) {
-                state = 2;
-            }
-            drawRectangle(40, 30 + (state * 30) + 6, 50, 30 + (state * 30), foreGroundColor);
-        }
-
-        if (nundata.c) {
-            //play_audio(wavFiles[state]);
-
-            printf("Reset\n");
-
-
-            printf("\nOpen %s\n", wavFiles[state]);
-            rc = f_open(&fid, wavFiles[state], FA_READ);
-
-            if (!rc) {
-                struct ckhd hd;
-                uint32_t  waveid;
-                struct fmtck fck;
-
-                readckhd(&fid, &hd, 'FFIR');
-
-                f_read(&fid, &waveid, sizeof(waveid), &ret);
-                if ((ret != sizeof(waveid)) || (waveid != 'EVAW'))
-                    return -1;
-
-                readckhd(&fid, &hd, ' tmf');
-
-                f_read(&fid, &fck, sizeof(fck), &ret);
-
-                // skip over extra info
-
-                if (hd.cksize != 16) {
-                    printf("extra header info %d\n", hd.cksize - 16);
-                    f_lseek(&fid, hd.cksize - 16);
-                }
-
-                printf("audio format 0x%x\n", fck.wFormatTag);
-                printf("channels %d\n", fck.nChannels);
-                printf("sample rate %d\n", fck.nSamplesPerSec);
-                printf("data rate %d\n", fck.nAvgBytesPerSec);
-                printf("block alignment %d\n", fck.nBlockAlign);
-                printf("bits per sample %d\n", fck.wBitsPerSample);
-
-                // now skip all non-data chunks !
-
-                while(1){
-                    readckhd(&fid, &hd, 0);
-                    if (hd.ckID == 'atad')
-                        break;
-                    f_lseek(&fid, hd.cksize);
-                }
-
-                printf("Samples %d\n", hd.cksize);
-
-                // Play it !
-
-                //audioplayerInit(fck.nSamplesPerSec);
-
-                f_read(&fid, Audiobuf, AUDIOBUFSIZE, &ret);
-                hd.cksize -= ret;
-                audioplayerStart();
-                while (hd.cksize) {
-                    int next = hd.cksize > AUDIOBUFSIZE/2 ? AUDIOBUFSIZE/2 : hd.cksize;
-                    if (audioplayerHalf) {
-                        if (next < AUDIOBUFSIZE/2)
-                            bzero(Audiobuf, AUDIOBUFSIZE/2);
-                        f_read(&fid, Audiobuf, next, &ret);
-                        hd.cksize -= ret;
-                        audioplayerHalf = 0;
-                    }
-                    if (audioplayerWhole) {
-                        if (next < AUDIOBUFSIZE/2)
-                            bzero(&Audiobuf[AUDIOBUFSIZE/2], AUDIOBUFSIZE/2);
-                        f_read(&fid, &Audiobuf[AUDIOBUFSIZE/2], next, &ret);
-                        hd.cksize -= ret;
-                        audioplayerWhole = 0;
-                    }
-                }
-                audioplayerStop();
+            if (hd.cksize != 16) {
+                printf("extra header info %d\n", hd.cksize - 16);
+                f_lseek(&fid, hd.cksize - 16);
             }
 
-            printf("\nClose the file.\n"); 
-            rc = f_close(&fid);
+            printf("audio format 0x%x\n", fck.wFormatTag);
+            printf("channels %d\n", fck.nChannels);
+            printf("sample rate %d\n", fck.nSamplesPerSec);
+            printf("data rate %d\n", fck.nAvgBytesPerSec);
+            printf("block alignment %d\n", fck.nBlockAlign);
+            printf("bits per sample %d\n", fck.wBitsPerSample);
 
-            if (rc) die(rc);
+            // now skip all non-data chunks !
+
+            while(1){
+                readckhd(&fid, &hd, 0, ret);
+                if (hd.ckID == 'atad')
+                    break;
+                f_lseek(&fid, hd.cksize);
+            }
+
+            printf("Samples %d\n", hd.cksize);
+
+            // Play it !
+
+            //audioplayerInit(fck.nSamplesPerSec);
+
+            f_read(&fid, Audiobuf, AUDIOBUFSIZE, &ret);
+            hd.cksize -= ret;
+            audioplayerStart();
+            while (hd.cksize) {
+                int next = hd.cksize > AUDIOBUFSIZE/2 ? AUDIOBUFSIZE/2 : hd.cksize;
+                if (audioplayerHalf) {
+                    if (next < AUDIOBUFSIZE/2)
+                        bzero(Audiobuf, AUDIOBUFSIZE/2);
+                    f_read(&fid, Audiobuf, next, &ret);
+                    hd.cksize -= ret;
+                    audioplayerHalf = 0;
+                }
+                if (audioplayerWhole) {
+                    if (next < AUDIOBUFSIZE/2)
+                        bzero(&Audiobuf[AUDIOBUFSIZE/2], AUDIOBUFSIZE/2);
+                    f_read(&fid, &Audiobuf[AUDIOBUFSIZE/2], next, &ret);
+                    hd.cksize -= ret;
+                    audioplayerWhole = 0;
+                }
+            }
+            audioplayerStop();
         }
-        // may need to wait after the button is pressed    
+
+        printf("\nClose the file.\n"); 
+        rc = f_close(&fid);
+
+        if (rc) die(rc);
+        while (1);
     }
 }
 

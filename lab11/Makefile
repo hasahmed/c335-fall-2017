@@ -38,7 +38,7 @@ OBJS=  $(STARTUP) 	main.o \
 			f3d_dac.o \
 			ff.o \
 			mmcbb.o \
-			#f3d_systick.o \
+			play_audio.o \
 # include common make file
 
 include $(TEMPLATEROOT)/c335.mk

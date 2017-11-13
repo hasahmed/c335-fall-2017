@@ -9,7 +9,6 @@
 Q1. What is the significance of the peripheral base address? Where does it point?
 
 
-
 Q2. Why is it necessary to enable incrementing as was done in this step? What will the DMA controller do in response to this configuration.
 
 

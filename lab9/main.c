@@ -73,7 +73,6 @@ void initAll(){
     delay(310);
     f3d_rtc_init();
 
-    f_mount(0, &Fatfs);		/* Register volume work area (never fails) */
 }
 void setBuffs(){
     setvbuf(stdin, NULL, _IONBF, 0);
@@ -98,9 +97,10 @@ int main(void) {
     UINT bw;
     UINT br; //number of bytes to read
     unsigned int retval;
+    f_mount(0, &Fatfs);		/* Register volume work area (never fails) */
 
     FIL Fil;
-    printf("\nCreate a new file (hello.txt).\n");
+    printf("\nCreate a new file (HELLO.TXT).\n");
     rc = f_open(&Fil, "HELLO.TXT", FA_WRITE | FA_CREATE_ALWAYS);
     if (rc) die(rc);
 

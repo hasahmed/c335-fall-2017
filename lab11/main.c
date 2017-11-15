@@ -76,16 +76,24 @@ void setBuffs(){
     setvbuf(stderr, NULL, _IONBF, 0);
 }
 
+struct nunchuk_data nundata;
+
 int main(void) { 
     setBuffs();
     initAll();
-    //play_audio("thermo.wav");
-    char *audiofiles[] = {"thermo.wav", "bell.wav", "ocean.wav"};
-    draw_stringlist(L_INDENT, L_START, audiofiles, 3, L_SEP,  TEXTCOLOR, BGCOLOR);
-    draw_rect(L_INDENT - 10, L_START + (L_START * audiofile_index), SEL_SIZE, SEL_SIZE, TEXTCOLOR);
+    char *audiofiles[] = {"thermo.wav", "howsoon.wav", "genious.wav"};
 
-    struct nunchuk_data nundata;
-    f3d_nunchuk_read(&nundata);
+
+    do{
+        f3d_nunchuk_read(&nundata);
+    } while(check_nun_pressed(&nundata) == NA);
+
+    draw_stringlist(L_INDENT, L_START, audiofiles, 3, L_SEP,  TEXTCOLOR, BGCOLOR);
+    draw_rect(L_INDENT - 10, L_START + (L_SEP * audiofile_index), SEL_SIZE, SEL_SIZE, TEXTCOLOR);
+
+
+
+    printf("////////////////////////////////////////////////////////////\n");
 
 
     if(1){
@@ -151,7 +159,12 @@ int main(void) {
             f_read(&fid, Audiobuf, AUDIOBUFSIZE, &ret);
             hd.cksize -= ret;
             audioplayerStart();
-            while (hd.cksize) {
+            while (hd.cksize > 0){
+                /*
+                if(hd.cksize == -1)
+                    break;
+                    */
+                //printf("hd.cksize %d\n", hd.cksize);
                 int next = hd.cksize > AUDIOBUFSIZE/2 ? AUDIOBUFSIZE/2 : hd.cksize;
                 if (audioplayerHalf) {
                     if (next < AUDIOBUFSIZE/2)

@@ -15,35 +15,34 @@ int audioplayerWhole;
 int ret;
 
 void play_audio(char *filename){
+    /*
+    nundata.c = 0;
     FATFS Fatfs; //global file system
     f_mount(0, &Fatfs);
-    FIL fid;
     FRESULT rc;	
-    DIR dir;	
+    DIR dir;
     FILINFO fno;	
     UINT bw, br;
     unsigned int retval;
     int bytesread;
+    FIL fid;
 
     printf("Reset\n");
-    printf("\nOpenining %s\n", filename);
-    rc = f_open(&fid, filename, FA_READ);
-
+    printf("\nOpen %s\n", audiofiles[audiofile_index]);
+    rc = f_open(&fid, audiofiles[audiofile_index], FA_READ);
+    printf("successfully opened");
 
     if (!rc) {
         struct ckhd hd;
         uint32_t  waveid;
         struct fmtck fck;
 
-        //readckhd(&fid, &hd, 'FFIR');
+        readckhd(&fid, &hd, 'FFIR', ret);
 
         f_read(&fid, &waveid, sizeof(waveid), &ret);
-        printf("sizeof waveid: %lu\n", sizeof(waveid));
-        printf("wtf is 'EVAW': %d\n", 'EVAW');
-        printf("ret: %d\n", ret);
         if ((ret != sizeof(waveid)) || (waveid != 'EVAW'))
-            die(rc);
-        printf("we've made it to here");
+            return -1;
+
         readckhd(&fid, &hd, ' tmf', ret);
 
         f_read(&fid, &fck, sizeof(fck), &ret);
@@ -73,14 +72,13 @@ void play_audio(char *filename){
 
         printf("Samples %d\n", hd.cksize);
 
-        // Play it !
-
-        //audioplayerInit(fck.nSamplesPerSec);
-
         f_read(&fid, Audiobuf, AUDIOBUFSIZE, &ret);
         hd.cksize -= ret;
         audioplayerStart();
-        while (hd.cksize) {
+        while (hd.cksize > 0 && hd.cksize != -1){
+            //if(hd.cksize == -1)
+            //break;
+            //printf("hd.cksize %d\n", hd.cksize);
             int next = hd.cksize > AUDIOBUFSIZE/2 ? AUDIOBUFSIZE/2 : hd.cksize;
             if (audioplayerHalf) {
                 if (next < AUDIOBUFSIZE/2)
@@ -104,6 +102,8 @@ void play_audio(char *filename){
     rc = f_close(&fid);
 
     if (rc) die(rc);
+}
+*/
 }
 
 void readckhd(FIL *fid, struct ckhd *hd, uint32_t ckID, int ret) {

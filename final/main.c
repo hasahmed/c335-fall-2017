@@ -172,11 +172,9 @@ int main(void) {
                 f_read(&fid, Audiobuf, AUDIOBUFSIZE, &ret);
                 hd.cksize -= ret;
                 audioplayerStart();
-                while (hd.cksize > 0){
-                    /*
-                       if(hd.cksize == -1)
-                       break;
-                       */
+                while (hd.cksize > 0 && hd.cksize != -1){
+                       //if(hd.cksize == -1)
+                       //break;
                     //printf("hd.cksize %d\n", hd.cksize);
                     int next = hd.cksize > AUDIOBUFSIZE/2 ? AUDIOBUFSIZE/2 : hd.cksize;
                     if (audioplayerHalf) {

@@ -7,16 +7,19 @@
  */
 
 Q1. What is the significance of the peripheral base address? Where does it point?
+    The significance of the base address, is its use in DMA. It points directly into the perepherials memory.
 
 
 Q2. Why is it necessary to enable incrementing as was done in this step? What will the DMA controller do in response to this configuration.
+    This is necissary so that the DMA controller will be able to transwer data in both directions. Otherwise it would only be dummy data.
 
 
 Q3. Why is this line of the code necessary?
+    Its necessary because we need to know when the DMA controller is ready for transer.
 
 
 Q4. For transfers of less than 4 bytes, what do you think is the reason for not using the xchng_datablock functions?
-
-
+    The purpose for using a different function to transfer less than 4 bytes of data is because the xchng_datablock function is less efficient when the size is less than 4 bytes.
 
 Q5. Why is it important for the DMA controller and the audio player to work on differnt portions of Audiobuf.
+    This is important so that they don't have a data race.

@@ -12,11 +12,13 @@ int get_next_audio_index(enum dir thedirection, int current_file_index, int file
     if(thedirection == UP){
         if(current_file_index >= file_arr_len -1)
             return 0;
+        return current_file_index + 1;
+    } else if (thedirection == DOWN){
+        if(current_file_index <= 0)
+            return file_arr_len -1;
         else if (current_file_index <= 0)
             return file_arr_len -1;
-        return current_file_index++;
-    } else if (thedirection == DOWN){
-        //do the same stuff basically
-
+        return current_file_index - 1;
     }
+    return -1;
 }

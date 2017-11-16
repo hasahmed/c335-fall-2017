@@ -15,8 +15,8 @@ badd +1 helpers.c
 badd +43 Makefile
 badd +25 report.txt
 badd +25 ~/classes/C335-Fall2017/lab7/main.c
-badd +1 lcdutil.c
-badd +1 lcdutil.h
+badd +0 lcdutil.c
+badd +0 lcdutil.h
 args main.c
 edit main.c
 set splitbelow splitright
@@ -34,12 +34,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 175 - ((12 * winheight(0) + 27) / 55)
+let s:l = 179 - ((26 * winheight(0) + 27) / 55)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-175
-normal! 055|
+179
+normal! 025|
 tabedit helpers.c
 set splitbelow splitright
 set nosplitbelow

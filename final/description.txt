@@ -1,0 +1,14 @@
+Hasan Yusuf Ahmed
+Final Project Description
+
+
+Journey of the Prary King
+
+Game Description:
+    You play as The Prary King, a Cowboy who is being barraded by bandits. Your goal is to not die as wave after wave of bandit
+    comes to kill you. You may find a power up here and there to make your gun or player better in various ways
+
+Techical Details:
+    SD card to save high score
+    Nunchuk1 to control players movement, and nunchuk2 to control direction of players gun
+    Maybe: read images from SD card for static background.

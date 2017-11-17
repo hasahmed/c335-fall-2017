@@ -11,5 +11,4 @@ struct player{
 typedef struct player Player;
 void player_init(Player *p, uint8_t player_x, uint8_t player_y, uint8_t player_width, uint8_t player_height, uint16_t player_color);
 void player_draw(Player *p);
-void player_move(Player *p, int8_t x, int8_t y);
 #endif //_PLAYER_H_

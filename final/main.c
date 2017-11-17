@@ -58,6 +58,8 @@ int main(void) {
 
 
     while(1){
+        player_move(&player, 1, 1);
+        player_draw(&player);
         /*
         //printf("width %d, height %d\n", WIDTH, HEIGHT);
         f3d_nunchuk_read(&nundata);

@@ -1,0 +1,2 @@
+void setBuffs();
+void initAll();

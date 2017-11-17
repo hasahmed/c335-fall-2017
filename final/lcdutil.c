@@ -1,7 +1,7 @@
+#ifndef _LCD_UTIL_H_
+#define _LCD_UTIL_H_
 #include <f3d_lcd_sd.h>
 #include "lcdutil.h"
-
-
 #define HEIGHT ST7735_height
 #define WIDTH ST7735_width
 void draw_string(int startx, int y, const char *str, uint16_t charColor, uint16_t charBGColor){
@@ -13,7 +13,7 @@ void draw_string(int startx, int y, const char *str, uint16_t charColor, uint16_
 }
 void draw_stringlist(int startx, 
                     int starty, 
-                    const char **strlist, 
+                    char **strlist, 
                     unsigned int arr_len, 
                     unsigned int linegap, 
                     uint16_t charColor, 
@@ -33,9 +33,4 @@ void draw_rect(int x, int y, int width, int height,  uint16_t color) {
         }
     }
 }
-/*
-void draw_screen_message(char *message){
-    f3d_lcd_fillScreen2(RED);
-    //draw_string(10, HEIGHT/2, message, 3, L_SEP,  TEXTCOLOR, BGCOLOR);
-}
-*/
+#endif //_LCD_UTIL_H_

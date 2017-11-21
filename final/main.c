@@ -21,7 +21,7 @@
 #include "general_util.h"
 #include "lcdutil.h"
 //#include "play_audio.h"
-#include "helpers.h"
+#include "nunchuk_util.h"
 #include "player.h"
 #include "game_util.h"
 
@@ -33,7 +33,7 @@
 //#define TIMER 20000
 //#define AUDIOBUFSIZE 128
 #define BGCOLOR BLACK
-#define DEBUGF(f_, ...) do{ char buf[26]; sprintf(buf, (f_), __VA_ARGS__); draw_string(0, 0, buf, WHITE, BGCOLOR); } while(0);
+//#define DEBUGF(f_, ...) do{ char buf[26]; sprintf(buf, (f_), __VA_ARGS__); draw_string(0, 0, buf, WHITE, BGCOLOR); } while(0);
 
 //extern int8_t Audiobuf[AUDIOBUFSIZE];
 //extern int audioplayerHalf;
@@ -51,17 +51,14 @@ int main(void) {
     printf("////////////////////////////////////////////////////////////\n");
     init_game_screen(&player);
 
-    int pressed_direction = NA;
-    int back_to_neutral = 1;
-    int should_play_audio = 0;
-
     //DEBUGF("Hey baby girl %d\n, %f", 100, 1.11f);
 
     while(1){
         f3d_nunchuk_read(&nundata);
-        player_move(&player, 1, 1);
+        //player_move(&player, 1, 1);
         player_draw(&player);
-        DEBUGF("nd jx: %lu jy: %lu", nundata.jx, nundata.jy);
+        player_listen_move(&player, &nundata);
+        //DEBUGF("nd jx: %4lu jy: %4lu", nundata.jx, nundata.jy);
         /*
          *
         //printf("width %d, height %d\n", WIDTH, HEIGHT);

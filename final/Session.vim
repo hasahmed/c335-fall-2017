@@ -8,25 +8,29 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
-badd +8 helpers.h
-badd +8 lcdutil.h
+badd +1 helpers.h
+badd +10 lcdutil.h
 badd +1 play_audio.h
-badd +2 helpers.c
-badd +4 lcdutil.c
+badd +1 helpers.c
+badd +7 lcdutil.c
 badd +23 main.c
 badd +1 play_audio.c
-badd +3 player.h
-badd +30 Makefile
-badd +1 player.c
+badd +14 player.h
+badd +42 Makefile
+badd +5 player.c
 badd +1 general_util.h
 badd +1 general_util.c
 badd +1 game_utils.h
 badd +1 game_utils.c
-badd +1 game_util.c
+badd +6 game_util.c
 badd +16 game_util.h
-badd +0 ../driver/src/f3d_systick.c
+badd +1 ../driver/src/f3d_systick.c
+badd +108 ../driver/src/f3d_lcd_sd.c
+badd +92 ../driver/inc/f3d_lcd_sd.h
+badd +0 nunchuk_util.c
+badd +0 nunchuk_util.h
 args helpers.c lcdutil.c main.c play_audio.c helpers.h lcdutil.h play_audio.h
-edit lcdutil.h
+edit nunchuk_util.c
 set splitbelow splitright
 set nosplitbelow
 set nosplitright
@@ -34,6 +38,7 @@ wincmd t
 set winheight=1 winwidth=1
 argglobal
 6argu
+edit nunchuk_util.c
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -43,12 +48,58 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 13 - ((12 * winheight(0) + 27) / 55)
+let s:l = 14 - ((13 * winheight(0) + 24) / 49)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-13
-normal! 016|
+14
+normal! 043|
+tabedit nunchuk_util.h
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winheight=1 winwidth=1
+argglobal
+edit nunchuk_util.h
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 17 - ((16 * winheight(0) + 24) / 49)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+17
+normal! 06|
+tabedit player.c
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winheight=1 winwidth=1
+argglobal
+edit player.c
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 44 - ((42 * winheight(0) + 24) / 49)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+44
+normal! 05|
 tabedit main.c
 set splitbelow splitright
 set nosplitbelow
@@ -66,12 +117,35 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 61 - ((32 * winheight(0) + 27) / 55)
+let s:l = 60 - ((41 * winheight(0) + 24) / 49)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-61
-normal! 021|
+60
+normal! 09|
+tabedit player.h
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winheight=1 winwidth=1
+argglobal
+edit player.h
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 5 - ((4 * winheight(0) + 24) / 49)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+5
+normal! 0
 tabedit ../driver/src/f3d_systick.c
 set splitbelow splitright
 set nosplitbelow
@@ -89,11 +163,11 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 16 - ((15 * winheight(0) + 27) / 55)
+let s:l = 19 - ((4 * winheight(0) + 24) / 49)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-16
+19
 normal! 0
 tabedit Makefile
 set splitbelow splitright
@@ -112,21 +186,20 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 42 - ((41 * winheight(0) + 27) / 55)
+let s:l = 41 - ((40 * winheight(0) + 24) / 49)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-42
-normal! 021|
-tabedit game_util.h
+41
+normal! 013|
+tabedit general_util.c
 set splitbelow splitright
 set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
 argglobal
-5argu
-edit game_util.h
+edit general_util.c
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -136,20 +209,20 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 16 - ((15 * winheight(0) + 27) / 55)
+let s:l = 1 - ((0 * winheight(0) + 24) / 49)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-16
+1
 normal! 0
-tabedit game_util.c
+tabedit general_util.h
 set splitbelow splitright
 set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
 argglobal
-edit game_util.c
+edit general_util.h
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -159,59 +232,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 4 - ((3 * winheight(0) + 27) / 55)
+let s:l = 3 - ((2 * winheight(0) + 24) / 49)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-4
-normal! 033|
-tabedit player.h
-set splitbelow splitright
-set nosplitbelow
-set nosplitright
-wincmd t
-set winheight=1 winwidth=1
-argglobal
-6argu
-edit player.h
-setlocal fdm=manual
-setlocal fde=0
-setlocal fmr={{{,}}}
-setlocal fdi=#
-setlocal fdl=0
-setlocal fml=1
-setlocal fdn=20
-setlocal fen
-silent! normal! zE
-let s:l = 14 - ((13 * winheight(0) + 27) / 55)
-if s:l < 1 | let s:l = 1 | endif
-exe s:l
-normal! zt
-14
-normal! 044|
-tabedit player.c
-set splitbelow splitright
-set nosplitbelow
-set nosplitright
-wincmd t
-set winheight=1 winwidth=1
-argglobal
-edit player.c
-setlocal fdm=manual
-setlocal fde=0
-setlocal fmr={{{,}}}
-setlocal fdi=#
-setlocal fdl=0
-setlocal fml=1
-setlocal fdn=20
-setlocal fen
-silent! normal! zE
-let s:l = 9 - ((8 * winheight(0) + 27) / 55)
-if s:l < 1 | let s:l = 1 | endif
-exe s:l
-normal! zt
-9
-normal! 0
+3
+normal! 018|
 tabnext 3
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf

@@ -36,10 +36,10 @@ OBJS=  $(STARTUP) 	main.o \
 			mmcbb.o \
 			play_audio.o \
 			lcdutil.o \
-			helpers.o \
 			player.o \
 			general_util.o \
 			game_util.o \
+			nunchuk_util.o \
 # include common make file
 
 include $(TEMPLATEROOT)/c335.mk

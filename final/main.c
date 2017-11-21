@@ -26,12 +26,14 @@
 #include "game_util.h"
 
 
+
 #define SCREEN_HEIGHT ST7735_height
 #define SCREEN_WIDTH ST7735_width
 
 //#define TIMER 20000
 //#define AUDIOBUFSIZE 128
 #define BGCOLOR BLACK
+#define DEBUGF(f_, ...) do{ char buf[26]; sprintf(buf, (f_), __VA_ARGS__); draw_string(0, 0, buf, WHITE, BGCOLOR); } while(0);
 
 //extern int8_t Audiobuf[AUDIOBUFSIZE];
 //extern int audioplayerHalf;
@@ -53,16 +55,16 @@ int main(void) {
     int back_to_neutral = 1;
     int should_play_audio = 0;
 
-    //draw_stringlist(L_INDENT, L_START, audiofiles, 3, L_SEP,  TEXTCOLOR, BGCOLOR);
-    //draw_rect(L_INDENT - 10, L_START + (L_SEP * audiofile_index), SEL_SIZE, SEL_SIZE, TEXTCOLOR);
-
+    //DEBUGF("Hey baby girl %d\n, %f", 100, 1.11f);
 
     while(1){
+        f3d_nunchuk_read(&nundata);
         player_move(&player, 1, 1);
         player_draw(&player);
+        DEBUGF("nd jx: %lu jy: %lu", nundata.jx, nundata.jy);
         /*
+         *
         //printf("width %d, height %d\n", WIDTH, HEIGHT);
-        f3d_nunchuk_read(&nundata);
         pressed_direction = check_nun_pressed(&nundata);
         if (pressed_direction != NA){
         if (back_to_neutral){

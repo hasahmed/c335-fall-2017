@@ -3,5 +3,3 @@
 void f3d_systick_init(void);
 void SysTick_Handler(void);
 void setTickSpeed(int speed);
-void setNextLed(int *currentLed);
-int getPrevLed(int currentLed);

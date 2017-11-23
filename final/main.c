@@ -20,64 +20,62 @@
 #include <stm32f30x_dac.h>
 #include "general_util.h"
 #include "lcdutil.h"
-//#include "play_audio.h"
 #include "nunchuk_util.h"
 #include "player.h"
 #include "game_util.h"
-
-
+#include "main.h"
 
 #define SCREEN_HEIGHT ST7735_height
 #define SCREEN_WIDTH ST7735_width
-
-//#define TIMER 20000
-//#define AUDIOBUFSIZE 128
 #define BGCOLOR BLACK
-//#define DEBUGF(f_, ...) do{ char buf[26]; sprintf(buf, (f_), __VA_ARGS__); draw_string(0, 0, buf, WHITE, BGCOLOR); } while(0);
-
-//extern int8_t Audiobuf[AUDIOBUFSIZE];
-//extern int audioplayerHalf;
-//extern int audioplayerWhole;
-//int ret;
-//int audiofile_index = 0;
+#define ENEMIES 1
+#define ENEMY_WIDTH 4
+#define ENEMY_HEIGHT 8
+#define ENEMY_COLOR BLUE
 
 Player player;
-
+Player enemies[ENEMIES];
 struct nunchuk_data nundata;
+int redraw = 0;
+
+void move_enemies(Player *enemies_list);
+
+void init_enemies(Player *enemies_list){
+    int i = 0;
+    for (i = 0; i < ENEMIES; i++){
+        enemies[i].x = i * ENEMY_WIDTH + i;
+        enemies[i].y = i * ENEMY_WIDTH + i;
+        enemies[i].width = ENEMY_WIDTH;
+        enemies[i].height = ENEMY_HEIGHT;
+        enemies[i].color = ENEMY_COLOR;
+    }
+}
+void move_enemies(Player *enemies_list){
+    int i = 0;
+    for (i = 0; i < ENEMIES; i++){
+        player_move(&enemies[i], 1, 0);
+    }
+}
+void update(){
+    f3d_nunchuk_read(&nundata);
+    player_listen_move(&player, &nundata);
+    move_enemies(enemies);
+    redraw = 1;
+}
 
 int main(void) { 
     setBuffs();
     initAll();
     printf("////////////////////////////////////////////////////////////\n");
     init_game_screen(&player);
-
-    //DEBUGF("Hey baby girl %d\n, %f", 100, 1.11f);
-
+    init_enemies(enemies);
     while(1){
-        f3d_nunchuk_read(&nundata);
-        //player_move(&player, 1, 1);
-        player_draw(&player);
-        player_listen_move(&player, &nundata);
-        //DEBUGF("nd jx: %4lu jy: %4lu", nundata.jx, nundata.jy);
-        /*
-         *
-        //printf("width %d, height %d\n", WIDTH, HEIGHT);
-        pressed_direction = check_nun_pressed(&nundata);
-        if (pressed_direction != NA){
-        if (back_to_neutral){
-        audiofile_index = get_next_audio_index(pressed_direction, audiofile_index, FILE_ARR_LEN);
-        f3d_lcd_fillScreen2(BLACK);
+        if (redraw) {
+            f3d_lcd_fillScreen(BGCOLOR);
+            player_draw(&player);
+            enemies_draw(enemies, ENEMIES);
+            redraw = 0;
         }
-        back_to_neutral = 0;
-        } 
-        if (pressed_direction == NA){
-        back_to_neutral = 1;
-        }
-
-        //draw_stringlist(L_INDENT, L_START, audiofiles, 3, L_SEP,  TEXTCOLOR, BGCOLOR);
-        //draw_rect(L_INDENT - 10, L_START + (L_SEP * audiofile_index), SEL_SIZE, SEL_SIZE, TEXTCOLOR);
-        }
-        */
     }
 }
 

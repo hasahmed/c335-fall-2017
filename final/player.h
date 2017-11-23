@@ -14,4 +14,6 @@ void player_init(Player *p, uint8_t player_x, uint8_t player_y, uint8_t player_w
 void player_draw(Player *p);
 void player_move(Player *p, int8_t x, int8_t y);
 void player_listen_move(Player *p, struct nunchuk_data *nundata);
+//enemy stuff
+void enemies_draw(Player *enemy_list, uint8_t enemy_list_len);
 #endif //_PLAYER_H_

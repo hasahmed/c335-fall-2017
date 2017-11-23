@@ -46,3 +46,8 @@ void player_listen_move(Player *p, struct nunchuk_data *nundata){
             break;
     }
 }
+void enemies_draw(Player *enemy_list, uint8_t enemy_list_len) {
+    uint8_t i = 0;
+    for(i = 0; i < enemy_list_len; i++)
+        player_draw(&enemy_list[i]);
+}

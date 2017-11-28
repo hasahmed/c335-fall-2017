@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "../../final/main.h"
 
-#define GAME_TICK 25
+#define GAME_TICK 20 //ticks/s
 
 volatile int systick_flag = 0;
 

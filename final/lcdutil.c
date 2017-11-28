@@ -1,5 +1,6 @@
 #ifndef _LCD_UTIL_H_
 #define _LCD_UTIL_H_
+#include <stdio.h>
 #include <f3d_lcd_sd.h>
 #include "lcdutil.h"
 #define HEIGHT ST7735_height
@@ -25,16 +26,12 @@ void draw_stringlist(int startx,
 }
 
 void draw_rect(int x, int y, int width, int height,  uint16_t color) {
-    if (
-            x >= WIDTH     ||
-            x + width < 0  ||
-            y >= HEIGHT    ||
-            y + height < 0) return;
+    //no need to check if off screen, because game takes place on one screen and check is in move function
     int i;
     uint16_t color_buf[width];
     for(i = 0; i < width; i++)
         color_buf[i] = color;
-    f3d_lcd_setAddrWindow_GRAPHICS(x, y, x + (width -1), y + (height - 1));
+    f3d_lcd_setAddrWindow_GRAPHICS(x, y, x + (width -1), y + (height - 1)); //assumes that madctl is already correctly assigned to MADGRAPHICS
     for(i = 0; i < height; i++){ //vertical
         f3d_lcd_pushColor(color_buf, width);
     }

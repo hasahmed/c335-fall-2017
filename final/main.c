@@ -27,22 +27,21 @@
 
 #define SCREEN_HEIGHT ST7735_height
 #define SCREEN_WIDTH ST7735_width
-#define BGCOLOR BLACK
 #define ENEMIES 5
 #define ENEMY_WIDTH 8
 #define ENEMY_HEIGHT 8
 #define ENEMY_COLOR BLUE
 
 Player player;
-Player enemies[ENEMIES];
+Enemy enemies[ENEMIES];
 struct nunchuk_data nundata;
 int redraw = 0;
 
 void move_enemies(Player *enemies_list);
 
 void init_enemies(Player *enemies_list){
-    int i = 0;
-    for (i = 0; i < ENEMIES; i++){
+    int i;
+    for (i = 1; i < ENEMIES; i++){
         enemies[i].x = i * ENEMY_WIDTH + i;
         enemies[i].y = i * ENEMY_WIDTH + i;
         enemies[i].width = ENEMY_WIDTH;

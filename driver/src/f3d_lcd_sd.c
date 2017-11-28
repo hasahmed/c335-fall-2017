@@ -366,6 +366,11 @@ void f3d_lcd_drawPixel(uint8_t x, uint8_t y, uint16_t color) {
     f3d_lcd_setAddrWindow(x, y, x + 1, y + 1, MADCTLGRAPHICS);
     f3d_lcd_pushColor(&color, 1);
 }
+void f3d_lcd_drawPixel_GRAPHICS(uint8_t x, uint8_t y, uint16_t color) {
+    if ((x >= ST7735_width) || (y >= ST7735_height)) return;
+    f3d_lcd_setAddrWindow_GRAPHICS(x, y, x + 1, y + 1);
+    f3d_lcd_pushColor(&color, 1);
+}
 
 void f3d_lcd_drawChar(uint8_t x, uint8_t y, unsigned char c, uint16_t color, uint16_t background_color) {
     int i, j;

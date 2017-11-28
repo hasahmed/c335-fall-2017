@@ -1,6 +1,7 @@
 #include <f3d_nunchuk.h>
 #include "nunchuk_util.h"
-nunchuk_dir get_nunchuk_dir(struct nunchuk_data *nundata){
+#include "game_util.h"
+GDIR get_nunchuk_dir(struct nunchuk_data *nundata){
     if (nundata->jy < NUN_REST - DEAD_ZONE && nundata->jx < NUN_REST - DEAD_ZONE)
         return DOWN_LEFT;
     if (nundata->jy < NUN_REST - DEAD_ZONE && nundata->jx > NUN_REST + DEAD_ZONE)

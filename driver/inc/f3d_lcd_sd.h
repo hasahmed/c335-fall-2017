@@ -66,6 +66,7 @@ void f3d_lcd_pushColor(uint16_t *color,int cnt);
 static void f3d_lcd_writeCmd(uint8_t);
 void f3d_lcd_fillScreen(uint16_t);
 void f3d_lcd_drawPixel(uint8_t, uint8_t, uint16_t);
+void f3d_lcd_drawPixel_GRAPHICS(uint8_t x, uint8_t y, uint16_t color);
 void f3d_lcd_drawChar(uint8_t, uint8_t, unsigned char, uint16_t, uint16_t);
 void f3d_lcd_drawString(uint8_t, uint8_t, char *, uint16_t, uint16_t);
 

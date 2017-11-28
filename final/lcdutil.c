@@ -34,8 +34,8 @@ void draw_rect(int x, int y, int width, int height,  uint16_t color) {
     uint16_t color_buf[width];
     for(i = 0; i < width; i++)
         color_buf[i] = color;
+    f3d_lcd_setAddrWindow_GRAPHICS(x, y, x + (width -1), y + (height - 1));
     for(i = 0; i < height; i++){ //vertical
-        f3d_lcd_setAddrWindow(x -1, (y -1) + i, width, height, MADCTLGRAPHICS);
         f3d_lcd_pushColor(color_buf, width);
     }
 

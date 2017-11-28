@@ -12,7 +12,7 @@ badd +1 helpers.h
 badd +10 lcdutil.h
 badd +1 play_audio.h
 badd +1 helpers.c
-badd +7 lcdutil.c
+badd +26 lcdutil.c
 badd +57 main.c
 badd +1 play_audio.c
 badd +14 player.h
@@ -51,12 +51,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 26 - ((25 * winheight(0) + 27) / 55)
+let s:l = 37 - ((12 * winheight(0) + 27) / 55)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-26
-normal! 0
+37
+normal! 062|
 tabedit ../driver/src/f3d_lcd_sd.c
 set splitbelow splitright
 set nosplitbelow
@@ -74,12 +74,35 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 308 - ((11 * winheight(0) + 27) / 55)
+let s:l = 358 - ((32 * winheight(0) + 27) / 55)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-308
-normal! 022|
+358
+normal! 029|
+tabedit ../driver/inc/f3d_lcd_sd.h
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winheight=1 winwidth=1
+argglobal
+edit ../driver/inc/f3d_lcd_sd.h
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 1 - ((0 * winheight(0) + 27) / 55)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+1
+normal! 0
 tabedit main.c
 set splitbelow splitright
 set nosplitbelow
@@ -241,7 +264,7 @@ exe s:l
 normal! zt
 1
 normal! 0
-tabnext 2
+tabnext 1
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf
 endif

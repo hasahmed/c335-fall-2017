@@ -1,40 +1,6 @@
-/* f3d_lcd_sd.h --- 
- * 
- * Filename: f3d_lcd_sd.h
- * Description: 
- * Author: Bryce Himebaugh
- * Maintainer: 
- * Created: Thu Oct 24 05:19:07 2013
- * Last-Updated: 
- *           By: Hasan Y Ahmed
- *     Update #: 0
- * Keywords: 
- * Compatibility: 
- * 
- */
-
-/* Commentary: 
- * 
- * 
- * 
- */
-
-/* Change log:
- * 
- * 
- */
-
-/* Copyright (c) 2004-2007 The Trustees of Indiana University and 
- * Indiana University Research and Technology Corporation.  
- * 
- * All rights reserved. 
- * 
- * Additional copyrights may follow 
- */
-
-/* Code: */
+#ifndef _F3D_LCD_SD_H_
+#define _F3D_LCD_SD_H_
 #include <stm32f30x.h>
-
 #define SPI_SLOW (uint16_t) SPI_BaudRatePrescaler_64
 #define SPI_MEDIUM (uint16_t) SPI_BaudRatePrescaler_8
 #define SPI_FAST (uint16_t) SPI_BaudRatePrescaler_2
@@ -95,6 +61,7 @@
 void f3d_lcd_sd_interface_init(void);
 void f3d_lcd_init(void);
 void f3d_lcd_setAddrWindow(uint16_t x0,uint16_t y0,uint16_t x1,uint16_t y1,uint8_t madctl);
+void f3d_lcd_setAddrWindow_GRAPHICS(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
 void f3d_lcd_pushColor(uint16_t *color,int cnt);
 static void f3d_lcd_writeCmd(uint8_t);
 void f3d_lcd_fillScreen(uint16_t);
@@ -106,9 +73,4 @@ int spiReadWrite(SPI_TypeDef *SPIx,uint8_t *rbuf,const uint8_t *tbuf, int cnt, u
 int spiReadWrite16(SPI_TypeDef *SPIx,uint8_t *rbuf,const uint16_t *tbuf, int cnt,  uint16_t speed);
 static void LcdWrite(char dc,const char *data,int nbytes);
 static void LcdWrite16(char dc,const uint16_t *data,int cnt);
-
-/* void f3d_sdcard_readwrite(uint8_t *, uint8_t *, int); */
-
-
-/* f3d_lcd_sd.h ends here */
-
+#endif // _F3D_LCD_SD_H_

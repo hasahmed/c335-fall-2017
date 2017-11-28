@@ -300,11 +300,26 @@ int spiReadWrite16(SPI_TypeDef *SPIx,uint8_t *rbuf, const uint16_t *tbuf, int cn
  */
 void f3d_lcd_setAddrWindow ( uint16_t x0 , uint16_t y0 , uint16_t x1 , uint16_t y1 , uint8_t madctl) {
     madctl = MADVAL ( madctl );
-    if ( madctl != madctlcurrent ){
-        f3d_lcd_writeCmd(ST7735_MADCTL);
-        LcdWrite(LCD_D, &madctl, 1);
-        madctlcurrent = madctl ;
+    if ( madctl != madctlcurrent ){ //if the draw mode isn't the current draw mode
+        f3d_lcd_writeCmd(ST7735_MADCTL); // write a command to the lcd of the not current draw mode
+        LcdWrite(LCD_D, &madctl, 1); //write the draw mode to the screen
+        madctlcurrent = madctl;  //set the current draw mode to given
     }
+    f3d_lcd_writeCmd(ST7735_CASET);
+    LcdWrite16(LCD_D, &x0, 1);
+    LcdWrite16(LCD_D, &x1, 1);
+    f3d_lcd_writeCmd(ST7735_RASET);
+    LcdWrite16(LCD_D, &y0, 1);
+    LcdWrite16(LCD_D, &y1, 1);
+    f3d_lcd_writeCmd(ST7735_RAMWR);
+}
+
+/**
+ * same as f3d_lcd_setAddrWindow except it just assumes that the madctl is correct
+ * in an attempt to optimize a function that is called alot
+ *
+ */
+void f3d_lcd_setAddrWindow_GRAPHICS(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1){
     f3d_lcd_writeCmd(ST7735_CASET);
     LcdWrite16(LCD_D, &x0, 1);
     LcdWrite16(LCD_D, &x1, 1);
@@ -322,7 +337,6 @@ static void f3d_lcd_writeCmd(uint8_t c) {
     LcdWrite(LCD_C,&c,1);
 }
 
-//fillScreen and fillScreen2 are the exact same functions
 void f3d_lcd_fillScreen(uint16_t color) {
     uint8_t y;
     uint16_t x[ST7735_width]; //buffer the width of the screen
@@ -336,6 +350,7 @@ void f3d_lcd_fillScreen(uint16_t color) {
     }
 }
 
+//fillScreen and fillScreen2 are the exact same functions for the purpose of backwards compatability
 void f3d_lcd_fillScreen2(uint16_t color) {
     uint8_t y;
     uint16_t x[ST7735_width];

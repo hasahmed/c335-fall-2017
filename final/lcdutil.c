@@ -25,12 +25,19 @@ void draw_stringlist(int startx,
 }
 
 void draw_rect(int x, int y, int width, int height,  uint16_t color) {
-    //draw middle square
-    int i, j;
-    for(i = 0; i < width; i++){ //horizontal
-        for(j = 0; j < height; j++){ //vertical
-            f3d_lcd_drawPixel(x + i, y + j, color);
-        }
+    if (
+            x >= WIDTH     ||
+            x + width < 0  ||
+            y >= HEIGHT    ||
+            y + height < 0) return;
+    int i;
+    uint16_t color_buf[width];
+    for(i = 0; i < width; i++)
+        color_buf[i] = color;
+    for(i = 0; i < height; i++){ //vertical
+        f3d_lcd_setAddrWindow(x -1, (y -1) + i, width, height, MADCTLGRAPHICS);
+        f3d_lcd_pushColor(color_buf, width);
     }
+
 }
 #endif //_LCD_UTIL_H_

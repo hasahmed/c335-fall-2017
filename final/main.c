@@ -28,8 +28,8 @@
 #define SCREEN_HEIGHT ST7735_height
 #define SCREEN_WIDTH ST7735_width
 #define BGCOLOR BLACK
-#define ENEMIES 1
-#define ENEMY_WIDTH 4
+#define ENEMIES 5
+#define ENEMY_WIDTH 8
 #define ENEMY_HEIGHT 8
 #define ENEMY_COLOR BLUE
 

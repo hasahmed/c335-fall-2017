@@ -237,37 +237,19 @@ static void LcdWrite(char dc, const char *data, int nbytes) {
     GPIO_SetBits(LCD_PORT,GPIO_PIN_SCE);
 }
 
-static void LcdWrite16(char dc,const uint16_t *data,int cnt) {
-    GPIO_WriteBit(LCD_PORT,GPIO_PIN_DC,dc); 
-    GPIO_ResetBits(LCD_PORT,GPIO_PIN_SCE);
-    spiReadWrite16(SPILCD,0,data,cnt,LCDSPEED);
-    GPIO_SetBits(LCD_PORT,GPIO_PIN_SCE);
+/**
+ * @param char dc either 0 or 1. 1 for data, 0 for control
+ * @param *data
+ * @param cnt
+ */
+static void LcdWrite16(char dc, const uint16_t *data, int cnt) {
+    GPIO_WriteBit(LCD_PORT, GPIO_PIN_DC, dc); 
+    GPIO_ResetBits(LCD_PORT, GPIO_PIN_SCE);
+    spiReadWrite16(SPILCD,0, data, cnt, LCDSPEED);
+    GPIO_SetBits(LCD_PORT, GPIO_PIN_SCE);
 }
 
 int spiReadWrite(SPI_TypeDef *SPIx, uint8_t *rbuf, const uint8_t *tbuf, int cnt, uint16_t speed) {
-    /*
-       int i;
-       int timeout;
-
-       SPIx->CR1 = (SPIx->CR1&~SPI_BaudRatePrescaler_256)|speed;
-       for (i = 0; i < cnt; i++){
-       if (tbuf) {
-       SPI_SendData8(SPIx,*tbuf++);
-       } 
-       else {
-       SPI_SendData8(SPIx,0xff);
-       }
-       timeout = 100;
-       while (SPI_I2S_GetFlagStatus(SPIx,SPI_I2S_FLAG_RXNE) == RESET);
-       if (rbuf) {
-     *rbuf++ = SPI_ReceiveData8(SPIx);
-     } 
-     else {
-     SPI_ReceiveData8(SPIx);
-     }
-     }
-     return i;
-     */
     int i;
     SPIx->CR1 = (SPIx->CR1 & ~SPI_BaudRatePrescaler_256) | speed;
 
@@ -289,33 +271,6 @@ int spiReadWrite(SPI_TypeDef *SPIx, uint8_t *rbuf, const uint8_t *tbuf, int cnt,
 }
 
 int spiReadWrite16(SPI_TypeDef *SPIx,uint8_t *rbuf, const uint16_t *tbuf, int cnt, uint16_t speed) {
-    /*
-    int i;
-
-    SPIx->CR1 = (SPIx->CR1&~SPI_BaudRatePrescaler_256)|speed;
-    SPI_DataSizeConfig(SPIx, SPI_DataSize_16b);
-
-    for (i = 0; i < cnt; i++){
-        if (tbuf) {
-            //      printf("data=0x%4x\n\r",*tbuf);
-            SPI_I2S_SendData16(SPIx,*tbuf++);
-        } 
-        else {
-            SPI_I2S_SendData16(SPIx,0xffff);
-        }
-        while (SPI_I2S_GetFlagStatus(SPIx,SPI_I2S_FLAG_RXNE) == RESET);
-        if (rbuf) {
-            *rbuf++ = SPI_I2S_ReceiveData16(SPIx);
-        } 
-        else {
-            SPI_I2S_ReceiveData16(SPIx);
-        }
-    }
-    SPI_DataSizeConfig(SPIx, SPI_DataSize_8b);
-
-    return i;
-    */
-
     int i;
     SPIx->CR1 = (SPIx->CR1 & ~SPI_BaudRatePrescaler_256) | speed;
     SPI_DataSizeConfig(SPIx, SPI_DataSize_16b);
@@ -338,6 +293,11 @@ int spiReadWrite16(SPI_TypeDef *SPIx,uint8_t *rbuf, const uint16_t *tbuf, int cn
 
 }
 
+
+/**
+ * sets the drawing window to rectangle of size x0 y0, x1 y1
+ *
+ */
 void f3d_lcd_setAddrWindow ( uint16_t x0 , uint16_t y0 , uint16_t x1 , uint16_t y1 , uint8_t madctl) {
     madctl = MADVAL ( madctl );
     if ( madctl != madctlcurrent ){
@@ -346,16 +306,16 @@ void f3d_lcd_setAddrWindow ( uint16_t x0 , uint16_t y0 , uint16_t x1 , uint16_t 
         madctlcurrent = madctl ;
     }
     f3d_lcd_writeCmd(ST7735_CASET);
-    LcdWrite16(LCD_D,&x0,1);
-    LcdWrite16(LCD_D,&x1,1);
+    LcdWrite16(LCD_D, &x0, 1);
+    LcdWrite16(LCD_D, &x1, 1);
     f3d_lcd_writeCmd(ST7735_RASET);
-    LcdWrite16(LCD_D,&y0,1);
-    LcdWrite16(LCD_D,&y1,1);
+    LcdWrite16(LCD_D, &y0, 1);
+    LcdWrite16(LCD_D, &y1, 1);
     f3d_lcd_writeCmd(ST7735_RAMWR);
 }
 
-void f3d_lcd_pushColor(uint16_t *color,int cnt) {
-    LcdWrite16(LCD_D,color,cnt);
+void f3d_lcd_pushColor(uint16_t *color, int cnt) {
+    LcdWrite16(LCD_D, color, cnt);
 }
 
 static void f3d_lcd_writeCmd(uint8_t c) {
@@ -365,11 +325,14 @@ static void f3d_lcd_writeCmd(uint8_t c) {
 //fillScreen and fillScreen2 are the exact same functions
 void f3d_lcd_fillScreen(uint16_t color) {
     uint8_t y;
-    uint16_t x[ST7735_width];
-    for (y = 0; y < ST7735_width; y++) x[y] = color;
-    f3d_lcd_setAddrWindow (0,0,ST7735_width-1,ST7735_height-1,MADCTLGRAPHICS);
-    for (y=0;y<ST7735_height; y++) {
-        f3d_lcd_pushColor(x,ST7735_width);
+    uint16_t x[ST7735_width]; //buffer the width of the screen
+    for (y = 0; y < ST7735_width; y++) x[y] = color; //fill the buffer with with color
+
+    f3d_lcd_setAddrWindow (0, 0, ST7735_width -1, ST7735_height -1, MADCTLGRAPHICS);
+    for (y = 0; y < ST7735_height; y++) {
+        f3d_lcd_pushColor(x, ST7735_width); //write an entire line at a time?
+        //why on earth does this fill the entire screen?
+        // it looks like it should just write the same line over and over again
     }
 }
 
@@ -379,14 +342,14 @@ void f3d_lcd_fillScreen2(uint16_t color) {
     for (y = 0; y < ST7735_width; y++) x[y] = color;
     f3d_lcd_setAddrWindow (0,0,ST7735_width-1,ST7735_height-1,MADCTLGRAPHICS);
     for (y=0;y<ST7735_height; y++) {
-        f3d_lcd_pushColor(x,ST7735_width);
+        f3d_lcd_pushColor(x, ST7735_width);
     }
 }
 
 void f3d_lcd_drawPixel(uint8_t x, uint8_t y, uint16_t color) {
     if ((x >= ST7735_width) || (y >= ST7735_height)) return;
-    f3d_lcd_setAddrWindow(x,y,x+1,y+1,MADCTLGRAPHICS);
-    f3d_lcd_pushColor(&color,1);
+    f3d_lcd_setAddrWindow(x, y, x + 1, y + 1, MADCTLGRAPHICS);
+    f3d_lcd_pushColor(&color, 1);
 }
 
 void f3d_lcd_drawChar(uint8_t x, uint8_t y, unsigned char c, uint16_t color, uint16_t background_color) {

@@ -3,6 +3,7 @@
 #include "player.h"
 #include "general_util.h" //includes game_util.h
 #include "game_util.h"
+#include "game_types.h"
 
 void player_init(Player *p, uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint16_t color){
     p->x = x;

@@ -19,8 +19,8 @@ void f3d_nunchuk_init(void) {
   f3d_i2c1_write(NUNCHUK_ADDRESS, 0xf0, &buf); 
   f3d_i2c1_write(NUNCHUK_ADDRESS, 0xfb, &buf2);
 
-  //f3d_i2c2_write(NUNCHUK_ADDRESS, 0xf0, &buf3);
-  //f3d_i2c2_write(NUNCHUK_ADDRESS, 0xfb, &buf4);
+  f3d_i2c2_write(NUNCHUK_ADDRESS, 0xf0, &buf3);
+  f3d_i2c2_write(NUNCHUK_ADDRESS, 0xfb, &buf4);
 }
 
 void f3d_nunchuk_read(nunchuk_t *n) {

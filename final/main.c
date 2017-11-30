@@ -32,10 +32,14 @@
 #define ENEMY_HEIGHT 8
 #define ENEMY_COLOR BLUE
 
+
+
+//GLOBAL Variables
 Player player;
 Enemy enemies[ENEMIES];
 Bullet b;
 struct nunchuk_data nundata;
+struct nunchuk_data nundata2;
 int redraw = 0;
 
 void init_enemies(Player *enemies_list){
@@ -67,13 +71,13 @@ void bullet_init(Bullet *b){
 
 
 void update(){
-    f3d_nunchuk_read(&nundata);
-    player_listen_move(&player, &nundata);
-    move_enemies(enemies);
-    bullet_listen_shoot(&player, &b, &nundata);
+    //f3d_nunchuk_read(&nundata);
+    //player_listen_move(&player, &nundata);
+    //move_enemies(enemies);
+    //bullet_listen_shoot(&player, &b, &nundata);
     //object_move(&b, (int8_t)b.speed, (int8_t)b.speed);
-    object_update_loc_by_speed(&b);
-    redraw = 1;
+    //object_update_loc_by_speed(&b);
+    //redraw = 1;
 }
 
 int main(void) { 
@@ -83,8 +87,10 @@ int main(void) {
     init_game_screen(&player);
     init_enemies(enemies);
     bullet_init(&b);
-    printf("x:%d, y:%d, width:%d, height:%d\n", b.x, b.y, b.width, b.height);
     while(1){
+    f3d_nunchuk_read2(&nundata2);
+    nunchuk_print_values(&nundata2);
+        /*
         if (redraw) {
             f3d_lcd_fillScreen(BGCOLOR);
             player_draw(&player);
@@ -92,6 +98,7 @@ int main(void) {
             enemies_draw(enemies, ENEMIES);
             redraw = 0;
         }
+        */
     }
 }
 

@@ -119,12 +119,12 @@ void f3d_i2c2_init() {
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
     GPIO_StructInit(&GPIO_InitStructure);
 
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9  | GPIO_Pin_10;
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9 | GPIO_Pin_10;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
     GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
     GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-    GPIO_Init(GPIOB ,&GPIO_InitStructure);
+    GPIO_Init(GPIOA ,&GPIO_InitStructure);
 
     GPIO_PinAFConfig(GPIOA, 9, GPIO_AF_4);
     GPIO_PinAFConfig(GPIOA, 10, GPIO_AF_4);
@@ -180,7 +180,7 @@ void f3d_i2c2_write(uint8_t device, uint8_t reg, uint8_t* value) {
     I2C_TransferHandling(I2C2, device, 1, I2C_Reload_Mode, I2C_Generate_Start_Write);
     while (I2C_GetFlagStatus(I2C2, I2C_ISR_TXIS) == RESET);
 
-    I2C_SendData(I2C2,reg);
+    I2C_SendData(I2C2, reg);
     while(I2C_GetFlagStatus(I2C2, I2C_ISR_TCR) == RESET);
 
     I2C_TransferHandling(I2C2, device, 1, I2C_AutoEnd_Mode, I2C_No_StartStop);
@@ -197,7 +197,7 @@ void f3d_i2c2_read_nunchuk (uint8_t device, uint8_t* buffer, uint16_t numbytes) 
     while (I2C_GetFlagStatus(I2C2, I2C_ISR_BUSY) != RESET);
     I2C_TransferHandling(I2C2, 0xA4, 1, I2C_AutoEnd_Mode, I2C_Generate_Start_Write);
     while (I2C_GetFlagStatus(I2C2, I2C_ISR_TXIS) == RESET);
-    I2C_SendData(I2C2,0x00);
+    I2C_SendData(I2C2, 0x00);
     while(I2C_GetFlagStatus(I2C2, I2C_ISR_STOPF) == RESET);
     I2C_ClearFlag(I2C2, I2C_ICR_STOPCF);
     delay(1);

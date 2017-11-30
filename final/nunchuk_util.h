@@ -6,4 +6,5 @@
 #define NUN_REST 128
 #define DEAD_ZONE 36
 GDIR get_nunchuk_dir(struct nunchuk_data *nundata);
+void nunchuk_print_values(struct nunchuk_data *nundata);
 #endif //_NUNCHUK_UTIL_H_

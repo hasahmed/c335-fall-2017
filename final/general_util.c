@@ -9,6 +9,8 @@ void initAll(){
     delay(310);
     f3d_i2c1_init();
     delay(310);
+    //f3d_i2c2_init();
+    delay(310);
     f3d_nunchuk_init();
     delay(310);
     f3d_rtc_init();

@@ -1,4 +1,5 @@
 #include <f3d_nunchuk.h>
+#include <stdio.h>
 #include "nunchuk_util.h"
 #include "game_util.h"
 GDIR get_nunchuk_dir(struct nunchuk_data *nundata){
@@ -19,4 +20,7 @@ GDIR get_nunchuk_dir(struct nunchuk_data *nundata){
     if (nundata->jx > NUN_REST + DEAD_ZONE)
         return RIGHT;
     return NA;
+}
+
+void nunchuk_print_values(struct nunchuk_data *nundata){
 }

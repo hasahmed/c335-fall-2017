@@ -14,5 +14,10 @@ void enemies_draw(Player *enemy_list, uint8_t enemy_list_len);
 
 //bullet stuff
 void bullet_move(Bullet *b, int8_t x, int8_t y);
-void bullet_listen_shoot(Bullet *b, struct nunchuk_data *nundata);
+void bullet_listen_shoot(Player *p, Bullet *b, struct nunchuk_data *nundata);
+
+
+//general object stuff
+void object_move(Object *o, int8_t x, int8_t y);
+void object_update_loc_by_speed(Object *o);
 #endif //_PLAYER_H_

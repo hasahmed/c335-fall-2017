@@ -2,6 +2,7 @@
 #define _GAME_TYPES_H_
 
 #include <f3d_lcd_sd.h>
+#include <stdbool.h>
 
 #define SCREEN_HEIGHT ST7735_height
 #define SCREEN_WIDTH ST7735_width
@@ -11,7 +12,9 @@
 #define PLAYER_STARTING_Y SCREEN_HEIGHT/2
 #define PLAYER_COLOR RED
 
-#define BULLET_SIZE 2;
+//BULLET STUFF
+#define BULLET_SIZE 2
+#define BULLET_NUM 10
 
 //bg stuff
 #define BGCOLOR BLACK //testing
@@ -45,18 +48,33 @@ enum ptype {
 typedef enum ptype PTYPE;
 
 struct object{
-    int8_t x;
-    int8_t y;
+    int16_t x; 
+    int16_t y;
+    uint16_t color;
     uint8_t width;
     uint8_t height;
     float speed;
-    uint16_t color;
     GDIR dir;
     GTYPE type;
     PTYPE powerup;
+    bool used; //for bullet
 };
 typedef struct object Object;
 typedef struct object Player;
 typedef struct object Enemy;
 typedef struct object Bullet;
+
+
+/* thinking about having a seperate bullet struct to save the space. Color would not be needed
+struct bullet{
+    int16_t x;
+    int16_t y;
+    uint16_t color;
+    uint8_t width;
+    uint8_t height;
+    GDIR dir;
+    float speed;
+};
+*/
+
 #endif //_GAME_TYPES_H_

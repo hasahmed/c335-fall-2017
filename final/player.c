@@ -6,7 +6,7 @@
 #include "game_util.h"
 #include "game_types.h"
 
-void player_init(Player *p, uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint16_t color){
+void player_init(Player *p, int16_t x, int16_t y, uint8_t width, uint8_t height, uint16_t color){
     p->x = x;
     p->y = y;
     p->width = width;
@@ -17,18 +17,19 @@ void player_init(Player *p, uint8_t x, uint8_t y, uint8_t width, uint8_t height,
 void player_draw(Player *p){
     draw_rect(p->x, p->y, p->width, p->height,  p->color);
 }
-void player_move(Player *p, int8_t x, int8_t y){
+void player_move(Player *p, int16_t x, int16_t y){
     if (
-            (p->x + p->width) + x >= SCREEN_WIDTH   ||
-            p->x + x <= 0                           ||
-            (p->y + p->height) + y >= SCREEN_HEIGHT ||
-            p->y + y <= 0) return;
+            (p->x + p->width) + x >= SCREEN_WIDTH   || // right wall
+            p->x + x <= 0                           || // left wall
+            (p->y + p->height) + y >= SCREEN_HEIGHT || // floor
+            p->y + y <= 0                           ||
+            0) return;                      //ceiling
     p->x += x;
     p->y += y;
 }
 
 void player_listen_move(Player *p, struct nunchuk_data *nundata){
-    uint8_t player_speed = 1;
+    uint8_t player_speed = 10;
     GDIR dir = get_nunchuk_dir(nundata);
     switch(dir){
         case UP:
@@ -65,15 +66,16 @@ void enemies_draw(Player *enemy_list, uint8_t enemy_list_len) {
 }
 
 //BULLETS
-void bullet_move(Bullet *b, int8_t x, int8_t y){
+void bullet_move(Bullet *b, int16_t x, int16_t y){
     b->x += x;
     b->y += y;
 }
-void bullet_listen_shoot(Player *p, Bullet *b, struct nunchuk_data *nundata){
-    if(nundata->c == 1){
-        b->speed = 2;
-        b->x = p->x;
-        b->y = p->y;
+void bullet_listen_shoot(Player *p, Bullet *bullet_buf, uint8_t bullet_buf_length, struct nunchuk_data *nundata){
+    GDIR dir = get_nunchuk_dir(nundata);
+    if(dir != NA){
+        //b->speed = 2;
+        //b->x = p->x;
+        //b->y = p->y;
         //b->dir = RIGHT;
         //b->speed = 1;
     }
@@ -81,7 +83,7 @@ void bullet_listen_shoot(Player *p, Bullet *b, struct nunchuk_data *nundata){
 
 //OBJECTS (general)
 
-void object_move(Object *o, int8_t x, int8_t y){
+void object_move(Object *o, int16_t x, int16_t y){
     o->x += x;
     o->y += y;
 }
@@ -116,4 +118,16 @@ void object_update_loc_by_speed(Object *o){
             return;
     }
     */
+}
+void object_print(Object *o){
+    printf("x: %d\n", o->x);
+    printf("y: %d\n", o->y);
+    printf("width: %u\n", o->width);
+    printf("height: %u\n", o->height);
+    printf("color: %u\n", o->color);
+    printf("speed: %f\n", o->speed);
+    printf("GDIR: %d\n", o->dir);
+    printf("GTYPE: %d\n", o->type);
+    printf("PTYPE: %d\n", o->powerup);
+    printf("used: %d\n", o->used);
 }

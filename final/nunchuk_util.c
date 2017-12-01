@@ -24,9 +24,8 @@ GDIR get_nunchuk_dir(struct nunchuk_data *nundata){
 
 void nunchuk_print_values(struct nunchuk_data *nundata){
     printf("jx: %d jy: %d\n", nundata->jx, nundata->jy);
-    //printf("ax: %d\n", nundata->ax);
-    //printf("ay: %d\n", nundata->ay);
-    //printf("az: %d\n", nundata->az);
-    //printf("c: %d\n", nundata->c);
-    //printf("z: %d\n", nundata->z);
+    printf("ax: %d\n", nundata->ax);
+    printf("ay: %d\n", nundata->ay);
+    printf("az: %d\n", nundata->az);
+    printf("c: %d z: %d\n", nundata->c, nundata->z);
 }

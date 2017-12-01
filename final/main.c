@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <stm32f30x_dma.h>
 #include <stm32f30x_dac.h>
+#include <stdbool.h>
 #include "general_util.h"
 #include "lcdutil.h"
 #include "nunchuk_util.h"
@@ -37,7 +38,7 @@
 //GLOBAL Variables
 Player player;
 Enemy enemies[ENEMIES];
-Bullet b;
+Bullet bullet_buf[BULLET_NUM];
 struct nunchuk_data nundata;
 struct nunchuk_data nundata2;
 int redraw = 0;
@@ -60,24 +61,30 @@ void move_enemies(Player *enemies_list){
     }
 }
 
-void bullet_init(Bullet *b){
-    b->speed = 0;
-    b->x = 10;
-    b->y = 10;
-    b->color = WHITE;
-    b->width = BULLET_SIZE;
-    b->height = BULLET_SIZE;
+void bullet_init(Bullet *bullet_buf, uint8_t buf_size){
+    int i;
+    for(i = 0; i < buf_size; i++){
+        bullet_buf[i].speed = 0;
+        bullet_buf[i].x = -10;
+        bullet_buf[i].y = -10;
+        bullet_buf[i].color = WHITE;
+        bullet_buf[i].width = BULLET_SIZE;
+        bullet_buf[i].height = BULLET_SIZE;
+        bullet_buf[i].used = false;
+        object_print(&bullet_buf[i]);
+    }
 }
 
 
 void update(){
-    //f3d_nunchuk_read(&nundata);
-    //player_listen_move(&player, &nundata);
-    //move_enemies(enemies);
-    //bullet_listen_shoot(&player, &b, &nundata);
-    //object_move(&b, (int8_t)b.speed, (int8_t)b.speed);
-    //object_update_loc_by_speed(&b);
-    //redraw = 1;
+    f3d_nunchuk_read(&nundata);
+    f3d_nunchuk_read2(&nundata2);
+    player_listen_move(&player, &nundata);
+    move_enemies(enemies);
+    bullet_listen_shoot(&player, bullet_buf, BULLET_NUM, &nundata2);
+    //object_move(&bullet_buf, (int8_t)bullet_buf.speed, 0);
+    //object_update_loc_by_speed(&bullet_buf);
+    redraw = true;
 }
 
 int main(void) { 
@@ -86,19 +93,15 @@ int main(void) {
     printf("////////////////////////////////////////////////////////////\n");
     init_game_screen(&player);
     init_enemies(enemies);
-    bullet_init(&b);
+    bullet_init(bullet_buf, BULLET_NUM);
     while(1){
-    f3d_nunchuk_read2(&nundata2);
-    nunchuk_print_values(&nundata2);
-        /*
         if (redraw) {
             f3d_lcd_fillScreen(BGCOLOR);
             player_draw(&player);
-            player_draw(&b);
+            //player_draw(bullet_buf); //single bullet
             enemies_draw(enemies, ENEMIES);
-            redraw = 0;
+            redraw = false;
         }
-        */
     }
 }
 

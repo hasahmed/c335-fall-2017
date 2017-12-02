@@ -91,6 +91,7 @@ int main(void) {
     setBuffs();
     initAll();
     printf("////////////////////////////////////////////////////////////\n");
+    printf("sizeof Object", sizeof(Object));
     init_game_screen(&player);
     init_enemies(enemies);
     bullet_init(bullet_buf, BULLET_NUM);

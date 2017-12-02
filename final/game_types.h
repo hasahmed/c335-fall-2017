@@ -47,6 +47,7 @@ enum ptype {
 };
 typedef enum ptype PTYPE;
 
+//28 bytes
 struct object{
     int16_t x; 
     int16_t y;

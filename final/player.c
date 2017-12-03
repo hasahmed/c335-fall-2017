@@ -17,7 +17,8 @@ void player_init(Player *p, int16_t x, int16_t y, uint8_t width, uint8_t height,
 }
 void player_draw(Player *p){
     draw_rect(p->x, p->y, p->width, p->height,  p->color);
-    draw_rect(p->dirty_area.x, p->dirty_area.y, p->dirty_area.width, p->dirty_area.height, BGCOLOR); //erase dirty area
+    draw_rect(p->dirty_area[0].x, p->dirty_area[0].y, p->dirty_area[0].width, p->dirty_area[0].height, BGCOLOR); //erase dirty area
+    draw_rect(p->dirty_area[1].x, p->dirty_area[1].y, p->dirty_area[1].width, p->dirty_area[1].height, BGCOLOR); //erase dirty area
 } 
 void player_move(Player *p, GDIR dir, int16_t x, int16_t y){
     if (
@@ -27,30 +28,28 @@ void player_move(Player *p, GDIR dir, int16_t x, int16_t y){
             p->y + y <= 0                           || //ceiling
             0) return;
     //dirty area allocation
+    dirty_area_zeros(&p->dirty_area[1]);
     if (dir == RIGHT){
-        p->dirty_area.x = p->x;
-        p->dirty_area.y = p->y;
-        p->dirty_area.width = min(x, p->width);
-        p->dirty_area.height = p->height;
+        dirty_area_fill_right(p, 0, x, y);
     } else if (dir == LEFT){
-        p->dirty_area.x = p->x + (p->width -1);
-        p->dirty_area.y = p->y;
-        p->dirty_area.width = min(-x, p->width);
-        p->dirty_area.height = p->height;
+        dirty_area_fill_left(p, 0, x, y);
     } else if (dir == DOWN){
-        p->dirty_area.x = p->x;
-        p->dirty_area.y = p->y;
-        p->dirty_area.width = p->width;
-        p->dirty_area.height = min(y, p->height);
+        dirty_area_fill_down(p, 0, x, y);
     } else if (dir == UP){
-        p->dirty_area.x = p->x;
-        p->dirty_area.y = p->y + p->height -1; // -1?
-        p->dirty_area.width = p->width;
-        p->dirty_area.height = min(-y, p->height);
+        dirty_area_fill_up(p, 0, x, y);
+    } else if (dir == UP_RIGHT){
+        dirty_area_fill_up(p, 0, x, y);
+        dirty_area_fill_right(p, 1, x, y);
+    } else if (dir == UP_LEFT){
+        dirty_area_fill_up(p, 0, x, y);
+        dirty_area_fill_left(p, 1, x, y);
+    } else if (dir == DOWN_RIGHT){
+        dirty_area_fill_down(p, 0, x, y);
+        dirty_area_fill_right(p, 1, x, y);
+    } else if (dir == DOWN_LEFT){
+        dirty_area_fill_down(p, 0, x, y);
+        dirty_area_fill_left(p, 1, x, y);
     }
-
-
-
 
     p->x += x;
     p->y += y;
@@ -159,4 +158,42 @@ void object_print(Object *o){
     printf("GTYPE: %d\n", o->type);
     printf("PTYPE: %d\n", o->powerup);
     printf("used: %d\n", o->used);
+}
+
+
+
+
+
+// DirtyArea
+void dirty_area_zeros(DirtyArea *d){
+    d->x = 0;
+    d->y = 0;
+    d->width = 0;
+    d->height = 0;
+}
+
+
+void dirty_area_fill_right(Player *p, uint8_t area_num, int x, int y){
+    p->dirty_area[area_num].x = p->x;
+    p->dirty_area[area_num].y = p->y;
+    p->dirty_area[area_num].width = min(x, p->width);
+    p->dirty_area[area_num].height = p->height;
+}
+void dirty_area_fill_left(Player *p, uint8_t area_num, int x, int y){
+    p->dirty_area[area_num].x = p->x + (p->width -1);
+    p->dirty_area[area_num].y = p->y;
+    p->dirty_area[area_num].width = min(-x, p->width);
+    p->dirty_area[area_num].height = p->height;
+}
+void dirty_area_fill_down(Player *p, uint8_t area_num, int x, int y){
+    p->dirty_area[area_num].x = p->x;
+    p->dirty_area[area_num].y = p->y;
+    p->dirty_area[area_num].width = p->width;
+    p->dirty_area[area_num].height = min(y, p->height);
+}
+void dirty_area_fill_up(Player *p, uint8_t area_num, int x, int y){
+    p->dirty_area[area_num].x = p->x;
+    p->dirty_area[area_num].y = p->y + p->height -1; // -1?
+    p->dirty_area[area_num].width = p->width;
+    p->dirty_area[area_num].height = min(-y, p->height);
 }

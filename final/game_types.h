@@ -63,7 +63,7 @@ struct object{
     int16_t x; 
     int16_t y;
     uint16_t color;
-    DirtyArea dirty_area;
+    DirtyArea dirty_area[2];
     uint8_t width;
     uint8_t height;
     float speed;

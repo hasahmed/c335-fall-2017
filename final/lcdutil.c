@@ -26,6 +26,7 @@ void draw_stringlist(int startx,
 }
 
 void draw_rect(int x, int y, int width, int height,  uint16_t color) {
+    if (width <= 0 || height <= 0) return;
     //no need to check if off screen, because game takes place on one screen and check is in move function
     int i;
     uint16_t color_buf[width];

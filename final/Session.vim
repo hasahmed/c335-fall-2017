@@ -80,12 +80,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 99 - ((38 * winheight(0) + 24) / 49)
+let s:l = 60 - ((16 * winheight(0) + 24) / 49)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-99
-normal! 0
+60
+normal! 062|
 tabedit player.h
 set splitbelow splitright
 set nosplitbelow
@@ -108,7 +108,7 @@ if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 23
-normal! 030|
+normal! 047|
 tabedit player.c
 set splitbelow splitright
 set nosplitbelow
@@ -126,12 +126,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 13 - ((12 * winheight(0) + 24) / 49)
+let s:l = 28 - ((24 * winheight(0) + 24) / 49)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-13
-normal! 0
+28
+normal! 013|
 tabedit game_types.h
 set splitbelow splitright
 set nosplitbelow

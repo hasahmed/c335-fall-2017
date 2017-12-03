@@ -12,7 +12,7 @@ badd +1 helpers.h
 badd +10 lcdutil.h
 badd +1 play_audio.h
 badd +1 helpers.c
-badd +30 lcdutil.c
+badd +1 lcdutil.c
 badd +95 main.c
 badd +1 play_audio.c
 badd +14 player.h
@@ -57,7 +57,7 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 24) / 49)
+let s:l = 1 - ((0 * winheight(0) + 25) / 50)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -80,11 +80,11 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 76 - ((33 * winheight(0) + 24) / 49)
+let s:l = 99 - ((38 * winheight(0) + 24) / 49)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-76
+99
 normal! 0
 tabedit player.h
 set splitbelow splitright
@@ -103,11 +103,11 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 22 - ((21 * winheight(0) + 24) / 49)
+let s:l = 23 - ((22 * winheight(0) + 24) / 49)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-22
+23
 normal! 030|
 tabedit player.c
 set splitbelow splitright
@@ -126,12 +126,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 19 - ((14 * winheight(0) + 24) / 49)
+let s:l = 13 - ((12 * winheight(0) + 24) / 49)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-19
-normal! 019|
+13
+normal! 0
 tabedit game_types.h
 set splitbelow splitright
 set nosplitbelow
@@ -149,12 +149,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 2 - ((1 * winheight(0) + 24) / 49)
+let s:l = 20 - ((19 * winheight(0) + 24) / 49)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-2
-normal! 0
+20
+normal! 021|
 tabedit general_util.h
 set splitbelow splitright
 set nosplitbelow
@@ -172,11 +172,11 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 16 - ((15 * winheight(0) + 24) / 49)
+let s:l = 15 - ((14 * winheight(0) + 24) / 49)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-16
+15
 normal! 0
 tabedit general_util.c
 set splitbelow splitright

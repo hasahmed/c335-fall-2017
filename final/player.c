@@ -17,11 +17,6 @@ void player_init(Player *p, int16_t x, int16_t y, uint8_t width, uint8_t height,
 }
 void player_draw(Player *p){
     object_draw(p);
-    /*
-    draw_rect(p->x, p->y, p->width, p->height,  p->color);
-    draw_rect(p->dirty_area[0].x, p->dirty_area[0].y, p->dirty_area[0].width, p->dirty_area[0].height, BGCOLOR); //erase dirty area
-    draw_rect(p->dirty_area[1].x, p->dirty_area[1].y, p->dirty_area[1].width, p->dirty_area[1].height, BGCOLOR); //erase dirty area
-    */
 } 
 void player_move(Player *p, GDIR dir, int16_t x, int16_t y){
     if (

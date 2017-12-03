@@ -16,9 +16,12 @@ void player_init(Player *p, int16_t x, int16_t y, uint8_t width, uint8_t height,
     p->speed = 0;
 }
 void player_draw(Player *p){
+    object_draw(p);
+    /*
     draw_rect(p->x, p->y, p->width, p->height,  p->color);
     draw_rect(p->dirty_area[0].x, p->dirty_area[0].y, p->dirty_area[0].width, p->dirty_area[0].height, BGCOLOR); //erase dirty area
     draw_rect(p->dirty_area[1].x, p->dirty_area[1].y, p->dirty_area[1].width, p->dirty_area[1].height, BGCOLOR); //erase dirty area
+    */
 } 
 void player_move(Player *p, GDIR dir, int16_t x, int16_t y){
     if (
@@ -27,33 +30,7 @@ void player_move(Player *p, GDIR dir, int16_t x, int16_t y){
             (p->y + p->height) + y >= SCREEN_HEIGHT || // floor
             p->y + y <= 0                           || //ceiling
             0) return;
-    //dirty area allocation
-    dirty_area_zeros(&p->dirty_area[1]);
-    if (dir == RIGHT){
-        dirty_area_fill_right(p, 0, x, y);
-    } else if (dir == LEFT){
-        dirty_area_fill_left(p, 0, x, y);
-    } else if (dir == DOWN){
-        dirty_area_fill_down(p, 0, x, y);
-    } else if (dir == UP){
-        dirty_area_fill_up(p, 0, x, y);
-    } else if (dir == UP_RIGHT){
-        dirty_area_fill_up(p, 0, x, y);
-        dirty_area_fill_right(p, 1, x, y);
-    } else if (dir == UP_LEFT){
-        dirty_area_fill_up(p, 0, x, y);
-        dirty_area_fill_left(p, 1, x, y);
-    } else if (dir == DOWN_RIGHT){
-        dirty_area_fill_down(p, 0, x, y);
-        dirty_area_fill_right(p, 1, x, y);
-    } else if (dir == DOWN_LEFT){
-        dirty_area_fill_down(p, 0, x, y);
-        dirty_area_fill_left(p, 1, x, y);
-    }
-
-    p->x += x;
-    p->y += y;
-
+    object_move(p, dir, x, y);
 }
 
 void player_listen_move(Player *p, struct nunchuk_data *nundata){
@@ -110,14 +87,43 @@ void bullet_listen_shoot(Player *p, Bullet *bullet_buf, uint8_t bullet_buf_lengt
 }
 
 //OBJECTS (general)
+void object_move(Object *obj, GDIR dir, int16_t x, int16_t y){
+    //dirty area allocation
+    dirty_area_zeros(&obj->dirty_area[1]);
+    if (dir == RIGHT){
+        dirty_area_fill_right(obj, 0, x, y);
+    } else if (dir == LEFT){
+        dirty_area_fill_left(obj, 0, x, y);
+    } else if (dir == DOWN){
+        dirty_area_fill_down(obj, 0, x, y);
+    } else if (dir == UP){
+        dirty_area_fill_up(obj, 0, x, y);
+    } else if (dir == UP_RIGHT){
+        dirty_area_fill_up(obj, 0, x, y);
+        dirty_area_fill_right(obj, 1, x, y);
+    } else if (dir == UP_LEFT){
+        dirty_area_fill_up(obj, 0, x, y);
+        dirty_area_fill_left(obj, 1, x, y);
+    } else if (dir == DOWN_RIGHT){
+        dirty_area_fill_down(obj, 0, x, y);
+        dirty_area_fill_right(obj, 1, x, y);
+    } else if (dir == DOWN_LEFT){
+        dirty_area_fill_down(obj, 0, x, y);
+        dirty_area_fill_left(obj, 1, x, y);
+    }
 
-void object_move(Object *o, int16_t x, int16_t y){
-    o->x += x;
-    o->y += y;
+    obj->x += x;
+    obj->y += y;
+
 }
+void object_draw(Object *obj){
+    draw_rect(obj->x, obj->y, obj->width, obj->height,  obj->color);
+    draw_rect(obj->dirty_area[0].x, obj->dirty_area[0].y, obj->dirty_area[0].width, obj->dirty_area[0].height, BGCOLOR); //erase dirty area
+    draw_rect(obj->dirty_area[1].x, obj->dirty_area[1].y, obj->dirty_area[1].width, obj->dirty_area[1].height, BGCOLOR); //erase dirty area
+} 
 
 void object_update_loc_by_speed(Object *o){
-    object_move(o, (int8_t)o->speed, 0);
+    //object_move(o, (int8_t)o->speed, 0);
     /*
        switch(o->dir){
        case UP:

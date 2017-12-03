@@ -28,7 +28,7 @@
 
 #define SCREEN_HEIGHT ST7735_height
 #define SCREEN_WIDTH ST7735_width
-#define ENEMIES 0
+#define ENEMIES 8
 #define ENEMY_WIDTH 8
 #define ENEMY_HEIGHT 8
 #define ENEMY_COLOR BLUE
@@ -80,7 +80,7 @@ void update(){
     f3d_nunchuk_read(&nundata);
     f3d_nunchuk_read2(&nundata2);
     player_listen_move(&player, &nundata);
-    //move_enemies(enemies);
+    move_enemies(enemies);
     bullet_listen_shoot(&player, bullet_buf, BULLET_NUM, &nundata2);
     redraw = true;
 }
@@ -96,9 +96,8 @@ int main(void) {
     while(1){
         if (redraw) {
             player_draw(&player);
-            //f3d_lcd_fillScreen(BGCOLOR);
             //player_draw(bullet_buf); //single bullet
-            //enemies_draw(enemies, ENEMIES);
+            enemies_draw(enemies, ENEMIES);
             redraw = false;
         }
     }

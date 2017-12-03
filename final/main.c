@@ -57,7 +57,7 @@ void init_enemies(Player *enemies_list){
 void move_enemies(Player *enemies_list){
     int i = 0;
     for (i = 0; i < ENEMIES; i++){
-        player_move(&enemies[i], 1, 0);
+        player_move(&enemies[i], RIGHT, 1, 0);
     }
 }
 

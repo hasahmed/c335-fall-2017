@@ -117,6 +117,16 @@ void object_draw(Object *obj){
     draw_rect(obj->dirty_area[1].x, obj->dirty_area[1].y, obj->dirty_area[1].width, obj->dirty_area[1].height, BGCOLOR); //erase dirty area
 } 
 
+void object_draw_many(Object *obj_arr, uint8_t arr_len){
+    int i;
+    for(i = 0; i < arr_len; i++){
+        Object *obj = &obj_arr[i];
+        draw_rect(obj->x, obj->y, obj->width, obj->height,  obj->color);
+        draw_rect(obj->dirty_area[0].x, obj->dirty_area[0].y, obj->dirty_area[0].width, obj->dirty_area[0].height, BGCOLOR); //erase dirty area
+        draw_rect(obj->dirty_area[1].x, obj->dirty_area[1].y, obj->dirty_area[1].width, obj->dirty_area[1].height, BGCOLOR); //erase dirty area
+    }
+} 
+
 void object_update_loc_by_speed(Object *o){
     //object_move(o, (int8_t)o->speed, 0);
     /*

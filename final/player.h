@@ -20,6 +20,7 @@ void bullet_listen_shoot(Player *p, Bullet *bullet_buf, uint8_t bullet_buf_lengt
 
 //general object stuff
 void object_draw(Object *obj);
+void object_draw_many(Object *obj_arr, uint8_t arr_len);
 void object_move(Object *obj, GDIR dir, int16_t x, int16_t y);
 void object_update_loc_by_speed(Object *o);
 void object_print(Object *o);

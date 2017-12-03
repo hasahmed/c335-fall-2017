@@ -57,7 +57,7 @@ void init_enemies(Player *enemies_list){
 void move_enemies(Player *enemies_list){
     int i = 0;
     for (i = 0; i < ENEMIES; i++){
-        player_move(&enemies[i], RIGHT, 1, 0);
+        player_move(&enemies[i], RIGHT, rand() % 2, rand() % 2);
     }
 }
 
@@ -96,8 +96,9 @@ int main(void) {
     while(1){
         if (redraw) {
             player_draw(&player);
-            //player_draw(bullet_buf); //single bullet
-            enemies_draw(enemies, ENEMIES);
+            //object_draw(bullet_buf); //single bullet
+            //enemies_draw(enemies, ENEMIES);
+            object_draw_many(enemies, ENEMIES);
             redraw = false;
         }
     }

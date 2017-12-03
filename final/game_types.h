@@ -1,3 +1,6 @@
+/**
+ * this file contains game types and constants
+ */
 #ifndef _GAME_TYPES_H_
 #define _GAME_TYPES_H_
 
@@ -15,6 +18,7 @@
 //BULLET STUFF
 #define BULLET_SIZE 2
 #define BULLET_NUM 10
+#define BULLET_COLOR WHITE
 
 //bg stuff
 #define BGCOLOR BLACK //testing
@@ -47,10 +51,10 @@ enum ptype {
 };
 typedef enum ptype PTYPE;
 struct dirty_area{
-    int16_t x1;
-    int16_t y1;
-    int16_t x2;
-    int16_t y2;
+    int16_t x;
+    int16_t y;
+    uint8_t width;
+    uint8_t height;
 };
 typedef struct dirty_area DirtyArea;
 
@@ -58,8 +62,8 @@ typedef struct dirty_area DirtyArea;
 struct object{
     int16_t x; 
     int16_t y;
-    DirtyArea dirty_area;
     uint16_t color;
+    DirtyArea dirty_area;
     uint8_t width;
     uint8_t height;
     float speed;

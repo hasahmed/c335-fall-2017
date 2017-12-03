@@ -16,16 +16,28 @@ void player_init(Player *p, int16_t x, int16_t y, uint8_t width, uint8_t height,
 }
 void player_draw(Player *p){
     draw_rect(p->x, p->y, p->width, p->height,  p->color);
-}
+    draw_rect(p->dirty_area.x, p->dirty_area.y, p->dirty_area.width, p->dirty_area.height, GREEN); //erase dirty area
+} 
 void player_move(Player *p, int16_t x, int16_t y){
     if (
             (p->x + p->width) + x >= SCREEN_WIDTH   || // right wall
             p->x + x <= 0                           || // left wall
             (p->y + p->height) + y >= SCREEN_HEIGHT || // floor
-            p->y + y <= 0                           ||
-            0) return;                      //ceiling
+            p->y + y <= 0                           || //ceiling
+            0) return;
+    //dirty area
+    //only account for the player moving right
+    p->dirty_area.x = p->x;
+    p->dirty_area.y = p->y;
+
+    p->dirty_area.width = min((p->x + x) - p->dirty_area.x, p->width);
+    //p->dirty_area.height = (p->y + y) - p->dirty_area.y;
+    p->dirty_area.height = p->height;
+    //DEBUGF("DAW %d", p->dirty_area.width);
+
     p->x += x;
     p->y += y;
+
 }
 
 void player_listen_move(Player *p, struct nunchuk_data *nundata){

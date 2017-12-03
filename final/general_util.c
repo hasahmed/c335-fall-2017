@@ -26,3 +26,8 @@ void setBuffs(){
     setvbuf(stdout, NULL, _IONBF, 0);
     setvbuf(stderr, NULL, _IONBF, 0);
 }
+int min(int a, int b){
+    if (a < b)
+        return a;
+    return b;
+}

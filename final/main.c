@@ -95,10 +95,10 @@ int main(void) {
     DEBUGF("sizeof Object %lu", sizeof(Object));
     while(1){
         if (redraw) {
-            f3d_lcd_fillScreen(BGCOLOR);
             player_draw(&player);
+            //f3d_lcd_fillScreen(BGCOLOR);
             //player_draw(bullet_buf); //single bullet
-            enemies_draw(enemies, ENEMIES);
+            //enemies_draw(enemies, ENEMIES);
             redraw = false;
         }
     }

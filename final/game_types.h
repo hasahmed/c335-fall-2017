@@ -46,11 +46,19 @@ enum ptype {
     EIGHT_DIR
 };
 typedef enum ptype PTYPE;
+struct dirty_area{
+    int16_t x1;
+    int16_t y1;
+    int16_t x2;
+    int16_t y2;
+};
+typedef struct dirty_area DirtyArea;
 
-//28 bytes
+//16 bytes
 struct object{
     int16_t x; 
     int16_t y;
+    DirtyArea dirty_area;
     uint16_t color;
     uint8_t width;
     uint8_t height;

@@ -29,7 +29,7 @@ void player_move(Player *p, int16_t x, int16_t y){
 }
 
 void player_listen_move(Player *p, struct nunchuk_data *nundata){
-    uint8_t player_speed = 10;
+    uint8_t player_speed = 1;
     GDIR dir = get_nunchuk_dir(nundata);
     switch(dir){
         case UP:

@@ -79,8 +79,9 @@ void update(){
     f3d_nunchuk_read(&nundata);
     f3d_nunchuk_read2(&nundata2);
     player_listen_move(&player, &nundata);
-    move_enemies(enemies);
     bullet_listen_shoot(&player, bullet_buf, BULLET_NUM, &nundata2);
+    object_move()
+    move_enemies(enemies);
     redraw = true;
 }
 
@@ -95,7 +96,7 @@ int main(void) {
     while(1){
         if (redraw) {
             player_draw(&player);
-            //object_draw(bullet_buf); //single bullet
+            object_draw_many(bullet_buf, BULLET_NUM); //single bullet
             object_draw_many(enemies, ENEMIES);
             redraw = false;
         }

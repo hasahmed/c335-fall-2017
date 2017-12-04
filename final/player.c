@@ -29,7 +29,7 @@ void player_move(Player *p, int16_t x, int16_t y){
 }
 
 void player_listen_move(Player *p, struct nunchuk_data *nundata){
-    uint8_t player_speed = 12;
+    uint8_t player_speed = 2;
     GDIR dir = get_nunchuk_dir(nundata);
     switch(dir){
         case UP:
@@ -73,11 +73,11 @@ void bullet_move(Bullet *b, int16_t x, int16_t y){
 void bullet_listen_shoot(Player *p, Bullet *bullet_buf, uint8_t bullet_buf_length, struct nunchuk_data *nundata){
     GDIR dir = get_nunchuk_dir(nundata);
     if(dir != NA){
-        //b->speed = 2;
-        //b->x = p->x;
-        //b->y = p->y;
-        //b->dir = RIGHT;
-        //b->speed = 1;
+        bullet_buf[0].speed = 2;
+        bullet_buf[0].x = p->x;
+        bullet_buf[0].y = p->y;
+        bullet_buf[0].dir = RIGHT;
+        bullet_buf[0].speed = 1;
     }
 }
 
@@ -107,11 +107,11 @@ void object_move(Object *obj, int16_t x, int16_t y){
         dirty_area_fill_down(obj, 0, x, y);
         dirty_area_fill_left(obj, 1, x, y);
     }
-
     obj->x += x;
     obj->y += y;
-
 }
+
+//void object_move_many(Object *object_arr, uint8_t arr_len, )
 void object_draw(Object *obj){
     draw_rect(obj->x, obj->y, obj->width, obj->height,  obj->color);
     draw_rect(obj->dirty_area[0].x, obj->dirty_area[0].y, obj->dirty_area[0].width, obj->dirty_area[0].height, BGCOLOR); //erase dirty area

@@ -29,7 +29,7 @@ void player_move(Player *p, int16_t x, int16_t y){
 }
 
 void player_listen_move(Player *p, struct nunchuk_data *nundata){
-    uint8_t player_speed = 2;
+    uint8_t player_speed = 1;
     GDIR dir = get_nunchuk_dir(nundata);
     switch(dir){
         case UP:
@@ -193,9 +193,9 @@ void dirty_area_fill_right(Player *p, uint8_t area_num, int x, int y){
 void dirty_area_fill_left(Player *p, uint8_t area_num, int x, int y){
     p->dirty_area[area_num].y = p->y;
     if (-x > p->width)
-        p->dirty_area[area_num].x = p->x;
+    p->dirty_area[area_num].x = p->x;
     else
-        p->dirty_area[area_num].x = (p->x + p->width) - 1; //-1 because I think something about set window addr
+        p->dirty_area[area_num].x = p->x + x + p->width;
     p->dirty_area[area_num].width = min(-x, p->width);
     p->dirty_area[area_num].height = p->height;
 }

@@ -80,7 +80,7 @@ void update(){
     f3d_nunchuk_read2(&nundata2);
     player_listen_move(&player, &nundata);
     bullet_listen_shoot(&player, bullet_buf, BULLET_NUM, &nundata2);
-    object_move()
+    //object_move()
     move_enemies(enemies);
     redraw = true;
 }

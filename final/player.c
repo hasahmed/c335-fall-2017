@@ -18,14 +18,14 @@ void player_init(Player *p, int16_t x, int16_t y, uint8_t width, uint8_t height,
 void player_draw(Player *p){
     object_draw(p);
 } 
-void player_move(Player *p, GDIR dir, int16_t x, int16_t y){
+void player_move(Player *p, int16_t x, int16_t y){
     if (
             (p->x + p->width) + x >= SCREEN_WIDTH   || // right wall
             p->x + x <= 0                           || // left wall
             (p->y + p->height) + y >= SCREEN_HEIGHT || // floor
             p->y + y <= 0                           || //ceiling
             0) return;
-    object_move(p, dir, x, y);
+    object_move(p, x, y);
 }
 
 void player_listen_move(Player *p, struct nunchuk_data *nundata){
@@ -33,28 +33,28 @@ void player_listen_move(Player *p, struct nunchuk_data *nundata){
     GDIR dir = get_nunchuk_dir(nundata);
     switch(dir){
         case UP:
-            player_move(p, UP, 0, -player_speed);
+            player_move(p, 0, -player_speed);
             break;
         case UP_LEFT:
-            player_move(p, UP_LEFT, -player_speed, -player_speed);
+            player_move(p, -player_speed, -player_speed);
             break;
         case UP_RIGHT:
-            player_move(p, UP_RIGHT, player_speed, -player_speed);
+            player_move(p, player_speed, -player_speed);
             break;
         case DOWN:
-            player_move(p, DOWN, 0, player_speed);
+            player_move(p, 0, player_speed);
             break;
         case DOWN_LEFT:
-            player_move(p, DOWN_LEFT, -player_speed, player_speed);
+            player_move(p, -player_speed, player_speed);
             break;
         case DOWN_RIGHT:
-            player_move(p, DOWN_RIGHT, player_speed, player_speed);
+            player_move(p, player_speed, player_speed);
             break;
         case LEFT:
-            player_move(p, LEFT, -player_speed, 0);
+            player_move(p, -player_speed, 0);
             break;
         case RIGHT:
-            player_move(p, RIGHT, player_speed, 0);
+            player_move(p, player_speed, 0);
             break;
     }
 }
@@ -82,7 +82,8 @@ void bullet_listen_shoot(Player *p, Bullet *bullet_buf, uint8_t bullet_buf_lengt
 }
 
 //OBJECTS (general)
-void object_move(Object *obj, GDIR dir, int16_t x, int16_t y){
+void object_move(Object *obj, int16_t x, int16_t y){
+    GDIR dir = getDirection(x, y);
     //dirty area allocation
     dirty_area_zeros(&obj->dirty_area[1]);
     if (dir == RIGHT){
@@ -115,15 +116,13 @@ void object_draw(Object *obj){
     draw_rect(obj->x, obj->y, obj->width, obj->height,  obj->color);
     draw_rect(obj->dirty_area[0].x, obj->dirty_area[0].y, obj->dirty_area[0].width, obj->dirty_area[0].height, BGCOLOR); //erase dirty area
     draw_rect(obj->dirty_area[1].x, obj->dirty_area[1].y, obj->dirty_area[1].width, obj->dirty_area[1].height, BGCOLOR); //erase dirty area
+    //dirty_area_zeros(&obj->dirty_area[1]);
 } 
 
 void object_draw_many(Object *obj_arr, uint8_t arr_len){
     int i;
     for(i = 0; i < arr_len; i++){
-        Object *obj = &obj_arr[i];
-        draw_rect(obj->x, obj->y, obj->width, obj->height,  obj->color);
-        draw_rect(obj->dirty_area[0].x, obj->dirty_area[0].y, obj->dirty_area[0].width, obj->dirty_area[0].height, BGCOLOR); //erase dirty area
-        draw_rect(obj->dirty_area[1].x, obj->dirty_area[1].y, obj->dirty_area[1].width, obj->dirty_area[1].height, BGCOLOR); //erase dirty area
+        object_draw(&obj_arr[i]);
     }
 } 
 
@@ -184,6 +183,8 @@ void dirty_area_zeros(DirtyArea *d){
 }
 
 
+// MAY NEED MULTIPLE CASES FOR WHEN NUMBER IS > THAN WIDTH/HEIGHT OF PLAYER
+// BUT I THINK IT CAN BE DONE
 void dirty_area_fill_right(Player *p, uint8_t area_num, int x, int y){
     p->dirty_area[area_num].x = p->x;
     p->dirty_area[area_num].y = p->y;
@@ -191,7 +192,7 @@ void dirty_area_fill_right(Player *p, uint8_t area_num, int x, int y){
     p->dirty_area[area_num].height = p->height;
 }
 void dirty_area_fill_left(Player *p, uint8_t area_num, int x, int y){
-    p->dirty_area[area_num].x = p->x + (p->width -1);
+    p->dirty_area[area_num].x = p->x;
     p->dirty_area[area_num].y = p->y;
     p->dirty_area[area_num].width = min(-x, p->width);
     p->dirty_area[area_num].height = p->height;
@@ -203,8 +204,8 @@ void dirty_area_fill_down(Player *p, uint8_t area_num, int x, int y){
     p->dirty_area[area_num].height = min(y, p->height);
 }
 void dirty_area_fill_up(Player *p, uint8_t area_num, int x, int y){
-    p->dirty_area[area_num].x = p->x;
-    p->dirty_area[area_num].y = p->y + p->height -1; // -1?
+    p->dirty_area[area_num].x = p->x; //assign x. Easy
+    p->dirty_area[area_num].y = p->y;
     p->dirty_area[area_num].width = p->width;
     p->dirty_area[area_num].height = min(-y, p->height);
 }
@@ -212,13 +213,13 @@ void dirty_area_fill_up(Player *p, uint8_t area_num, int x, int y){
 
 
 GDIR getDirection(int16_t x, int16_t y){
-    if (x < 0 && y < 0)
+    if (x < 0 && y > 0)
         return DOWN_LEFT;
-    else if (x > 0 && y < 0)
-        return DOWN_RIGHT;
-    else if (x < 0 && y > 0)
-        return UP_LEFT;
     else if (x > 0 && y > 0)
+        return DOWN_RIGHT;
+    else if (x < 0 && y < 0)
+        return UP_LEFT;
+    else if (x > 0 && y < 0)
         return UP_RIGHT;
     else if (x < 0)
         return LEFT;

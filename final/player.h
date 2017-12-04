@@ -7,7 +7,7 @@
 #include "game_types.h"
 void player_init(Player *p, int16_t x, int16_t y, uint8_t width, uint8_t height, uint16_t color);
 void player_draw(Player *p);
-void player_move(Player *p, GDIR dir, int16_t x, int16_t y);
+void player_move(Player *p, int16_t x, int16_t y);
 void player_listen_move(Player *p, struct nunchuk_data *nundata);
 //enemy stuff
 void enemies_draw(Player *enemy_list, uint8_t enemy_list_len);
@@ -21,7 +21,7 @@ void bullet_listen_shoot(Player *p, Bullet *bullet_buf, uint8_t bullet_buf_lengt
 //general object stuff
 void object_draw(Object *obj);
 void object_draw_many(Object *obj_arr, uint8_t arr_len);
-void object_move(Object *obj, GDIR dir, int16_t x, int16_t y);
+void object_move(Object *obj, int16_t x, int16_t y);
 void object_update_loc_by_speed(Object *o);
 void object_print(Object *o);
 

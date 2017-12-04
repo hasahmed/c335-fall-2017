@@ -32,4 +32,9 @@ void dirty_area_fill_right(Player *p, uint8_t area_num, int x, int y);
 void dirty_area_fill_left(Player *p, uint8_t area_num, int x, int y);
 void dirty_area_fill_down(Player *p, uint8_t area_num, int x, int y);
 void dirty_area_fill_up(Player *p, uint8_t area_num, int x, int y);
+
+
+//misc
+
+GDIR getDirection(int16_t x, int16_t y);
 #endif //_PLAYER_H_

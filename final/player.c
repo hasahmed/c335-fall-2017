@@ -208,3 +208,25 @@ void dirty_area_fill_up(Player *p, uint8_t area_num, int x, int y){
     p->dirty_area[area_num].width = p->width;
     p->dirty_area[area_num].height = min(-y, p->height);
 }
+
+
+
+GDIR getDirection(int16_t x, int16_t y){
+    if (x < 0 && y < 0)
+        return DOWN_LEFT;
+    else if (x > 0 && y < 0)
+        return DOWN_RIGHT;
+    else if (x < 0 && y > 0)
+        return UP_LEFT;
+    else if (x > 0 && y > 0)
+        return UP_RIGHT;
+    else if (x < 0)
+        return LEFT;
+    else if (x > 0)
+        return RIGHT;
+    else if (y < 0)
+        return UP;
+    else if (y > 0)
+        return DOWN;
+    return NONE;
+}

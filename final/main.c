@@ -28,7 +28,7 @@
 
 #define SCREEN_HEIGHT ST7735_height
 #define SCREEN_WIDTH ST7735_width
-#define ENEMIES 8
+#define ENEMIES 10
 #define ENEMY_WIDTH 8
 #define ENEMY_HEIGHT 8
 #define ENEMY_COLOR BLUE
@@ -71,7 +71,6 @@ void bullet_init(Bullet *bullet_buf, uint8_t buf_size){
         bullet_buf[i].width = BULLET_SIZE;
         bullet_buf[i].height = BULLET_SIZE;
         bullet_buf[i].used = false;
-        object_print(&bullet_buf[i]);
     }
 }
 
@@ -97,8 +96,7 @@ int main(void) {
         if (redraw) {
             player_draw(&player);
             //object_draw(bullet_buf); //single bullet
-            //enemies_draw(enemies, ENEMIES);
-            //object_draw_many(enemies, ENEMIES);
+            object_draw_many(enemies, ENEMIES);
             redraw = false;
         }
     }

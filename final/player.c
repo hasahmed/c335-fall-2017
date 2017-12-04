@@ -29,7 +29,7 @@ void player_move(Player *p, int16_t x, int16_t y){
 }
 
 void player_listen_move(Player *p, struct nunchuk_data *nundata){
-    uint8_t player_speed = 1;
+    uint8_t player_speed = 12;
     GDIR dir = get_nunchuk_dir(nundata);
     switch(dir){
         case UP:
@@ -116,7 +116,6 @@ void object_draw(Object *obj){
     draw_rect(obj->x, obj->y, obj->width, obj->height,  obj->color);
     draw_rect(obj->dirty_area[0].x, obj->dirty_area[0].y, obj->dirty_area[0].width, obj->dirty_area[0].height, BGCOLOR); //erase dirty area
     draw_rect(obj->dirty_area[1].x, obj->dirty_area[1].y, obj->dirty_area[1].width, obj->dirty_area[1].height, BGCOLOR); //erase dirty area
-    //dirty_area_zeros(&obj->dirty_area[1]);
 } 
 
 void object_draw_many(Object *obj_arr, uint8_t arr_len){
@@ -184,7 +183,7 @@ void dirty_area_zeros(DirtyArea *d){
 
 
 // MAY NEED MULTIPLE CASES FOR WHEN NUMBER IS > THAN WIDTH/HEIGHT OF PLAYER
-// BUT I THINK IT CAN BE DONE
+// BUT I THINK IT CAN BE DONE WITHOUT THAT
 void dirty_area_fill_right(Player *p, uint8_t area_num, int x, int y){
     p->dirty_area[area_num].x = p->x;
     p->dirty_area[area_num].y = p->y;
@@ -192,8 +191,11 @@ void dirty_area_fill_right(Player *p, uint8_t area_num, int x, int y){
     p->dirty_area[area_num].height = p->height;
 }
 void dirty_area_fill_left(Player *p, uint8_t area_num, int x, int y){
-    p->dirty_area[area_num].x = p->x;
     p->dirty_area[area_num].y = p->y;
+    if (-x > p->width)
+        p->dirty_area[area_num].x = p->x;
+    else
+        p->dirty_area[area_num].x = (p->x + p->width) - 1; //-1 because I think something about set window addr
     p->dirty_area[area_num].width = min(-x, p->width);
     p->dirty_area[area_num].height = p->height;
 }
@@ -205,7 +207,10 @@ void dirty_area_fill_down(Player *p, uint8_t area_num, int x, int y){
 }
 void dirty_area_fill_up(Player *p, uint8_t area_num, int x, int y){
     p->dirty_area[area_num].x = p->x; //assign x. Easy
-    p->dirty_area[area_num].y = p->y;
+    if (-y > p->height)
+        p->dirty_area[area_num].y = p->y + y + p->height + (-y - p->height);
+    else
+        p->dirty_area[area_num].y = p->y + (p->height + y);
     p->dirty_area[area_num].width = p->width;
     p->dirty_area[area_num].height = min(-y, p->height);
 }

@@ -70,18 +70,59 @@ void bullet_move(Bullet *b, int16_t x, int16_t y){
     b->x += x;
     b->y += y;
 }
+
+void bullet_disable_out(Bullet *bullet_arr, uint8_t arr_len){
+    uint8_t i;
+    for (i = 0; i < arr_len; i++){
+        /*
+        if (bullet_arr[i].used == true){
+            if (bullet_arr[i]); //check to see if bullet is out of bounds. if so set it to disabled
+        }
+        */
+    }
+}
+
+void bullet_reset(Bullet *b){
+    b->x = -10;
+    b->y = -10;
+    b->used = false;
+    b->speed = 0;
+}
+bool object_is_out(Object *o){
+    //if ()
+}
+
+void bullet_init(Bullet *b){
+    b->speed = 0;
+    b->x = -10;
+    b->y = -10;
+    b->color = WHITE;
+    b->width = BULLET_SIZE;
+    b->height = BULLET_SIZE;
+    b->used = false;
+
+}
+
 void bullet_listen_shoot(Player *p, Bullet *bullet_buf, uint8_t bullet_buf_length, struct nunchuk_data *nundata){
+    uint8_t i;
     GDIR dir = get_nunchuk_dir(nundata);
     if(dir != NA){
-        bullet_buf[0].speed = 2;
-        bullet_buf[0].x = p->x;
-        bullet_buf[0].y = p->y;
-        bullet_buf[0].dir = RIGHT;
-        bullet_buf[0].speed = 1;
+        for (i = 0; i < bullet_buf_length; i++){
+            if (bullet_buf[i].used == false){
+                bullet_buf[i].x = p->x + p->width;
+                bullet_buf[i].y = p->y;
+                bullet_buf[i].dir = dir;
+                bullet_buf[i].speed = BULLET_BASE_SPEED;
+                bullet_buf[i].used = true;
+                return;
+            }
+        }
     }
 }
 
 //OBJECTS (general)
+
+
 void object_move(Object *obj, int16_t x, int16_t y){
     GDIR dir = getDirection(x, y);
     //dirty area allocation
@@ -125,36 +166,40 @@ void object_draw_many(Object *obj_arr, uint8_t arr_len){
     }
 } 
 
-void object_update_loc_by_speed(Object *o){
-    //object_move(o, (int8_t)o->speed, 0);
-    /*
-       switch(o->dir){
-       case UP:
-       object_move(o, (int8_t)o->speed, (int8_t)o->speed);
-       return;
-       case DOWN:
-       object_move(o, (int8_t)o->speed, (int8_t)o->speed);
-       return;
-       case LEFT:
-       object_move(o, (int8_t)o->speed, (int8_t)o->speed);
-       return;
-       case RIGHT:
-       object_move(o, (int8_t)o->speed, (int8_t)o->speed);
-       return;
-       case UP_LEFT:
-       object_move(o, (int8_t)o->speed, (int8_t)o->speed);
-       return;
-       case UP_RIGHT:
-       object_move(o, (int8_t)o->speed, (int8_t)o->speed);
-       return;
-       case DOWN_LEFT:
-       object_move(o, (int8_t)o->speed, (int8_t)o->speed);
-       return;
-       case DOWN_RIGHT:
-       object_move(o, (int8_t)o->speed, (int8_t)o->speed);
-       return;
-       }
-       */
+void object_update_loc_by_speed_and_dir(Object *o){
+    switch(o->dir){
+        case UP:
+            object_move(o, 0, -(int8_t)o->speed);
+            return;
+        case DOWN:
+            object_move(o, 0, (int8_t)o->speed);
+            return;
+        case LEFT:
+            object_move(o, -(int8_t)o->speed, 0);
+            return;
+        case RIGHT:
+            object_move(o, (int8_t)o->speed, 0);
+            return;
+        case UP_LEFT:
+            object_move(o, -(int8_t)o->speed, -(int8_t)o->speed);
+            return;
+        case UP_RIGHT:
+            object_move(o, (int8_t)o->speed, -(int8_t)o->speed);
+            return;
+        case DOWN_LEFT:
+            object_move(o, -(int8_t)o->speed, (int8_t)o->speed);
+            return;
+        case DOWN_RIGHT:
+            object_move(o, (int8_t)o->speed, (int8_t)o->speed);
+            return;
+    }
+}
+
+void object_update_loc_by_speed_and_dir_many(Object *object_arr, uint8_t arr_len){
+    uint8_t i;
+    for(i = 0; i < arr_len; i++){
+        object_update_loc_by_speed_and_dir(&object_arr[i]);
+    }
 }
 void object_print(Object *o){
     printf("x: %d\n", o->x);
@@ -193,7 +238,7 @@ void dirty_area_fill_right(Player *p, uint8_t area_num, int x, int y){
 void dirty_area_fill_left(Player *p, uint8_t area_num, int x, int y){
     p->dirty_area[area_num].y = p->y;
     if (-x > p->width)
-    p->dirty_area[area_num].x = p->x;
+        p->dirty_area[area_num].x = p->x;
     else
         p->dirty_area[area_num].x = p->x + x + p->width;
     p->dirty_area[area_num].width = min(-x, p->width);

@@ -61,7 +61,7 @@ void move_enemies(Player *enemies_list){
     }
 }
 
-void bullet_init(Bullet *bullet_buf, uint8_t buf_size){
+void bullets_init(Bullet *bullet_buf, uint8_t buf_size){
     int i;
     for(i = 0; i < buf_size; i++){
         bullet_buf[i].speed = 0;
@@ -80,7 +80,7 @@ void update(){
     f3d_nunchuk_read2(&nundata2);
     player_listen_move(&player, &nundata);
     bullet_listen_shoot(&player, bullet_buf, BULLET_NUM, &nundata2);
-    //object_move()
+    object_update_loc_by_speed_and_dir_many(bullet_buf, BULLET_NUM);
     move_enemies(enemies);
     redraw = true;
 }
@@ -91,7 +91,7 @@ int main(void) {
     printf("////////////////////////////////////////////////////////////\n");
     init_game_screen(&player);
     init_enemies(enemies);
-    bullet_init(bullet_buf, BULLET_NUM);
+    bullets_init(bullet_buf, BULLET_NUM);
     DEBUGF("sizeof Object %lu", sizeof(Object));
     while(1){
         if (redraw) {

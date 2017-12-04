@@ -17,8 +17,9 @@
 
 //BULLET STUFF
 #define BULLET_SIZE 2
-#define BULLET_NUM 5
+#define BULLET_NUM 50
 #define BULLET_COLOR WHITE
+#define BULLET_BASE_SPEED 2
 
 //bg stuff
 #define BGCOLOR BLACK //testing

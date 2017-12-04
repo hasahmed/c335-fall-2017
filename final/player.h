@@ -16,14 +16,19 @@ void enemies_draw(Player *enemy_list, uint8_t enemy_list_len);
 //bullet stuff
 void bullet_move(Bullet *b, int16_t x, int16_t y);
 void bullet_listen_shoot(Player *p, Bullet *bullet_buf, uint8_t bullet_buf_length, struct nunchuk_data *nundata);
+void bullet_disable_out(Bullet *bullet_arr, uint8_t arr_len);
+void bullet_reset(Bullet *b);
+void bullet_init(Bullet *b);
 
 
 //general object stuff
 void object_draw(Object *obj);
 void object_draw_many(Object *obj_arr, uint8_t arr_len);
 void object_move(Object *obj, int16_t x, int16_t y);
-void object_update_loc_by_speed(Object *o);
+void object_update_loc_by_speed_and_dir(Object *o);
+void object_update_loc_by_speed_and_dir_many(Object *object_arr, uint8_t arr_len);
 void object_print(Object *o);
+bool object_is_out(Object *o);
 
 
 // DirtyArea

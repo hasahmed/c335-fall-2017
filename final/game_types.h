@@ -9,6 +9,9 @@
 
 #define SCREEN_HEIGHT ST7735_height
 #define SCREEN_WIDTH ST7735_width
+
+
+//PLAYER STUFF
 #define PLAYER_HEIGHT 8
 #define PLAYER_WIDTH 4
 #define PLAYER_STARTING_X SCREEN_WIDTH/2
@@ -17,9 +20,14 @@
 
 //BULLET STUFF
 #define BULLET_SIZE 2
-#define BULLET_NUM 50
+#define BULLET_NUM 20 //the size of the bullet buffer
 #define BULLET_COLOR WHITE
 #define BULLET_BASE_SPEED 2
+
+//ENEMY STUFF
+#define ENEMY_WIDTH 8
+#define ENEMY_HEIGHT 8
+#define ENEMY_COLOR BLUE
 
 //bg stuff
 #define BGCOLOR BLACK //testing
@@ -67,6 +75,7 @@ struct object{
     DirtyArea dirty_area[2];
     uint8_t width;
     uint8_t height;
+    uint8_t bullet_fire_rate; //how many game tics must pass before the bullet can be shot again
     float speed;
     GDIR dir;
     GTYPE type;

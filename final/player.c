@@ -14,6 +14,7 @@ void player_init(Player *p, int16_t x, int16_t y, uint8_t width, uint8_t height,
     p->height = height;
     p->color = color;
     p->speed = 0;
+    p->bullet_fire_rate = 10;
 }
 void player_draw(Player *p){
     object_draw(p);
@@ -64,6 +65,65 @@ void enemies_draw(Player *enemy_list, uint8_t enemy_list_len) {
     for(i = 0; i < enemy_list_len; i++)
         player_draw(&enemy_list[i]);
 }
+void enemy_move_towards_player_many(Player *p, Enemy *enemy_list, uint8_t enemy_list_len){
+
+}
+void enemy_init_many(Enemy *enemy_list, uint8_t enemy_list_len){
+    uint8_t i;
+    for (i = 0; i < enemy_list_len; i++)
+        enemy_init(&enemy_list[i]);
+}
+
+void enemy_init(Enemy *e){
+    e->x = -10;
+    e->y = 100;
+    e->width = ENEMY_WIDTH;
+    e->height = ENEMY_HEIGHT;
+    e->color = ENEMY_COLOR;
+    e->speed = 0;
+    e->used = false;
+}
+void enemy_reset(Enemy *e){
+    e->x = -10;
+    e->y = 100;
+    e->speed = 0;
+    e->used = false;
+}
+
+/**
+ * assumes inactive bullets are are already deactivated
+ */
+void handle_enemy_bullet_collision(Enemy *enemies_list, uint8_t enemies_list_len, Bullet *active_bullets_list, uint8_t bullets_list_len, uint16_t *score){
+    uint8_t i;
+    uint8_t j;
+    for (i = 0; i < enemies_list_len; i++){
+        for (j = 0; j < bullets_list_len; j++){
+            if (object_check_collision(&active_bullets_list[j], &enemies_list[i])){
+                enemy_reset(&enemies_list[i]);
+                bullet_reset(&active_bullets_list[j]);
+            }
+        }
+    }
+}
+
+void enemy_move_towards_player(Player *p, Enemy *e){
+    GDIR dir = enemy_get_player_direction(p, e);
+    e->dir = dir;
+    object_update_loc_by_speed_and_dir(e);
+}
+
+GDIR enemy_get_player_direction(Player *p, Enemy *e){
+    float angle = getAngle(p, e);
+    if ((angle <= -160.0 && angle >= -180.0) || (angle <= 180 && angle >= 160.0))
+        return LEFT;
+    else if (angle >= 70.0 && angle <= 110.0)
+        return DOWN;
+    else if (angle >= -10.0 && angle <= 10.0)
+        return RIGHT;
+    else if (angle >= -110.0 && angle <= -70.0)
+        return UP;
+    return NA;
+}
 
 //BULLETS
 void bullet_move(Bullet *b, int16_t x, int16_t y){
@@ -71,14 +131,18 @@ void bullet_move(Bullet *b, int16_t x, int16_t y){
     b->y += y;
 }
 
+
+/**
+ * disables bullet if its out of bounds
+ */
 void bullet_disable_out(Bullet *bullet_arr, uint8_t arr_len){
     uint8_t i;
     for (i = 0; i < arr_len; i++){
-        /*
         if (bullet_arr[i].used == true){
-            if (bullet_arr[i]); //check to see if bullet is out of bounds. if so set it to disabled
+            if (object_is_out(&bullet_arr[i])){
+                bullet_reset(&bullet_arr[i]);
+            } 
         }
-        */
     }
 }
 
@@ -89,7 +153,14 @@ void bullet_reset(Bullet *b){
     b->speed = 0;
 }
 bool object_is_out(Object *o){
-    //if ()
+    if (
+            o->x > SCREEN_WIDTH || 
+            o-> x < 0 ||
+            o-> y > SCREEN_HEIGHT ||
+            o-> y < 0
+       )
+        return true;
+    return false;
 }
 
 void bullet_init(Bullet *b){
@@ -100,7 +171,6 @@ void bullet_init(Bullet *b){
     b->width = BULLET_SIZE;
     b->height = BULLET_SIZE;
     b->used = false;
-
 }
 
 void bullet_listen_shoot(Player *p, Bullet *bullet_buf, uint8_t bullet_buf_length, struct nunchuk_data *nundata){
@@ -165,6 +235,18 @@ void object_draw_many(Object *obj_arr, uint8_t arr_len){
         object_draw(&obj_arr[i]);
     }
 } 
+
+bool object_check_collision(Object *obj1, Object *obj2){
+    if (
+            (obj1->y <= obj2->y + obj2->width) && //up
+            //down
+            //left
+            //right
+            //if (obj1->x + obj1->width);
+            1)
+        return false;
+    return false;
+}
 
 void object_update_loc_by_speed_and_dir(Object *o){
     switch(o->dir){
@@ -280,4 +362,36 @@ GDIR getDirection(int16_t x, int16_t y){
     else if (y > 0)
         return DOWN;
     return NONE;
+}
+void debugDirection(GDIR dir){
+    switch(dir){
+        case UP:
+            DEBUGF("UP", NULL);
+            return;
+        case DOWN:
+            DEBUGF("DOWN", NULL);
+            return;
+        case LEFT:
+            DEBUGF("LEFT", NULL);
+            return;
+        case RIGHT:
+            DEBUGF("RIGHT", NULL);
+            return;
+        case UP_RIGHT:
+            DEBUGF("UP_RIGHT", NULL);
+            return;
+        case UP_LEFT:
+            DEBUGF("UP_LEFT", NULL);
+            return;
+        case DOWN_RIGHT:
+            DEBUGF("DOWN_RIGHT", NULL);
+            return;
+        case DOWN_LEFT:
+            DEBUGF("DOWN_LEFT", NULL);
+            return;
+        case NA:
+            DEBUGF("NA", NULL);
+            return;
+    }
+
 }

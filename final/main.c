@@ -28,7 +28,7 @@
 
 #define SCREEN_HEIGHT ST7735_height
 #define SCREEN_WIDTH ST7735_width
-#define ENEMIES 10
+#define ENEMIES 1
 #define ENEMY_WIDTH 8
 #define ENEMY_HEIGHT 8
 #define ENEMY_COLOR BLUE
@@ -41,23 +41,26 @@ Enemy enemies[ENEMIES];
 Bullet bullet_buf[BULLET_NUM];
 struct nunchuk_data nundata;
 struct nunchuk_data nundata2;
-int redraw = 0;
+bool redraw = 0;
+uint8_t ticks_passed_since_bullet_shot = 0;
+uint16_t score = 0;
 
 void init_enemies(Player *enemies_list){
     int i;
-    for (i = 1; i < ENEMIES; i++){
-        enemies[i].x = i * ENEMY_WIDTH + i;
-        enemies[i].y = i * ENEMY_WIDTH + i;
+    for (i = 0; i < ENEMIES; i++){
+        enemies[i].x =  SCREEN_WIDTH / 2;
+        enemies[i].y = SCREEN_HEIGHT / 2;
         enemies[i].width = ENEMY_WIDTH;
         enemies[i].height = ENEMY_HEIGHT;
         enemies[i].color = ENEMY_COLOR;
+        enemies[i].speed = 1;
     }
 }
 
 void move_enemies(Player *enemies_list){
     int i = 0;
     for (i = 0; i < ENEMIES; i++){
-        player_move(&enemies[i], rand() % 2 + (-1), rand() % 2 + (-1));
+        player_move(&enemies[i], 0, 0);
     }
 }
 
@@ -76,12 +79,19 @@ void bullets_init(Bullet *bullet_buf, uint8_t buf_size){
 
 
 void update(){
+    ticks_passed_since_bullet_shot++;
     f3d_nunchuk_read(&nundata);
     f3d_nunchuk_read2(&nundata2);
     player_listen_move(&player, &nundata);
-    bullet_listen_shoot(&player, bullet_buf, BULLET_NUM, &nundata2);
+    if (ticks_passed_since_bullet_shot >= player.bullet_fire_rate){
+        bullet_listen_shoot(&player, bullet_buf, BULLET_NUM, &nundata2);
+        ticks_passed_since_bullet_shot = 0;
+    }
     object_update_loc_by_speed_and_dir_many(bullet_buf, BULLET_NUM);
-    move_enemies(enemies);
+    enemy_move_towards_player(&player, &enemies[0]);
+    //move_enemies(enemies);
+    bullet_disable_out(bullet_buf, BULLET_NUM);
+    handle_enemy_bullet_collision(enemies, ENEMIES, bullet_buf, BULLET_NUM, &score);
     redraw = true;
 }
 
@@ -92,7 +102,7 @@ int main(void) {
     init_game_screen(&player);
     init_enemies(enemies);
     bullets_init(bullet_buf, BULLET_NUM);
-    DEBUGF("sizeof Object %lu", sizeof(Object));
+    //DEBUGF("sizeof Object %lu", sizeof(Object));
     while(1){
         if (redraw) {
             player_draw(&player);
@@ -100,6 +110,8 @@ int main(void) {
             object_draw_many(enemies, ENEMIES);
             redraw = false;
         }
+        //debugDirection(enemy_get_player_direction(&player, &enemies[0]));
+        //DEBUGF_CLEAR_LINE(10, "getAngle %.2f", getAngle(&player, &enemies[0]));
     }
 }
 

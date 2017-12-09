@@ -10,7 +10,17 @@ void player_draw(Player *p);
 void player_move(Player *p, int16_t x, int16_t y);
 void player_listen_move(Player *p, struct nunchuk_data *nundata);
 //enemy stuff
-void enemies_draw(Player *enemy_list, uint8_t enemy_list_len);
+void enemies_draw(Enemy *enemy_list, uint8_t enemy_list_len);
+void enemy_move_towards_player(Player *p, Enemy *e);
+void enemy_move_towards_player_many(Player *p, Enemy *enemy_list, uint8_t enemy_list_len);
+GDIR enemy_get_player_direction(Player *p, Enemy *e);
+void enemy_reset(Enemy *e);
+void enemy_reset_many(Enemy *enemy_list, uint8_t enemy_list_len);
+void enemy_init(Enemy *e);
+void enemy_init_many(Enemy *enemy_list, uint8_t enemy_list_len);
+
+
+void handle_enemy_bullet_collision(Enemy *enemies_list, uint8_t enemies_list_len, Bullet *active_bullets_list, uint8_t bullets_list_len, uint16_t *score);
 
 
 //bullet stuff
@@ -21,7 +31,8 @@ void bullet_reset(Bullet *b);
 void bullet_init(Bullet *b);
 
 
-//general object stuff
+//object stuff
+bool object_check_collision(Object *obj1, Object *obj2);
 void object_draw(Object *obj);
 void object_draw_many(Object *obj_arr, uint8_t arr_len);
 void object_move(Object *obj, int16_t x, int16_t y);
@@ -41,5 +52,6 @@ void dirty_area_fill_up(Player *p, uint8_t area_num, int x, int y);
 
 //misc
 
+void debugDirection(GDIR dir);
 GDIR getDirection(int16_t x, int16_t y);
 #endif //_PLAYER_H_

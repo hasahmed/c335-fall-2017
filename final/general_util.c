@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <math.h>
 #include "general_util.h"
 void initAll(){
     f3d_delay_init();
@@ -30,4 +31,10 @@ int min(int a, int b){
     if (a < b)
         return a;
     return b;
+}
+
+float getAngle(Object *obj1, Object *obj2) {
+    float deltaY = (float)obj1->y - (float)obj2->y;
+    float deltaX = (float)obj1->x - (float)obj2->x;
+    return atan2(deltaY, deltaX) * (180.0f / M_PI);
 }

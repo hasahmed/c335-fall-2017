@@ -15,7 +15,7 @@ badd +1 helpers.c
 badd +1 lcdutil.c
 badd +58 main.c
 badd +1 play_audio.c
-badd +22 player.h
+badd +23 player.h
 badd +41 Makefile
 badd +89 player.c
 badd +8 general_util.h
@@ -59,7 +59,7 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 23 - ((22 * winheight(0) + 26) / 52)
+let s:l = 23 - ((22 * winheight(0) + 26) / 53)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -82,11 +82,11 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 10 - ((9 * winheight(0) + 26) / 52)
+let s:l = 13 - ((9 * winheight(0) + 26) / 52)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-10
+13
 normal! 0
 tabedit main.c
 set splitbelow splitright
@@ -105,12 +105,35 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 102 - ((21 * winheight(0) + 26) / 52)
+let s:l = 149 - ((19 * winheight(0) + 26) / 52)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-102
+149
 normal! 0
+tabedit main.h
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winheight=1 winwidth=1
+argglobal
+edit main.h
+setlocal fdm=manual
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=0
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+silent! normal! zE
+let s:l = 6 - ((5 * winheight(0) + 26) / 52)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+6
+normal! 05|
 tabedit game_types.h
 set splitbelow splitright
 set nosplitbelow
@@ -226,7 +249,7 @@ exe s:l
 normal! zt
 25
 normal! 05|
-tabnext 2
+tabnext 3
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf
 endif

@@ -48,10 +48,34 @@ uint8_t spawn_counter = SPAWN_TIMER_START;
 uint16_t score = 0;
 bool score_changed = false;
 bool ready = false;
+bool resetting = false;
+
+
+void init_global_vars(){
+    gocalled_once = false;
+    redraw = false;
+    gameover = false;
+    ticks_passed_since_bullet_shot = 0;
+    spawn_counter = SPAWN_TIMER_START;
+    score = 0;
+    score_changed = false;
+    ready = false;
+}
+
+#define OFFSET 50
+void draw_wait_for_c_button_screen(){
+    if (!gameover){
+        f3d_lcd_fillScreen(BGCOLOR);
+        gameover = false;
+    }
+
+    draw_string(10, (SCREEN_HEIGHT / 2) - OFFSET, "PRESS NUNCHUK 'C'", RED, BGCOLOR);
+    draw_string(10, (SCREEN_HEIGHT / 2) - OFFSET + 10, "BUTTON TO START", RED, BGCOLOR);
+}
 
 void draw_game_over_screen(){
     f3d_lcd_fillScreen(BGCOLOR);
-    draw_string(10, SCREEN_HEIGHT / 2, "GAME OVER", RED, BGCOLOR);
+    draw_string(30, SCREEN_HEIGHT / 2, "GAME OVER", RED, BGCOLOR);
 }
 void draw_score(){
     draw_string(0, 0, "0", WHITE, BGCOLOR);
@@ -72,7 +96,11 @@ void init_game_objects(){
 void gameover_handler(){
     if (!gocalled_once) {
         draw_game_over_screen();
+        draw_wait_for_c_button_screen();
         gocalled_once = true;
+        ready = false;
+        wait_for_player_ready();
+        game_init();
     }
 }
 
@@ -101,16 +129,33 @@ void update(){
         redraw = true;
     }
 }
+void wait_for_player_ready(){
+    while(1){ //wait until the player is ready
+        f3d_nunchuk_read(&nundata);
+        f3d_nunchuk_read2(&nundata2);
+        if(nundata.c || nundata2.c)
+            break;
+    }
+}
+
+void game_init(){
+    init_game_objects();
+    init_global_vars();
+    /*if (!resetting){*/
+        draw_wait_for_c_button_screen();
+        wait_for_player_ready();
+    /*}*/
+    init_game_screen(&player);
+    ready = true;
+    draw_score();
+    setTickSpeed(GAME_TICK);
+}
 
 int main(void) { 
     setBuffs();
     initAll();
     printf("////////////////////////////////////////////////////////////\n");
-    init_game_objects();
-    init_game_screen(&player);
-    draw_score();
-    setTickSpeed(GAME_TICK);
-    ready = true;
+    game_init();
     while(1){
         if (redraw) {
             player_draw(&player);

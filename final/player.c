@@ -1,6 +1,7 @@
 #include <f3d_nunchuk.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include "nunchuk_util.h"
 #include "player.h"
 #include "general_util.h" //includes game_util.h
@@ -15,6 +16,7 @@ void player_init(Player *p, int16_t x, int16_t y, uint8_t width, uint8_t height,
     p->color = color;
     p->speed = 0;
     p->bullet_fire_rate = 10;
+    p->used = true;
 }
 void player_draw(Player *p){
     object_draw(p);
@@ -75,8 +77,8 @@ void enemy_init_many(Enemy *enemy_list, uint8_t enemy_list_len){
 }
 
 void enemy_init(Enemy *e){
-    e->x = -10;
-    e->y = 100;
+    e->x = ENEMY_BASE_X;
+    e->y = ENEMY_BASE_Y;
     e->width = ENEMY_WIDTH;
     e->height = ENEMY_HEIGHT;
     e->color = ENEMY_COLOR;
@@ -84,23 +86,48 @@ void enemy_init(Enemy *e){
     e->used = false;
 }
 void enemy_reset(Enemy *e){
-    e->x = -10;
-    e->y = 100;
+    /*object_set(e, ENEMY_BASE_X, ENEMY_BASE_Y);*/
+    object_erase(e);
+    e->x = ENEMY_BASE_X;
+    e->y = ENEMY_BASE_Y;
     e->speed = 0;
     e->used = false;
+}
+
+void enemy_place(Enemy *e, int16_t x, int16_t y){
+    e->x = x;
+    e->y = y;
+    e->used = true;
+    e->speed = ENEMY_BASE_SPEED;
 }
 
 /**
  * assumes inactive bullets are are already deactivated
  */
-void handle_enemy_bullet_collision(Enemy *enemies_list, uint8_t enemies_list_len, Bullet *active_bullets_list, uint8_t bullets_list_len, uint16_t *score){
+void handle_enemy_bullet_player_collision(
+        Player *player, 
+        Enemy *enemies_list, 
+        uint8_t enemies_list_len, 
+        Bullet *active_bullets_list, 
+        uint8_t bullets_list_len, 
+        uint16_t *score, 
+        bool *gameover){
+
     uint8_t i;
     uint8_t j;
     for (i = 0; i < enemies_list_len; i++){
+        if(object_check_collision(player, &enemies_list[i])){
+            *gameover = true;
+            return;
+        }
         for (j = 0; j < bullets_list_len; j++){
             if (object_check_collision(&active_bullets_list[j], &enemies_list[i])){
+                Bullet *b = &enemies_list[i];
+                /*DEBUGF("b x: %d y: %d", b->x, b->y);*/
+                /*[>DEBUGF_LINE(10, "e x: %d y: %d", e->x, e->y);<]*/
                 enemy_reset(&enemies_list[i]);
                 bullet_reset(&active_bullets_list[j]);
+                *score++;
             }
         }
     }
@@ -147,8 +174,10 @@ void bullet_disable_out(Bullet *bullet_arr, uint8_t arr_len){
 }
 
 void bullet_reset(Bullet *b){
-    b->x = -10;
-    b->y = -10;
+    /*object_erase(b);*/ //no need to erase, because bullet always moves bigger than its self
+    //therefore the previous dirty area has already been set... maybe
+    b->x = BULLET_BASE_X;
+    b->y = BULLET_BASE_Y;
     b->used = false;
     b->speed = 0;
 }
@@ -165,12 +194,17 @@ bool object_is_out(Object *o){
 
 void bullet_init(Bullet *b){
     b->speed = 0;
-    b->x = -10;
-    b->y = -10;
+    b->x = BULLET_BASE_X;
+    b->y = BULLET_BASE_Y;
     b->color = WHITE;
     b->width = BULLET_SIZE;
     b->height = BULLET_SIZE;
     b->used = false;
+}
+void bullet_init_many(Bullet *bullet_buf, uint8_t arr_len){
+    uint8_t i;
+    for (i = 0; i < arr_len; i++)
+        bullet_init(&bullet_buf[i]);
 }
 
 void bullet_listen_shoot(Player *p, Bullet *bullet_buf, uint8_t bullet_buf_length, struct nunchuk_data *nundata){
@@ -193,6 +227,17 @@ void bullet_listen_shoot(Player *p, Bullet *bullet_buf, uint8_t bullet_buf_lengt
 //OBJECTS (general)
 
 
+void object_erase(Object *o){
+    /*draw_rect(abs(o->x -2), abs(o->y -2), o->width + 1, o->height + 1, BGCOLOR);*/
+    draw_rect(o->x, o->y, o->width, o->height, BGCOLOR);
+}
+
+void object_set(Object *obj, int16_t x, int16_t y){
+    dirty_area_fill_all(obj);
+    dirty_area_zeros(&obj->dirty_area[1]);
+    obj->x = x;
+    obj->y = y;
+}
 void object_move(Object *obj, int16_t x, int16_t y){
     GDIR dir = getDirection(x, y);
     //dirty area allocation
@@ -222,9 +267,9 @@ void object_move(Object *obj, int16_t x, int16_t y){
     obj->y += y;
 }
 
-//void object_move_many(Object *object_arr, uint8_t arr_len, )
 void object_draw(Object *obj){
-    draw_rect(obj->x, obj->y, obj->width, obj->height,  obj->color);
+    if (obj->used)
+        draw_rect(obj->x, obj->y, obj->width, obj->height,  obj->color);
     draw_rect(obj->dirty_area[0].x, obj->dirty_area[0].y, obj->dirty_area[0].width, obj->dirty_area[0].height, BGCOLOR); //erase dirty area
     draw_rect(obj->dirty_area[1].x, obj->dirty_area[1].y, obj->dirty_area[1].width, obj->dirty_area[1].height, BGCOLOR); //erase dirty area
 } 
@@ -236,15 +281,18 @@ void object_draw_many(Object *obj_arr, uint8_t arr_len){
     }
 } 
 
+//object 1 is colliding with object 2
 bool object_check_collision(Object *obj1, Object *obj2){
+    if (obj1->x == 0 && obj1->y == 0 && obj2->x == 0 && obj2->y == 0) return false;
+    if (object_is_out(obj1) || object_is_out(obj2)) return false;
     if (
-            (obj1->y <= obj2->y + obj2->width) && //up
-            //down
-            //left
-            //right
-            //if (obj1->x + obj1->width);
-            1)
-        return false;
+            (obj1->y <= obj2->y + obj2->height) && //up
+            (obj1->y + obj1->height >= obj2->y) &&//down
+            (obj1->x <= obj2->x + obj2->width) && //left
+            (obj1->x + obj1->width >= obj2->x)//right
+       ){
+        return true;
+    }
     return false;
 }
 
@@ -309,8 +357,12 @@ void dirty_area_zeros(DirtyArea *d){
 }
 
 
-// MAY NEED MULTIPLE CASES FOR WHEN NUMBER IS > THAN WIDTH/HEIGHT OF PLAYER
-// BUT I THINK IT CAN BE DONE WITHOUT THAT
+void dirty_area_fill_all(Object *o){
+    o->dirty_area[0].x = abs(o->x -1);
+    o->dirty_area[0].y = abs(o->y -1);
+    o->dirty_area[0].width = o->width + 1;
+    o->dirty_area[0].height = o->height + 1;
+}
 void dirty_area_fill_right(Player *p, uint8_t area_num, int x, int y){
     p->dirty_area[area_num].x = p->x;
     p->dirty_area[area_num].y = p->y;
@@ -394,4 +446,38 @@ void debugDirection(GDIR dir){
             return;
     }
 
+}
+
+
+//SPAWN
+
+void spawn_init(Spawn *s){
+    //upper
+    s[0].x = UPPER_SPAWN_X;
+    s[0].y = UPPER_SPAWN_Y;
+    s[0].width = UPPER_SPAWN_WIDTH;
+    s[0].height = UPPER_SPAWN_HEIGHT;
+    s[0].color = SPAWN_COLOR;
+    s[0].used = true;
+
+    s[1].x = LEFT_SPAWN_X;
+    s[1].y = LEFT_SPAWN_Y;
+    s[1].width = LEFT_SPAWN_WIDTH;
+    s[1].height = LEFT_SPAWN_HEIGHT;
+    s[1].color = SPAWN_COLOR;
+    s[1].used = true;
+
+    s[2].x = RIGHT_SPAWN_X;
+    s[2].y = RIGHT_SPAWN_Y;
+    s[2].width = RIGHT_SPAWN_WIDTH;
+    s[2].height = RIGHT_SPAWN_HEIGHT;
+    s[2].color = SPAWN_COLOR;
+    s[2].used = true;
+
+    s[3].x = LOWER_SPAWN_X;
+    s[3].y = LOWER_SPAWN_Y;
+    s[3].width = LOWER_SPAWN_WIDTH;
+    s[3].height = LOWER_SPAWN_HEIGHT;
+    s[3].color = SPAWN_COLOR;
+    s[3].used = true;
 }

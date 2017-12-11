@@ -28,57 +28,53 @@
 
 #define SCREEN_HEIGHT ST7735_height
 #define SCREEN_WIDTH ST7735_width
-#define ENEMIES 1
-#define ENEMY_WIDTH 8
-#define ENEMY_HEIGHT 8
-#define ENEMY_COLOR BLUE
 
-
+#define SPAWN_POINTS 4 //don't change this
 
 //GLOBAL Variables
 Player player;
 Enemy enemies[ENEMIES];
 Bullet bullet_buf[BULLET_NUM];
+Spawn spawn_points[SPAWN_POINTS];
+Spawn tmp;
 struct nunchuk_data nundata;
 struct nunchuk_data nundata2;
-bool redraw = 0;
+bool gocalled_once = false;
+bool redraw = false;
+bool gameover = false;
 uint8_t ticks_passed_since_bullet_shot = 0;
 uint16_t score = 0;
 
-void init_enemies(Player *enemies_list){
-    int i;
-    for (i = 0; i < ENEMIES; i++){
-        enemies[i].x =  SCREEN_WIDTH / 2;
-        enemies[i].y = SCREEN_HEIGHT / 2;
-        enemies[i].width = ENEMY_WIDTH;
-        enemies[i].height = ENEMY_HEIGHT;
-        enemies[i].color = ENEMY_COLOR;
-        enemies[i].speed = 1;
-    }
+void draw_game_over_screen(){
+    f3d_lcd_fillScreen(BGCOLOR);
+    draw_string(10, SCREEN_HEIGHT / 2, "GAME OVER", RED, BGCOLOR);
 }
 
-void move_enemies(Player *enemies_list){
-    int i = 0;
-    for (i = 0; i < ENEMIES; i++){
-        player_move(&enemies[i], 0, 0);
-    }
+void init_game_objects(){
+    bullet_init_many(bullet_buf, BULLET_NUM);
+    enemy_init_many(enemies, ENEMIES);
+    spawn_init(spawn_points);
+
+    tmp.x = UPPER_SPAWN_X;
+    tmp.y = UPPER_SPAWN_Y;
+    tmp.width = UPPER_SPAWN_WIDTH;
+    tmp.height = UPPER_SPAWN_HEIGHT;
+    tmp.color = SPAWN_COLOR;
+    tmp.used = true;
 }
 
-void bullets_init(Bullet *bullet_buf, uint8_t buf_size){
-    int i;
-    for(i = 0; i < buf_size; i++){
-        bullet_buf[i].speed = 0;
-        bullet_buf[i].x = -10;
-        bullet_buf[i].y = -10;
-        bullet_buf[i].color = WHITE;
-        bullet_buf[i].width = BULLET_SIZE;
-        bullet_buf[i].height = BULLET_SIZE;
-        bullet_buf[i].used = false;
+void gameover_handler(){
+    if (!gocalled_once) {
+        draw_game_over_screen();
+        gocalled_once = true;
     }
 }
-
 
 void update(){
+    if (gameover){
+        gameover_handler(); //will only be called once per game
+        return; //protection from the continued update loop
+    }
     ticks_passed_since_bullet_shot++;
     f3d_nunchuk_read(&nundata);
     f3d_nunchuk_read2(&nundata2);
@@ -89,9 +85,8 @@ void update(){
     }
     object_update_loc_by_speed_and_dir_many(bullet_buf, BULLET_NUM);
     enemy_move_towards_player(&player, &enemies[0]);
-    //move_enemies(enemies);
     bullet_disable_out(bullet_buf, BULLET_NUM);
-    handle_enemy_bullet_collision(enemies, ENEMIES, bullet_buf, BULLET_NUM, &score);
+    handle_enemy_bullet_player_collision(&player, enemies, ENEMIES, bullet_buf, BULLET_NUM, &score, &gameover);
     redraw = true;
 }
 
@@ -99,19 +94,24 @@ int main(void) {
     setBuffs();
     initAll();
     printf("////////////////////////////////////////////////////////////\n");
+    init_game_objects();
     init_game_screen(&player);
-    init_enemies(enemies);
-    bullets_init(bullet_buf, BULLET_NUM);
-    //DEBUGF("sizeof Object %lu", sizeof(Object));
+    object_draw(&tmp);
+    /*object_draw_many(spawn_points, SPAWN_POINTS);*/
+    enemy_place(&enemies[0], 10, 10);
+
+    setTickSpeed(GAME_TICK);
+    /*DEBUGF("sizeof Object %lu", sizeof(Object));*/
     while(1){
         if (redraw) {
             player_draw(&player);
-            object_draw_many(bullet_buf, BULLET_NUM); //single bullet
+            object_draw_many(bullet_buf, BULLET_NUM);
             object_draw_many(enemies, ENEMIES);
+            object_draw_many(spawn_points, SPAWN_POINTS);
             redraw = false;
         }
-        //debugDirection(enemy_get_player_direction(&player, &enemies[0]));
-        //DEBUGF_CLEAR_LINE(10, "getAngle %.2f", getAngle(&player, &enemies[0]));
+        /*debugDirection(enemy_get_player_direction(&player, &enemies[0]));*/
+        /*DEBUGF_CLEAR_LINE(10, "getAngle %.2f", getAngle(&player, &enemies[0]));*/
     }
 }
 

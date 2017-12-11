@@ -57,6 +57,7 @@
 #define RED 0x001F
 #define WHITE 0xFFFF
 #define YELLOW 0x07FF
+#define BROWN 0x03FC
 
 void f3d_lcd_sd_interface_init(void);
 void f3d_lcd_init(void);

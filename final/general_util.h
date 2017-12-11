@@ -19,6 +19,11 @@ void initAll();
     draw_string(0, y, "HHHHHHHHHHHHHHHHHHHHHHHHH", BGCOLOR, BGCOLOR);\
     draw_string(0, y, buf, WHITE, BGCOLOR);\
 } while(0);
+#define DEBUGF_LINE(y, f_, ...) do{\
+    char buf[26];\
+    sprintf(buf, (f_), __VA_ARGS__);\
+    draw_string(0, y, buf, WHITE, BGCOLOR);\
+} while(0);
 #define DEBUGF(f_, ...) do{\
     char buf[26];\
     sprintf(buf, (f_), __VA_ARGS__);\

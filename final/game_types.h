@@ -7,8 +7,37 @@
 #include <f3d_lcd_sd.h>
 #include <stdbool.h>
 
+
+
+#define GAME_TICK 20 //ticks/s
+
 #define SCREEN_HEIGHT ST7735_height
 #define SCREEN_WIDTH ST7735_width
+
+
+//SPAWN STUFF
+#define SPAWN_COLOR BROWN
+#define SPAWN_THICKNESS 4
+//upper
+#define UPPER_SPAWN_WIDTH SCREEN_WIDTH / 3
+#define UPPER_SPAWN_X (SCREEN_WIDTH / 2) - (UPPER_SPAWN_WIDTH / 2)
+#define UPPER_SPAWN_Y 0
+#define UPPER_SPAWN_HEIGHT SPAWN_THICKNESS
+//left
+#define LEFT_SPAWN_HEIGHT SCREEN_WIDTH / 3
+#define LEFT_SPAWN_WIDTH SPAWN_THICKNESS;
+#define LEFT_SPAWN_X 0
+#define LEFT_SPAWN_Y (SCREEN_HEIGHT / 2) - (LEFT_SPAWN_HEIGHT / 2)
+//right
+#define RIGHT_SPAWN_WIDTH SCREEN_WIDTH / 3
+#define RIGHT_SPAWN_X (SCREEN_WIDTH / 2) - (RIGHT_SPAWN_WIDTH / 2)
+#define RIGHT_SPAWN_Y 0
+#define RIGHT_SPAWN_HEIGHT SPAWN_THICKNESS
+//lower
+#define LOWER_SPAWN_WIDTH SCREEN_WIDTH / 3
+#define LOWER_SPAWN_X (SCREEN_WIDTH / 2) - (LOWER_SPAWN_WIDTH / 2)
+#define LOWER_SPAWN_Y 0
+#define LOWER_SPAWN_HEIGHT SPAWN_THICKNESS
 
 
 //PLAYER STUFF
@@ -23,11 +52,17 @@
 #define BULLET_NUM 20 //the size of the bullet buffer
 #define BULLET_COLOR WHITE
 #define BULLET_BASE_SPEED 2
+#define BULLET_BASE_X -(10 + BULLET_SIZE)
+#define BULLET_BASE_Y 0
 
 //ENEMY STUFF
+#define ENEMIES 10 //number of enemies
+#define ENEMY_BASE_SPEED 1;
 #define ENEMY_WIDTH 8
 #define ENEMY_HEIGHT 8
 #define ENEMY_COLOR BLUE
+#define ENEMY_BASE_X -(10 + ENEMY_WIDTH)
+#define ENEMY_BASE_Y 0
 
 //bg stuff
 #define BGCOLOR BLACK //testing
@@ -86,6 +121,7 @@ typedef struct object Object;
 typedef struct object Player;
 typedef struct object Enemy;
 typedef struct object Bullet;
+typedef struct object Spawn;
 
 
 /* thinking about having a seperate bullet struct to save the space. Color would not be needed

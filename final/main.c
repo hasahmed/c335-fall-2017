@@ -47,6 +47,7 @@ uint8_t ticks_passed_since_bullet_shot = 0;
 uint8_t spawn_counter = SPAWN_TIMER_START;
 uint16_t score = 0;
 bool score_changed = false;
+bool ready = false;
 
 void draw_game_over_screen(){
     f3d_lcd_fillScreen(BGCOLOR);
@@ -76,27 +77,29 @@ void gameover_handler(){
 }
 
 void update(){
-    if (gameover){
-        gameover_handler(); //will only be called once per game
-        return; //protection from the continued update loop
+    if (ready) {
+        if (gameover){
+            gameover_handler(); //will only be called once per game
+            return; //protection from the continued update loop
+        }
+        ticks_passed_since_bullet_shot++;
+        f3d_nunchuk_read(&nundata);
+        f3d_nunchuk_read2(&nundata2);
+        player_listen_move(&player, &nundata);
+        if (ticks_passed_since_bullet_shot >= player.bullet_fire_rate){
+            bullet_listen_shoot(&player, bullet_buf, BULLET_NUM, &nundata2);
+            ticks_passed_since_bullet_shot = 0;
+        }
+        object_update_loc_by_speed_and_dir_many(bullet_buf, BULLET_NUM);
+        enemy_move_towards_player_many(&player, enemies, ENEMIES);
+        bullet_disable_out(bullet_buf, BULLET_NUM);
+        handle_enemy_bullet_player_collision(&player, enemies, ENEMIES, bullet_buf, BULLET_NUM, &score, &score_changed, &gameover);
+        if(spawn_counter-- <= 0){
+            enemy_spawn(spawn_points, SPAWN_POINTS, enemies, ENEMIES);
+            spawn_counter = SPAWN_TIMER_START;
+        }
+        redraw = true;
     }
-    ticks_passed_since_bullet_shot++;
-    f3d_nunchuk_read(&nundata);
-    f3d_nunchuk_read2(&nundata2);
-    player_listen_move(&player, &nundata);
-    if (ticks_passed_since_bullet_shot >= player.bullet_fire_rate){
-        bullet_listen_shoot(&player, bullet_buf, BULLET_NUM, &nundata2);
-        ticks_passed_since_bullet_shot = 0;
-    }
-    object_update_loc_by_speed_and_dir_many(bullet_buf, BULLET_NUM);
-    enemy_move_towards_player_many(&player, enemies, ENEMIES);
-    bullet_disable_out(bullet_buf, BULLET_NUM);
-    handle_enemy_bullet_player_collision(&player, enemies, ENEMIES, bullet_buf, BULLET_NUM, &score, &score_changed, &gameover);
-    if(spawn_counter-- <= 0){
-        enemy_spawn(spawn_points, SPAWN_POINTS, enemies, ENEMIES);
-        spawn_counter = SPAWN_TIMER_START;
-    }
-    redraw = true;
 }
 
 int main(void) { 
@@ -107,6 +110,7 @@ int main(void) {
     init_game_screen(&player);
     draw_score();
     setTickSpeed(GAME_TICK);
+    ready = true;
     while(1){
         if (redraw) {
             player_draw(&player);

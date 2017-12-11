@@ -62,13 +62,70 @@ void player_listen_move(Player *p, struct nunchuk_data *nundata){
     }
 }
 //ENEMIES
-void enemies_draw(Player *enemy_list, uint8_t enemy_list_len) {
+
+
+void enemy_spawn(Spawn *spawn_list, uint8_t spawn_list_len, Enemy *enemy_list, uint8_t enemy_list_len){
+    Enemy *e = NULL;
+    uint8_t i;
+    for (i = 0; i < enemy_list_len; i++){ //get the first unused enemy if one exists
+        if (enemy_list[i].used == false)
+            e = &enemy_list[i];
+    }
+    if (e) {
+        uint8_t spawn_point_index = rand() % spawn_list_len;
+        switch(spawn_point_index){
+            default:
+            case 0: //up
+                enemy_place(e, spawn_list[0].x + rand() % spawn_list[0].width, spawn_list[0].y);
+                break;
+            case 1: //left
+                enemy_place(e, spawn_list[1].x, spawn_list[1].y + rand() % spawn_list[1].height);
+                break; 
+            case 2: //right
+                enemy_place(e, spawn_list[2].x - e->width, spawn_list[2].y + rand() % spawn_list[2].height);
+                break;
+            case 3: //lower
+                enemy_place(e, spawn_list[3].x + rand() % spawn_list[3].width, spawn_list[3].y - e->height);
+                break;
+        }
+              
+    }
+}
+
+void enemy_update_loc_by_speed_and_dir(Enemy *e){
+    switch(e->dir){
+        case UP:
+            player_move(e, 0, -(int8_t)e->speed);
+            return;
+        case DOWN:
+            player_move(e, 0, (int8_t)e->speed);
+            return;
+        case LEFT:
+            player_move(e, -(int8_t)e->speed, 0);
+            return;
+        case RIGHT:
+            player_move(e, (int8_t)e->speed, 0);
+            return;
+        case UP_LEFT:
+            player_move(e, -(int8_t)e->speed, -(int8_t)e->speed);
+            return;
+        case UP_RIGHT:
+            player_move(e, (int8_t)e->speed, -(int8_t)e->speed);
+            return;
+        case DOWN_LEFT:
+            player_move(e, -(int8_t)e->speed, (int8_t)e->speed);
+            return;
+        case DOWN_RIGHT:
+            player_move(e, (int8_t)e->speed, (int8_t)e->speed);
+            return;
+    }
+}
+
+
+void enemies_draw(Enemy *enemy_list, uint8_t enemy_list_len) {
     uint8_t i = 0;
     for(i = 0; i < enemy_list_len; i++)
-        player_draw(&enemy_list[i]);
-}
-void enemy_move_towards_player_many(Player *p, Enemy *enemy_list, uint8_t enemy_list_len){
-
+        object_draw(&enemy_list[i]);
 }
 void enemy_init_many(Enemy *enemy_list, uint8_t enemy_list_len){
     uint8_t i;
@@ -111,7 +168,8 @@ void handle_enemy_bullet_player_collision(
         Bullet *active_bullets_list, 
         uint8_t bullets_list_len, 
         uint16_t *score, 
-        bool *gameover){
+        bool *score_changed,
+        bool *gameover) {
 
     uint8_t i;
     uint8_t j;
@@ -123,11 +181,10 @@ void handle_enemy_bullet_player_collision(
         for (j = 0; j < bullets_list_len; j++){
             if (object_check_collision(&active_bullets_list[j], &enemies_list[i])){
                 Bullet *b = &enemies_list[i];
-                /*DEBUGF("b x: %d y: %d", b->x, b->y);*/
-                /*[>DEBUGF_LINE(10, "e x: %d y: %d", e->x, e->y);<]*/
                 enemy_reset(&enemies_list[i]);
                 bullet_reset(&active_bullets_list[j]);
-                *score++;
+                *score_changed = true;
+                (*score)++;
             }
         }
     }
@@ -135,8 +192,13 @@ void handle_enemy_bullet_player_collision(
 
 void enemy_move_towards_player(Player *p, Enemy *e){
     GDIR dir = enemy_get_player_direction(p, e);
-    e->dir = dir;
-    object_update_loc_by_speed_and_dir(e);
+    e->dir = dir != NA ? dir : e->dir;
+    enemy_update_loc_by_speed_and_dir(e);
+}
+void enemy_move_towards_player_many(Player *p, Enemy *enemy_list, uint8_t enemy_list_len){
+    uint8_t i;
+    for (i = 0; i < enemy_list_len; i++)
+        enemy_move_towards_player(p, &enemy_list[i]);
 }
 
 GDIR enemy_get_player_direction(Player *p, Enemy *e){
@@ -339,8 +401,6 @@ void object_print(Object *o){
     printf("color: %u\n", o->color);
     printf("speed: %f\n", o->speed);
     printf("GDIR: %d\n", o->dir);
-    printf("GTYPE: %d\n", o->type);
-    printf("PTYPE: %d\n", o->powerup);
     printf("used: %d\n", o->used);
 }
 
@@ -393,8 +453,6 @@ void dirty_area_fill_up(Player *p, uint8_t area_num, int x, int y){
     p->dirty_area[area_num].width = p->width;
     p->dirty_area[area_num].height = min(-y, p->height);
 }
-
-
 
 GDIR getDirection(int16_t x, int16_t y){
     if (x < 0 && y > 0)
@@ -450,7 +508,6 @@ void debugDirection(GDIR dir){
 
 
 //SPAWN
-
 void spawn_init(Spawn *s){
     //upper
     s[0].x = UPPER_SPAWN_X;

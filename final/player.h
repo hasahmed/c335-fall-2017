@@ -19,6 +19,8 @@ void enemy_reset_many(Enemy *enemy_list, uint8_t enemy_list_len);
 void enemy_init(Enemy *e);
 void enemy_init_many(Enemy *enemy_list, uint8_t enemy_list_len);
 void enemy_place(Enemy *e, int16_t x, int16_t y);
+void enemy_spawn(Spawn *spawn_list, uint8_t spawn_list_len, Enemy *enemy_list, uint8_t enemy_list_len);
+void enemy_update_loc_by_speed_and_dir(Enemy *e);
 
 
 //handlers
@@ -29,6 +31,7 @@ void handle_enemy_bullet_player_collision(
         Bullet *active_bullets_list, 
         uint8_t bullets_list_len, 
         uint16_t *score, 
+        bool *score_changed,
         bool *gameover);
 
 

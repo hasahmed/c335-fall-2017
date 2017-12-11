@@ -25,18 +25,18 @@
 #define UPPER_SPAWN_HEIGHT SPAWN_THICKNESS
 //left
 #define LEFT_SPAWN_HEIGHT SCREEN_WIDTH / 3
-#define LEFT_SPAWN_WIDTH SPAWN_THICKNESS;
+#define LEFT_SPAWN_WIDTH SPAWN_THICKNESS
 #define LEFT_SPAWN_X 0
 #define LEFT_SPAWN_Y (SCREEN_HEIGHT / 2) - (LEFT_SPAWN_HEIGHT / 2)
 //right
-#define RIGHT_SPAWN_WIDTH SCREEN_WIDTH / 3
-#define RIGHT_SPAWN_X (SCREEN_WIDTH / 2) - (RIGHT_SPAWN_WIDTH / 2)
-#define RIGHT_SPAWN_Y 0
-#define RIGHT_SPAWN_HEIGHT SPAWN_THICKNESS
+#define RIGHT_SPAWN_HEIGHT SCREEN_WIDTH / 3
+#define RIGHT_SPAWN_WIDTH SPAWN_THICKNESS
+#define RIGHT_SPAWN_Y (SCREEN_HEIGHT / 2) - (RIGHT_SPAWN_HEIGHT / 2)
+#define RIGHT_SPAWN_X (SCREEN_WIDTH - SPAWN_THICKNESS)
 //lower
 #define LOWER_SPAWN_WIDTH SCREEN_WIDTH / 3
 #define LOWER_SPAWN_X (SCREEN_WIDTH / 2) - (LOWER_SPAWN_WIDTH / 2)
-#define LOWER_SPAWN_Y 0
+#define LOWER_SPAWN_Y (SCREEN_HEIGHT - SPAWN_THICKNESS)
 #define LOWER_SPAWN_HEIGHT SPAWN_THICKNESS
 
 
@@ -113,9 +113,7 @@ struct object{
     uint8_t bullet_fire_rate; //how many game tics must pass before the bullet can be shot again
     float speed;
     GDIR dir;
-    GTYPE type;
-    PTYPE powerup;
-    bool used; //for bullet
+    bool used; //is the object active or not
 };
 typedef struct object Object;
 typedef struct object Player;

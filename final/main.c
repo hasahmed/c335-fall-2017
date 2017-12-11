@@ -43,24 +43,29 @@ bool gocalled_once = false;
 bool redraw = false;
 bool gameover = false;
 uint8_t ticks_passed_since_bullet_shot = 0;
+#define SPAWN_TIMER_START 20
+uint8_t spawn_counter = SPAWN_TIMER_START;
 uint16_t score = 0;
+bool score_changed = false;
 
 void draw_game_over_screen(){
     f3d_lcd_fillScreen(BGCOLOR);
     draw_string(10, SCREEN_HEIGHT / 2, "GAME OVER", RED, BGCOLOR);
+}
+void draw_score(){
+    draw_string(0, 0, "0", WHITE, BGCOLOR);
+}
+void redraw_score() {
+    char strbuf[4];
+    sprintf(strbuf, "%d", score);
+    draw_string(0, 0, strbuf, WHITE, BGCOLOR);
+    score_changed = false;
 }
 
 void init_game_objects(){
     bullet_init_many(bullet_buf, BULLET_NUM);
     enemy_init_many(enemies, ENEMIES);
     spawn_init(spawn_points);
-
-    tmp.x = UPPER_SPAWN_X;
-    tmp.y = UPPER_SPAWN_Y;
-    tmp.width = UPPER_SPAWN_WIDTH;
-    tmp.height = UPPER_SPAWN_HEIGHT;
-    tmp.color = SPAWN_COLOR;
-    tmp.used = true;
 }
 
 void gameover_handler(){
@@ -84,9 +89,13 @@ void update(){
         ticks_passed_since_bullet_shot = 0;
     }
     object_update_loc_by_speed_and_dir_many(bullet_buf, BULLET_NUM);
-    enemy_move_towards_player(&player, &enemies[0]);
+    enemy_move_towards_player_many(&player, enemies, ENEMIES);
     bullet_disable_out(bullet_buf, BULLET_NUM);
-    handle_enemy_bullet_player_collision(&player, enemies, ENEMIES, bullet_buf, BULLET_NUM, &score, &gameover);
+    handle_enemy_bullet_player_collision(&player, enemies, ENEMIES, bullet_buf, BULLET_NUM, &score, &score_changed, &gameover);
+    if(spawn_counter-- <= 0){
+        enemy_spawn(spawn_points, SPAWN_POINTS, enemies, ENEMIES);
+        spawn_counter = SPAWN_TIMER_START;
+    }
     redraw = true;
 }
 
@@ -96,18 +105,16 @@ int main(void) {
     printf("////////////////////////////////////////////////////////////\n");
     init_game_objects();
     init_game_screen(&player);
-    object_draw(&tmp);
-    /*object_draw_many(spawn_points, SPAWN_POINTS);*/
-    enemy_place(&enemies[0], 10, 10);
-
+    draw_score();
     setTickSpeed(GAME_TICK);
-    /*DEBUGF("sizeof Object %lu", sizeof(Object));*/
     while(1){
         if (redraw) {
             player_draw(&player);
             object_draw_many(bullet_buf, BULLET_NUM);
             object_draw_many(enemies, ENEMIES);
             object_draw_many(spawn_points, SPAWN_POINTS);
+            if (score_changed)
+                redraw_score();
             redraw = false;
         }
         /*debugDirection(enemy_get_player_direction(&player, &enemies[0]));*/

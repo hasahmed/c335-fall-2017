@@ -1,25 +1,52 @@
 /*
  * Hasan Y Ahmed
- * Partner: Cas Sinders
- * Lab 11
- * 11/09/17
+ * Partner: N/A
+ * Final Project
+ * 12/11/17
  * file: report.txt
  */
 
-Q1. What is the significance of the peripheral base address? Where does it point?
-    The significance of the base address, is its use in DMA. It points directly into the perepherials memory.
+
+ The tasks that I accomplished can be roughly broken into 3 catagories:
+    1: Rendering
+    2: Gameplay
+    3: Everything else
+
+    The completion of the tasks was the whole project, so my contribution of them was more than substantial.
+
+Technical Challenges:
+    There were more technical challenges than I could even list. Working with hardware is always difficult,
+    and this is no exception. It was a challenge getting the second nunchuk to work, the issue in the end 
+    turned out to be changing an identifier from GPIOA to GPIOB. Hindsight is 20/20 I guess. Another issue
+    I faced was dealing with the drawing on the LCD sreen. Having worked on small video games on my PC before
+    I was displeased with how my original prototypes for the game were so flickery. It was flickery because 
+    every frame I was clearning the whole screen and then re-drawing everything. Not only is this approch in-
+    effecient, but it looks terrible. So I decided to do things differently. The implementation that I eventually
+    settled on was having every game object keep track of where it was in the previous frame, then creating a
+    "dirty area" in this previously visited spot, then in the next round of drawing, paint the dirty area the 
+    background color. This implementation (although it obviously has some drawbacks) worked wonderfully for my
+    purposes. Another techical difficulty I encountered was dealing with the timer interrupt. I have the main
+    game-loop called from an interrupt. I thought that this would make the game more consistant in speed, and
+    that may be true, but what it certainly did do was cause me a lot of headache. For one thing if the drawing
+    step takes too long, the interrupt will be called in the middle, which would break the entire rendering 
+    phase, namely the "cleanup" portion. So I had to be careful to not take too much time in the drawing
+    step. In addition to that possibility using the interrupt-driven approach, another huge issue is that
+    the interrupt seems to be intirely unstoppable once it has started. It can be slowed down, but can't be stopped.
+    This was a huge problem for me, because the update loop would be called before things had been initialized,
+    which resulted in a lot of unwanted behavior. Despite my best efforts I could not figure out how to stop
+    the interrupt from running before I needed it to, so I resorted to putting an if condition at the begning
+    of the update loop to check to see if the update is ready. This approach feels dirty and terrible. But I
+    had to do what I had to do. I was also worried about over running memory especially with my object oriented
+    aprroach. I also realized a bit too late, that I gave every object more information that it needed. Namely
+    the color, width and height sections.
 
 
-Q2. Why is it necessary to enable incrementing as was done in this step? What will the DMA controller do in response to this configuration.
-    This is necissary so that the DMA controller will be able to transwer data in both directions. Otherwise it would only be dummy data.
-
-
-Q3. Why is this line of the code necessary?
-    Its necessary because we need to know when the DMA controller is ready for transer.
-
-
-Q4. For transfers of less than 4 bytes, what do you think is the reason for not using the xchng_datablock functions?
-    The purpose for using a different function to transfer less than 4 bytes of data is because the xchng_datablock function is less efficient when the size is less than 4 bytes.
-
-Q5. Why is it important for the DMA controller and the audio player to work on differnt portions of Audiobuf.
-    This is important so that they don't have a data race.
+If I could Start Over:
+    If I could start the project over, I don't think I would use an interrupt at all. I think that the tradeoffs 
+    in this particular use case don't really offer something very useful. I would also be more careful about what
+    I put in the object struct so as to decrease memory useage. I also made a lot of effort to not use any heap
+    allocations because they are expensive operations, this lead to a much less dynamic approach to object creation,
+    i.e. every object in the game is in an array of size specified at compile time. I thought that this approach would
+    be more optimal than allocating heap memory, but a bit of the way through I started feeling not so sure. It adds
+    a lot of extra overhead in object creation and object deletion. I have to loop throuh every object weather it
+    is active or not, and this undoubtdly negates any performance benefits I gain from not allocating on the heap. 

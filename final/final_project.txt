@@ -1,0 +1,12 @@
+Hasan Y Ahmed
+Final Project
+"Journey of the Prarie King"
+
+Description:
+    This game is inspired by a mini-game in Stardew Valley. The idea is that you are the
+    Prarie King, and you are trying to escape from bandits.
+    The core functinality of the game is the two nunchuks. One for moving the player, the
+    other for shooting the bullets.
+
+    Task Breakdown:
+    I had no partner for this, so I did everything.

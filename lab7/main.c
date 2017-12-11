@@ -12,10 +12,13 @@
 #include <f3d_user_btn.h>
 #include <f3d_lcd_sd.h>
 #include <f3d_i2c.h>
+#include <f3d_rtc.h>
 #include <f3d_accel.h>
 #include <f3d_mag.h>
 #include <f3d_gyro.h>
 #include <f3d_led.h>
+#include <stm32f30x_dma.h>
+#include <stm32f30x_dac.h>
 
 #include <math.h>
 #include <stdio.h>

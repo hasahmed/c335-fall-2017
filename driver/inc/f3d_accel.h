@@ -1,10 +1,10 @@
-/* f3d_accel.c --- 
+/* f3d_accel.h --- 
  * 
- * Filename: f3d_accel.c
+ * Filename: f3d_accel.h
  * Description: 
  * Author: Bryce Himebaugh
  * Maintainer: 
- * Created: Thu Oct 31 09:14:43 2013
+ * Created: Thu Oct 31 09:15:45 2013
  * Last-Updated: 
  *           By: 
  *     Update #: 0
@@ -34,15 +34,11 @@
 
 /* Code: */
 
-#include <f3d_i2c.h>
-#include <f3d_accel.h>
+#include <stm32f30x.h>
 
-void f3d_accel_init() {
- 
-}
+void f3d_accel_init();
+void f3d_accel_read(float *);
 
-void f3d_accel_read(float *accel_data) {
 
-}
 
-/* f3d_accel.c ends here */
+/* f3d_accel.h ends here */
